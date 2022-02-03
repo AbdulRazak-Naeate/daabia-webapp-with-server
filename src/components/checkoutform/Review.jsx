@@ -67,7 +67,7 @@ const Review = ({checkoutToken,fees}) => {
               {/* <ListItemIcon>
                 <StarBorder />
               </ListItemIcon> */}
-              <ListItemText  key={`listItem${index}`}secondary={<ListItemSecondaryContent item={item}/>} />
+              <ListItemText  key={`listItem${index}`}secondary={<ListItemSecondaryContent key={`secondaryitem${index}`} item={item}/>} />
             </ListItemButton>
           </List>
         </Collapse>

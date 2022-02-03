@@ -7,7 +7,10 @@ import {formatWithCurrencySymbol} from '../../utils/Utils';
 
 const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,nextStep}) => {
   console.log(shippingData);
-  const config = {
+  var handleFlutterPayment =null;
+  
+      try{
+        const config = {
         public_key:"FLWPUBK-37d2e9fba8018282c3139e2a90c8ef76-X",
         tx_ref: Date.now(),
         amount: checkoutToken.subtotal+shippingData.shippingFees,
@@ -24,23 +27,31 @@ const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,next
           logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
         },
       };
-      
-     const handleFlutterPayment = useFlutterwave(config);
+      handleFlutterPayment = new useFlutterwave(config);
+
+      }catch(err){
+        console.log(err)
+      }
 
        const handlePayment =(orderData) =>{
-              handleFlutterPayment({
-                callback: (response) => { 
-                  closePaymentModal() // this will close the modal programmatically
-                   console.log(response);
-                   if (response.status==="success"){
-                      // FwVerifyPayment(response.transactionid,orderData);
-                   }else{
+              try{
+                handleFlutterPayment({
+                  callback: (response) => { 
+                    closePaymentModal() // this will close the modal programmatically
+                     console.log(response);
+                     if (response.status==="success"){
+                        // FwVerifyPayment(response.transactionid,orderData);
+                     }else{
+  
+                     }
+                     
+                  },
+                  onClose: () => {},
+                });
+              }catch(err){
+                console.log(err)
+              }
 
-                   }
-                   
-                },
-                onClose: () => {},
-              });
             }
     
       const handleSubmit= async (event)=>{

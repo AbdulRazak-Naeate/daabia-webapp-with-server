@@ -5,9 +5,9 @@ const Cities= require('../../models/world/Cities');
 //get cities data
 router.get('/', async(req,res) =>{
        try{
-        const states = await Cities.find();
+        const cities = await Cities.find();
     
-        res.json({states:states});
+        res.json({cities:cities});
               
        }catch(err){
            console.log(err)
