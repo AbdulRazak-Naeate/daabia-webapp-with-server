@@ -3,11 +3,10 @@ import React,{useState,useEffect,useRef,useCallback} from 'react';
 import FormInput from './CustomTextField';
 import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
-import { Grid,Select,Button, InputLabel, Typography } from '@material-ui/core';
-import{MenuItem}from '@mui/material';
+import { Grid,Select,Button, InputLabel, Typography, MenuItem} from '@material-ui/core';
 import axios from 'axios';
-var loki = require('lokijs');
-
+/* var loki = require('lokijs');
+ */
 
 const AddressForm = ({checkoutToken,next}) => {
 
@@ -26,7 +25,9 @@ const AddressForm = ({checkoutToken,next}) => {
     const {register,
       handleSubmit,
       formState: { errors },
-    } = useForm();
+    } = useForm();   
+     const mountedRef=useRef(true);
+     const[isCountriesloaded,setIscountriesLoaded]=useState(false)
     const [countries,setCountries]=useState([]);
     const [country,setCountry]=useState(0);
     const [countrylabel,setCountryLabel]=useState('');
@@ -38,7 +39,6 @@ const AddressForm = ({checkoutToken,next}) => {
     const [citylabel,setCityLabel]=useState('');
     const [orderNumber]=useState(uniqueOrderNumber());
     const [shippingFees,setShippingFees]=useState(0);
-    const mountedRef=useRef(true);
    
 
     
@@ -87,25 +87,29 @@ const AddressForm = ({checkoutToken,next}) => {
   })
 }
    const getCountries =  useCallback( async() => {
-          try{
-        const url=`http://localhost:3001/api/countries`;
-        await axios.get(url).then((response)=>{
-              console.log(response.data.countries)
-              setCountries(response.data.countries);
 
-        })
-         
-        if (!mountedRef.current) return null ;
+      // if (!mountedRef.current) return null ;
+
+     if (!isCountriesloaded){
+      try{
+        const url=`http://localhost:3001/api/countries`;
+        await axios.get(url).then((response)=>
+              setCountries(response.data.countries)
+             
+        )
+         console.log(mountedRef.current)
         
         }catch(err){
             console.log(err)
         }
-    },[mountedRef]);
+     }
+    },[isCountriesloaded]);
   
     useEffect(()=> {
       getCountries();
       return ()=>{
-        mountedRef.current=false;
+        setIscountriesLoaded(true)
+       // mountedRef.current=false;
       };
 
     },[getCountries]);
@@ -134,9 +138,9 @@ const AddressForm = ({checkoutToken,next}) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>    
                 <InputLabel>Shipping Country</InputLabel>
-                    <Select value={country} name="country" native required fullWidth onChange={onCountryChange}>
+                    <Select value={country} name="country"  required fullWidth onChange={onCountryChange}>
                     {countries.map((c,index)=>(
-                       <option key={c.id} value={index}>{c.name}</option>
+                       <MenuItem key={c.id} value={index}>{c.name}</MenuItem>
                    ))}
                    </Select>                </Grid>
                    <Grid item xs={12} sm={6}>    
@@ -151,21 +155,21 @@ const AddressForm = ({checkoutToken,next}) => {
 
                 <Grid item xs={12} sm={6}>
                     <InputLabel>Shipping State</InputLabel>
-                    <Select value={state}  fullWidth onChange={onStateChange} required native>
+                    <Select value={state}  fullWidth onChange={onStateChange} required >
                     {states.map((s,index)=>(
-                       <option key={s.id} value={index}>
+                       <MenuItem key={s.id} value={index}>
                             {s.name}
-                       </option>
+                       </MenuItem>
                    ))}
                    </Select>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <InputLabel>Shipping City</InputLabel>
-                    <Select value={city}  fullWidth onChange={onCityChange} required native>
+                    <Select value={city}  fullWidth onChange={onCityChange} required >
                     {cities.map((c,index)=>(
-                       <option key={c.id} value={index}>
+                       <MenuItem key={c.id} value={index}>
                             {c.name}
-                       </option>
+                       </MenuItem>
                    ))}
                    </Select>
                 </Grid>

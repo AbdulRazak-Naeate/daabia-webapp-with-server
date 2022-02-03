@@ -17,8 +17,8 @@ const SignUp = ({handleCloseModal,handleSwitchForm}) => {
     const history=useHistory();
   
   
-    const _db = new loki('csc.db');
-    const[db]=useState(_db);
+    /* const _db = new loki('csc.db');
+    const[db]=useState(_db); */ 
       
     const onFormSubmit =(e)=>{
       
@@ -46,7 +46,7 @@ const SignUp = ({handleCloseModal,handleSwitchForm}) => {
       }
     } 
   
-    const onCountryChange=(e)=>{
+    /* const onCountryChange=(e)=>{
       var sid=e.target.value;
        filterStates(sid,db);
     }
@@ -154,7 +154,7 @@ const SignUp = ({handleCloseModal,handleSwitchForm}) => {
       
        
       
-     },[db]);
+     },[db]); */
   
     
     const SignUp =()=>{
