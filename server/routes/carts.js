@@ -216,7 +216,7 @@ router.patch('/item/selection',async (req,res)=>{
 router.patch('/specs/colorandsize',async (req,res)=>{
 
     try{
-        var pId =req.body.productId;
+        var pId =  req.body.productId;
         var value= req.body.value
         var type=  req.body.type;
         
@@ -270,7 +270,7 @@ router.patch('/specs/measurement',async (req,res)=>{
         var pId =req.body.productId;
       
             var measurement= JSON.parse(req.body.measurement)
-            console.log(measurement.back)
+            //console.log(measurement.back)
             Cart.findOneAndUpdate({userId:req.body.userId,
                 items:{
                     $elemMatch:{productId:req.body.productId}
@@ -297,7 +297,7 @@ router.patch('/specs/measurement',async (req,res)=>{
 });
 
 //update cart set tempid to permanentid
-router.patch('/updateuserid/:tempuserId',async (req,res)=>{
+router.patch('/updateuserid/:tempuserId/:userId',async (req,res)=>{
 
     try{
        
@@ -305,7 +305,7 @@ router.patch('/updateuserid/:tempuserId',async (req,res)=>{
                 },
             {
                 $set: {
-                      userId:req.body.userId,
+                      userId:req.params.userId,
                       }
             },   
             { new:true,useFindAndModify:false}).then(ret=>{
@@ -432,16 +432,14 @@ const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
     try{
       var retLength=ret.length
        console.log("aggr : "+JSON.stringify(ret)+ " length :"+retLength);
-       
+       if(retLength!==0){
         subtotal=ret[0].subTotal;
+
+        }
        }catch(err){
            console.log("subTotal Error : "+err)
        }
-        
-        
-        })).then(()=>{
-
-             Cart.findOneAndUpdate({userId:req.body.userId},
+        Cart.findOneAndUpdate({userId:req.body.userId},
         {
           $set:{subtotal:subtotal},
         },   
@@ -449,7 +447,8 @@ const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
         ).then((ret=>{
         //console.log("updateSub "+ret)
        })) 
-        });
+        
+        }));
       
   //return the whole cart 
   const  cart = await Cart.findOne({userId:req.body.userId});

@@ -5795,7 +5795,7 @@
     "jsonfile" "^6.0.1"
     "universalify" "^2.0.0"
 
-"fs-monkey@1.0.3":
+"fs-monkey@^1.0.3":
   "integrity" "sha512-cybjIfiiE+pTWicSCLFHSrXZ6EilF30oh91FDP9S2B051prEa7QWfrVTQm10/dDpswBDXZugPa1Ogu8Yh+HV0Q=="
   "resolved" "https://registry.npmjs.org/fs-monkey/-/fs-monkey-1.0.3.tgz"
   "version" "1.0.3"
@@ -7688,12 +7688,12 @@
   "resolved" "https://registry.npmjs.org/media-typer/-/media-typer-0.3.0.tgz"
   "version" "0.3.0"
 
-"memfs@^3.1.2", "memfs@^3.2.2":
-  "integrity" "sha512-1c9VPVvW5P7I85c35zAdEr1TD5+F11IToIHIlrVIcflfnzPkJa0ZoYEoEdYDP8KgPFoSZ/opDrUsAoZWym3mtw=="
-  "resolved" "https://registry.npmjs.org/memfs/-/memfs-3.4.1.tgz"
-  "version" "3.4.1"
+"memfs@^3.1.2", "memfs@^3.4.3":
+  "integrity" "sha512-rH9mjopto6Wkr7RFuH9l9dk3qb2XGOcYKr7xMhaYqfzuJqOqhRrcFvfD7JMuPj6SLmPreh5+6eAuv36NFAU+Mw=="
+  "resolved" "https://registry.npmjs.org/memfs/-/memfs-3.4.6.tgz"
+  "version" "3.4.6"
   dependencies:
-    "fs-monkey" "1.0.3"
+    "fs-monkey" "^1.0.3"
 
 "memory-pager@^1.0.2":
   "integrity" "sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg=="
@@ -11331,13 +11331,13 @@
     "rechoir" "^0.7.0"
     "webpack-merge" "^5.7.3"
 
-"webpack-dev-middleware@^5.3.0":
-  "integrity" "sha512-MouJz+rXAm9B1OTOYaJnn6rtD/lWZPy2ufQCH3BPs8Rloh/Du6Jze4p7AeLYHkVi0giJnYLaSGDC7S+GM9arhg=="
-  "resolved" "https://registry.npmjs.org/webpack-dev-middleware/-/webpack-dev-middleware-5.3.0.tgz"
-  "version" "5.3.0"
+"webpack-dev-middleware@^5.3.0", "webpack-dev-middleware@^5.3.3":
+  "integrity" "sha512-hj5CYrY0bZLB+eTO+x/j67Pkrquiy7kWepMHmUMoPsmcUaeEnQJqFzHJOyxgWlq746/wUuA64p9ta34Kyb01pA=="
+  "resolved" "https://registry.npmjs.org/webpack-dev-middleware/-/webpack-dev-middleware-5.3.3.tgz"
+  "version" "5.3.3"
   dependencies:
     "colorette" "^2.0.10"
-    "memfs" "^3.2.2"
+    "memfs" "^3.4.3"
     "mime-types" "^2.1.31"
     "range-parser" "^1.2.1"
     "schema-utils" "^4.0.0"

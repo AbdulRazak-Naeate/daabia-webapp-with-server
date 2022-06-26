@@ -43,6 +43,145 @@ router.get('/transactions/:storeId', async (req,res)=>{
 
 });
 
+//get sales base on store Id
+
+router.get('/sales/:storeId', async (req,res)=>{
+    const transactions = await Order.find({storeId:req.params.storeId,status:'Completed'});
+    const aggr = await Order.aggregate([{$match:{storeId:req.params.storeId,status:'Completed'}},{$unwind:'$totalPrice'},
+    {
+        $group:{
+            _id:'0',
+            count:{$sum:1},
+            total:{$sum:'$totalPrice'}
+        }
+    }
+]);
+
+     console.log(transactions)
+
+
+    res.json({transactions:transactions,total:aggr,message:'transactions loaded'});
+
+});
+//get store monthly sales
+
+
+router.post('/sales/monthly/:storeId',async (req,res)=>{
+   
+     
+    var months =[{label:'jan',num:1},{label:'feb',num:2},{label:'mar',num:3},{label:'apr',num:4},
+                   {label:'may',num:5},{label:'jun',num:6},{label:'jul',num:7},{label:'aug',num:8},
+                   {label:'sep',num:9},{label:'oct',num:10},{label:'nov',num:11},{label:'dec',num:12}];
+    var year =parseInt(req.body.year) ;
+    var total=0;            
+    const data=[];
+     for(var i = 0;i < months.length;i++){
+         //var m=months[i].num;         
+                   
+         var m=months[i].num;
+         var label=months[i].label;
+         console.log(label)
+        const transMonthly = await Order.aggregate(
+            [
+           {
+               $match:{status:"Completed",storeId:req.params.storeId}
+           },
+
+            {
+                $match:{$expr:{
+                     $eq:[{$year: "$date"},year]
+                  }}
+            },
+             {
+                 $redact:{ 
+                 $cond:[
+                     { $eq:[{$month:'$date'},m]},
+                     "$$KEEP","$$PRUNE"
+                 ]
+                }
+              },{
+            $group:{
+                _id:'0',
+                count:{$sum:1},
+                sales:{$sum:'$totalPrice'}
+            }
+        }
+        ]);
+        if (transMonthly.length>0){
+            data.push({name:label,"Monthly Sales":transMonthly[0].sales});
+            total+=transMonthly[0].sales;
+            
+        }else{
+            data.push({name:label,"Monthly Sales":0});
+
+        }
+     }
+   
+     res.json({monthlySales:data,totalSales:total})
+})
+
+
+
+//get a specific store product monthly sales
+
+router.post('/transactions/product/sales/monthly/:storeId/:productId',async (req,res)=>{
+
+    var months =[{label:'jan',num:1},{label:'feb',num:2},{label:'mar',num:3},{label:'apr',num:4},
+                   {label:'may',num:5},{label:'jun',num:6},{label:'jul',num:7},{label:'aug',num:8},
+                   {label:'sep',num:9},{label:'oct',num:10},{label:'nov',num:11},{label:'dec',num:12}];
+    var year =parseInt(req.body.year) ;
+   
+    var total=0;            
+    const data=[];
+     for(var i = 0;i < months.length;i++){
+         //var m=months[i].num;         
+                   
+         var m=months[i].num;
+         var label=months[i].label;
+         var productid=req.params.productId
+         var storeid = req.params.storeId
+           
+        const transMonthly = await Order.aggregate(
+            [
+                {
+                $match:{productId:productid,storeId:storeid}
+                },
+           {
+               $match:{status:"Completed"}
+           },
+
+            {
+                $match:{$expr:{
+                     $eq:[{$year: "$date"},year]
+                  }}
+            },
+             {
+                 $redact:{ 
+                 $cond:[
+                     { $eq:[{$month:'$date'},m]},
+                     "$$KEEP","$$PRUNE"
+                 ]
+                }
+              },{
+            $group:{
+                _id:'0',
+                count:{$sum:1},
+                sales:{$sum:'$totalPrice'}
+            }
+        }
+        ]);
+        if (transMonthly.length>0){ //if get results ,record it
+            data.push({name:label,"Monthly Sales":transMonthly[0].sales});
+            total+=transMonthly[0].sales;
+            
+        }else{//no data is found put 0
+            data.push({name:label,"Monthly Sales":0});
+
+        }
+     }
+   
+     res.json({monthlySales:data,totalSales:total})
+})
 
 //get all transactions base on store Id
 
@@ -77,7 +216,11 @@ router.post('/transactions/many/ids', async (req,res)=>{
             console.log(aggr)
               var tranxobj={};
               if (aggr.length!==0){
-                 tranxobj={storeId:id,name:name,transactions:transactions,total:aggr[0].total,count:aggr[0].count
+                 tranxobj={storeId:id,
+                           name:name,
+                           transactions:transactions,
+                           total:aggr[0].total,
+                           count:aggr[0].count
               }
              }else{
                  tranxobj={storeId:id,name:name,transactions:[],total:0,count:0

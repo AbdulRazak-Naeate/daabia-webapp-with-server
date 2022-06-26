@@ -46,8 +46,10 @@ router.post('/',uploadImage('./server/uploads/stores'),verify,async(req,res)=>{
         currency:req.body.currency
     });
     try{
-        const saveStore = await store.save();
-        res.json({store:saveStore,message:"store created successfully"})
+       /*  const saveStore = */ await store.save();
+        const stores = await Store.find();
+
+        res.json({stores:stores,message:"store created successfully"})
         .status(200);
     }catch(err){
         res.json({store:null,message:err}).status(401)
