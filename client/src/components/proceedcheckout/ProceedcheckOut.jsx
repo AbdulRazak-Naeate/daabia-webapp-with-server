@@ -7,7 +7,6 @@ import axios from 'axios'
 import Grid from '@mui/material/Grid';
 import Slider from './slider/Slider_';
 import CommentItem from '../comments/commentitem/CommentItem';
-
 const ProceedcheckOut = ({onAddToCart}) => {
     const query =QueryParams()
     const classes = useStyles();

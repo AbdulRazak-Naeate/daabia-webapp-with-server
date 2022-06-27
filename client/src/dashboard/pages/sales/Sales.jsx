@@ -11,7 +11,6 @@ import {patch} from 'axios';
 import QueryParams from '../../QueryParams';
 
 const Sales = ({sales,setSales,handlegetSales,isSalesLoaded,setIsSalesLoaded}) => {
-  const query=QueryParams();
   const [pageSize, setPageSize] = useState(20);
   const [user]=useState(localStorage.getItem('user'));
   const [stores]=useState(JSON.parse(localStorage.getItem('stores')));
@@ -41,7 +40,7 @@ const Sales = ({sales,setSales,handlegetSales,isSalesLoaded,setIsSalesLoaded}) =
     const handleClose = (option) => {
       
       setOpen(false);
-       if (option===true) {handleUpdate(orderid)}
+       if (option===true) {/* handleUpdate(orderid) */}
       //console.log(orderid);
     };
  
@@ -52,68 +51,7 @@ const Sales = ({sales,setSales,handlegetSales,isSalesLoaded,setIsSalesLoaded}) =
      */
     return <span onClick={onClick} id={"status-span-"+id} className={"transStatusSpan "+type}>{type}</span>
 }
-  const handleUpdate=(orderid)=>{
-     
-    editTransaction(orderid).then((response)=>{
-
-      const data=response.data.data;
-      setSales(data)//set transaction data  with new updated one 
-      setSelectionModel([]);
-      //console.log(response.data);
-      
-    });
-}
-
-const editTransaction =(orderid)=>{
-const url = `http://localhost:3001/api/orders/${orderid}`;
-const body={
-         status:status,
-         storeId:storeid
-      
-}
-const config = {
-    headers: {
-        'auth-token':
-          user.auth_token,
-      },
-}
-return patch(url, body,config)
-
-};
-
-
-const handleUpdateMany=(option)=>{
-
   
-  editsales(option).then((response)=>{            
-
-      if(response.status===200){
-       setSales(response.data.data);
-       setSelectionModel([])
-      }                   
-
-  });
-}
-
-const editsales =(option)=>{
-  const ids=JSON.stringify(selected_Ids);
-  const url = `http://localhost:3001/api/orders/many/${ids}`;
-
-const body={
-       storeId:storeid,
-       status:option,
-       ids: ids
-    
-}
-const config = {
-  headers: {
-      'auth-token':
-        user.auth_token,
-    },
-}
-return patch(url, body,config)
-
-};
    
   useEffect(() => {  
     

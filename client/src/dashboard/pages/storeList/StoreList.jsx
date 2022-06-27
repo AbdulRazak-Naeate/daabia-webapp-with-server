@@ -170,15 +170,15 @@ export default function StoreList({stores,setStores}) {
 
           </div>
              {
-              stores.length>0 ?  <DataGrid rows={stores} getRowId={(row) => row._id} columns={columns} checkboxSelection
+              stores ? <DataGrid rows={stores} getRowId={(row) => row._id} columns={columns} checkboxSelection
               disableSelectionOnClick
               
-            />:<div> 
+            />:"" }<div> 
                 <Link to="/dashboard/newStore">
                  <div className="addStoreButton link">Add New Store</div>
                 </Link>
             </div>
-             }
+            
         </div>
     )
 }

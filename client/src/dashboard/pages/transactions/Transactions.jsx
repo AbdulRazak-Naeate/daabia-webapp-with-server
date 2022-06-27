@@ -13,13 +13,9 @@ import {TransacModal} from  './modal/TransacModal'
 
 import {PrintBox} from './printbox/PrintBox.jsx';
 
-const Transactions = ({handlegetTransactions,transactions,setTransactions,handlegetStores,isStoresLoaded,setIsStoreLoaded,isTransLoaded ,setIstransLoaded}) => {
-  const query=QueryParams();
-  //const [transactions,setTransactions]=useState([]);
+const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTransLoaded ,setIstransLoaded,handleUpdateManyTransactions,handleUpdateTransaction}) => {
   const [pageSize, setPageSize] = useState(20);
-  const [user]=useState(localStorage.getItem('user'));
   const [stores]=useState(JSON.parse(localStorage.getItem('stores')));
-  const [storeid,setStoreId]=useState(query.get('storeId'));
   const [selectedRows,setSelectedRows]=useState([]);
   const [selected_Ids,setSelected_Id]=useState([]);
   const [selectionModel,setSelectionModel]=useState([])
@@ -30,7 +26,7 @@ const Transactions = ({handlegetTransactions,transactions,setTransactions,handle
   const [tranxData,setTranxData]=useState([]);
 
    // const history=useHistory();
-  const componentRef = useRef();
+  //const componentRef = useRef();
 
    const handlePrint = ()=>{
     setOpenModal(true);
@@ -53,6 +49,7 @@ const Transactions = ({handlegetTransactions,transactions,setTransactions,handle
                 setStatus('Completed') 
                  break;
              default:
+              setStatus('Processing') 
                break;
            }
        row.status!=="Completed" ? setOpen(true):setOpen(false);
@@ -74,7 +71,7 @@ const Transactions = ({handlegetTransactions,transactions,setTransactions,handle
     const handleClose = (option) => {
       
       setOpen(false);
-       if (option===true) {handleUpdate(orderid)}
+       if (option===true) {handleUpdateTransaction(orderid,status,setSelectionModel)}
       //console.log(orderid);
     };
  
@@ -85,68 +82,7 @@ const Transactions = ({handlegetTransactions,transactions,setTransactions,handle
      */
     return <span onClick={onClick} id={"status-span-"+id} className={"transStatusSpan "+type}>{type}</span>
 }
-  const handleUpdate=(orderid)=>{
-     
-    editTransaction(orderid).then((response)=>{
-
-      const data=response.data.data;
-      setTransactions(data)//set transaction data  with new updated one 
-      setSelectionModel([]);
-      //console.log(response.data);
-      
-    });
-}
-
-const editTransaction =(orderid)=>{
-const url = `http://localhost:3001/api/orders/${orderid}`;
-const body={
-         status:status,
-         storeId:storeid
-      
-}
-const config = {
-    headers: {
-        'auth-token':
-          user.auth_token,
-      },
-}
-return patch(url, body,config)
-
-};
-
-
-const handleUpdateMany=(option)=>{
-
-  
-  editTransactions(option).then((response)=>{            
-
-      if(response.status===200){
-       setTransactions(response.data.data);
-       setSelectionModel([])
-      }                   
-
-  });
-}
-
-const editTransactions =(option)=>{
-  const ids=JSON.stringify(selected_Ids);
-  const url = `http://localhost:3001/api/orders/many/${ids}`;
-
-const body={
-       storeId:storeid,
-       status:option,
-       ids: ids
-    
-}
-const config = {
-  headers: {
-      'auth-token':
-        user.auth_token,
-    },
-}
-return patch(url, body,config)
-
-};
+ 
    
   useEffect(() => {  
 
@@ -313,11 +249,11 @@ return patch(url, body,config)
             </div>
           </div>
       <div className="actionButtonsWrapper">
-     <button className="actionButtons" onClick={()=>{handleUpdateMany("Approved");         
+     <button className="actionButtons" onClick={()=>{handleUpdateManyTransactions("Approved",setSelectionModel,selected_Ids);         
       }}>Approve</button>
-     <button className="actionButtons" onClick={()=>{handleUpdateMany("Completed")}}>Completed</button>
-     <button className="actionButtons" onClick={()=>{handleUpdateMany("Pending")}}>Pending</button>
-     <button className="actionButtons" onClick={()=>{handleUpdateMany("Declined")}}>Decline</button>
+     <button className="actionButtons" onClick={()=>{handleUpdateManyTransactions("Completed",setSelectionModel,selected_Ids)}}>Completed</button>
+     <button className="actionButtons" onClick={()=>{handleUpdateManyTransactions("Pending",setSelectionModel,selected_Ids)}}>Pending</button>
+     <button className="actionButtons" onClick={()=>{handleUpdateManyTransactions("Declined",setSelectionModel,selected_Ids)}}>Decline</button>
     {/*  <button className="actionButtons" onClick={()=>{
        setOpenModal(true);
        setTranxData(selectedRows);

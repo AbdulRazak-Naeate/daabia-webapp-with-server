@@ -4,20 +4,21 @@ import { AddShoppingCart } from '@material-ui/icons';
 import React from 'react';
 import useStyles from './styles';
 import {Link } from 'react-router-dom';
-import { formatWithCurrencySymbol, truncateString } from '../../../utils/Utils';
+import { formarttoCurrency, truncateString } from '../../../utils/Utils';
 
 
 const ProductDetails = ({product,onAddToCart}) => {
     const classes =useStyles();
-
+    console.log(product)
   return (
     <div className={classes.root} >
-       <Card className={classes.card}>
+      {
+        product !== undefined ?  <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
          <div className={classes.contentSub}>
         <div className={classes.priceWrapper}>
         <Typography variant="h4" className={classes.price}>
-              {formatWithCurrencySymbol(product.price,'GHS')}
+              {formarttoCurrency(product.price,'π')}
           </Typography>
         </div>
          
@@ -36,7 +37,8 @@ const ProductDetails = ({product,onAddToCart}) => {
          </div>
         </CardContent>
 
-       </Card>
+       </Card>:''
+      }
     </div>
   )
 }

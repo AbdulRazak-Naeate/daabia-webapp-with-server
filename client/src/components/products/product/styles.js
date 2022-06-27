@@ -13,7 +13,8 @@ export default makeStyles((theme)=>({
     color: 'orange',
   },
   price:{
-    position:'absolute',color:'red',margin:'2px 5px'
+    color:'red',
+    fontWeight:500
   },
   cardActions:{
       display:'flex',

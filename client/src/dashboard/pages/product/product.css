@@ -130,7 +130,7 @@
     margin-bottom: 10px;
     color: grey;
 }
-.measurementWrapper{
+.productmeasurementWrapper{
     display:grid;
     grid-template-columns: auto auto auto auto;
     border:0px solid darkgray;

@@ -4,7 +4,7 @@ import React ,{useState,useEffect} from 'react'
  import useStyles from './styles';
  import CartItem from './cartItem/CartItem';
  import {Link,useHistory} from 'react-router-dom';
- import {formatWithCurrencySymbol} from '../../utils/Utils';
+ import {formarttoCurrency} from '../../utils/Utils';
 
 const Cart = ({cart, handleUpdateCartQty,handleupdateColorSize,handleupdateMeasurement,handleRemoveFromCart, handleEmptyCart,handleupdateSelection}) => {
   
@@ -89,7 +89,7 @@ const Cart = ({cart, handleUpdateCartQty,handleupdateColorSize,handleupdateMeasu
                 ))}
             </Grid>
             <div className={classes.cardDetails}>
-             <div> <Typography variant="h5" className={classes.price}>{`Subtotal: ${formatWithCurrencySymbol(cart.subtotal,'GHS')} `} </Typography>
+             <div> <Typography variant="h5" className={classes.price}>{`Subtotal: ${formarttoCurrency(cart.subtotal,'π')}`} </Typography>
 </div>
                 <div className={classes.buttons}>
                 <Button className={classes.emptyButton} size="large" type="button" variant="contained" color="secondary" onClick={handleEmptyCart}>Empty Cart</Button> 

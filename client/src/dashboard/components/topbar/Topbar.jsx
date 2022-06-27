@@ -41,6 +41,8 @@ export const Topbar = () => {
       const handleLogout=()=>{
          setAnchorEl(null);
          localStorage.setItem('loggedin',false);
+         localStorage.removeItem('user')
+         localStorage.removeItem('stores')
          history.push('/dashboard/login');
       
         

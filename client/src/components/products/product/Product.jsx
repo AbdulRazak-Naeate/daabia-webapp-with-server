@@ -6,7 +6,7 @@ import { AddShoppingCart,FavoriteBorderOutlined,Favorite } from '@mui/icons-mate
 import {useHistory} from 'react-router-dom';
 import { blue, orange } from '@mui/material/colors';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { truncateString } from '../../../utils/Utils';
+import { truncateString,formarttoCurrency } from '../../../utils/Utils';
 
 const Product = ({product,onAddToCart,onUpdateLikes,favorites}) => {
     const classes=useStyles();
@@ -51,8 +51,8 @@ const Product = ({product,onAddToCart,onUpdateLikes,favorites}) => {
 
    {product ? <div>
     <Card className={classes.root} >
-           <Typography variant="h6" className={classes.price}>
-                        {`$${product.price}`}
+           <Typography variant="span" fontSize={14} className={classes.price}>
+          {/*  {`${formarttoCurrency(product.price,'π')}`} */}
             </Typography>  
            <CardMedia className={classes.media}  image={`http://localhost:3001/server/uploads/products/${product.image[0].filename}`} title={product.name} onClick={()=>{handleProductOnClick(product._id,product.storeId)}}/>
             
@@ -61,8 +61,8 @@ const Product = ({product,onAddToCart,onUpdateLikes,favorites}) => {
                     <Typography variant='span' gutterBottom noWrap>
                         {product.name}
                     </Typography>
-                    <Typography variant="span">
-                        {`$${product.price}`}
+                    <Typography variant="span" fontSize={14} className={classes.price}>
+                        {`${formarttoCurrency(product.price,'π')}`}
                     </Typography>
                   </div>
                   <div className={classes.description}>

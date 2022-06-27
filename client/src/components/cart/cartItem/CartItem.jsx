@@ -11,7 +11,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Checkbox from '@mui/material/Checkbox';
 import Measurement from './Measurement';
 import { pink,orange } from '@mui/material/colors';
-import {formatWithCurrencySymbol} from '../../../utils/Utils';
+import {formarttoCurrency} from '../../../utils/Utils';
 
 const CartItem = ({cartitem,onUpdateCartQty,onUpdateColorSize,onUpdateMeasurement,onRemoveFromCart,onUpdateSelect}) => {
     const classes = useStyles();
@@ -22,7 +22,7 @@ const CartItem = ({cartitem,onUpdateCartQty,onUpdateColorSize,onUpdateMeasuremen
     const[open,setOpen]=useState(true);
     const[colorSelectedList,setColorSelectedList]=useState([]);
     const [checked, setChecked] = useState(cartitem.selected);
-    const [imagepath]=useState(cartitem.product.product_type==='normal'? `http://localhost:3001/server/uploads/products/${cartitem.product.image[0].filename}`:`http://localhost:3001/server/uploads/products/prefarestyleproducts/${cartitem.product.image[0].filename}`)
+    const [imagepath]=useState( `http://localhost:3001/server/uploads/products/${cartitem.product.image[0].filename}`)
 
     const label = { inputProps: { 'aria-label': 'Select item' } };
 
@@ -105,7 +105,7 @@ const CartItem = ({cartitem,onUpdateCartQty,onUpdateColorSize,onUpdateMeasuremen
             <CardMedia image={imagepath} alt={cartitem.product.name} className={classes.media}/>
             <CardContent className={classes.cardContent}>
              <Typography variant="h6">{cartitem.product.name}</Typography>
-             <Typography variant="body1" className={classes.price}>{`${formatWithCurrencySymbol(cartitem.line_item_sub_price,'GHS')}`}</Typography>
+             <Typography variant="body1" className={classes.price}>{`${formarttoCurrency(cartitem.line_item_sub_price,'π')}`}</Typography>
             </CardContent>
             <CardActions className={classes.cardActions}>
              <div className={classes.specifications}>

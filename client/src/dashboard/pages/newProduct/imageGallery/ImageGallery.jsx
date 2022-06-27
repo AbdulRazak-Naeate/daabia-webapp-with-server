@@ -57,7 +57,7 @@ const ImageGallery = ({handleImages,productImages}) => {
     <div className="imageGallery">
          {
              imagediv.map((img,index)=>{
-                 return(<img class="productImg" alt={img}key={index} id={`product-image${img}`} src={thumbnail}  onClick={ (e) => { onImageClicked(e) }}/>)
+                 return(<img className="productImg" alt={img}key={index} id={`product-image${img}`} src={thumbnail}  onClick={ (e) => { onImageClicked(e) }}/>)
              })
          }
           <input style={{display:"none"}} type="file" id="product-file" multiple onChange={onFileInputChange} />

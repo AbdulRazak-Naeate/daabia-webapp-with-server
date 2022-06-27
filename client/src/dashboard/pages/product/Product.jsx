@@ -186,7 +186,7 @@ export default function Product() {
                     <div className="productFormMiddle">
                        <div className='formItem'>
                            <label>Color</label>
-                          <div className="measurementWrapper">
+                          <div className="productmeasurementWrapper">
                         
                           {   
                              colors.map((color,index)=>{
@@ -203,7 +203,7 @@ export default function Product() {
 
                         <div className='formItem'>
                            <label>Size</label>
-                           <div className="measurementWrapper">
+                           <div className="productmeasurementWrapper">
                         
                           {   
                              sizes.map((size,index)=>{

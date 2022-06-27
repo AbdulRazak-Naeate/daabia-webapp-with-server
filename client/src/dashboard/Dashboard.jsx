@@ -24,8 +24,9 @@ import axios from 'axios';
 
  function  Dashboard() {
  const [showSidebar,setShowSideBar]=useState(true);
- const [stores, setStores] = useState([JSON.parse(localStorage.getItem('stores'))]);
+ const [stores, setStores] = useState(JSON.parse(localStorage.getItem('stores')));
  const [storeindex,setStoreindex]=useState(parseInt(localStorage.getItem('storeindex')));
+ const user = JSON.parse(localStorage.getItem('user'));
  const [products,setProducts]=useState([]);
  const [transactions,setTransactions]=useState([]);
  const [sales,setSales]=useState([]);
@@ -68,6 +69,7 @@ import axios from 'axios';
     '/dashboard/transactions',
     '/dashboard/sales',]
 
+
     async function deleteStore(_id) {
       try {
         const response = await axios.delete(`http://localhost:3001/api/stores/${_id}`);
@@ -92,8 +94,142 @@ import axios from 'axios';
         console.error(error);
       }
     }
+//Transactions
+const handleUpdateTransaction=(orderid,status,setSelectionModel)=>{
+     
+  editTransaction(orderid,status).then((response)=>{
 
-   
+    const data=response.data.data;
+    setTransactions(data)//set transaction data  with new updated one 
+    setSelectionModel([]);
+    //console.log(response.data);
+    
+  });
+}
+
+const editTransaction =(orderid,status)=>{
+const url = `http://localhost:3001/api/orders/${orderid}`;
+const user = JSON.parse(localStorage.getItem('user'));
+
+const body={
+       status:status,
+       storeId:stores[storeindex]._id
+    
+}
+const config = {
+  headers: {
+      'auth-token':
+        user.auth_token,
+    },
+}
+return axios.patch(url, body,config)
+
+};
+
+
+const handleUpdateManyTransactions=(option,setSelectionModel,selected_Ids)=>{
+
+
+editTransactions(option,selected_Ids).then((response)=>{            
+
+    if(response.status===200){
+     setTransactions(response.data.data);
+     setSelectionModel([])
+    }                   
+
+});
+}
+
+const editTransactions =(option,selected_Ids)=>{
+const ids=JSON.stringify(selected_Ids);
+const url = `http://localhost:3001/api/orders/many/${ids}`;
+const user = JSON.parse(localStorage.getItem('user'));
+
+
+const body={
+     storeId:stores[storeindex],
+     status:option,
+     ids: ids
+  
+}
+const config = {
+headers: {
+    'auth-token':
+      user.auth_token,
+  },
+}
+return axios.patch(url, body,config)
+
+};
+//Sales Start here
+// eslint-disable-next-line no-unused-vars
+const handleUpdateSales=(orderid,setSelectionModel)=>{
+     
+  editSales(orderid).then((response)=>{
+
+    const data=response.data.data;
+    setSales(data)//set transaction data  with new updated one 
+    setSelectionModel([]);
+    //console.log(response.data);
+    
+  });
+}
+
+const editSales =(orderid,status)=>{
+const url = `http://localhost:3001/api/orders/${orderid}`;
+const user = JSON.parse(localStorage.getItem('user'));
+
+const body={
+       status:status,
+       storeId:stores[storeindex]._id
+    
+}
+const config = {
+  headers: {
+      'auth-token':
+        user.auth_token,
+    },
+}
+return axios.patch(url, body,config)
+
+};
+
+
+// eslint-disable-next-line no-unused-vars
+const handleUpdateManySales=(option,setSelectionModel)=>{
+
+
+editsales(option).then((response)=>{            
+
+    if(response.status===200){
+     setSales(response.data.data);
+     setSelectionModel([])
+    }                   
+
+});
+}
+
+const editsales =(option,selected_Ids)=>{
+const ids=JSON.stringify(selected_Ids);
+const url = `http://localhost:3001/api/orders/many/${ids}`;
+
+const body={
+     storeId:stores[storeindex]._id,
+     status:option,
+     ids: ids
+  
+}
+const config = {
+headers: {
+    'auth-token':
+      user.auth_token,
+  },
+}
+return axios.patch(url, body,config)
+
+};
+
+   //Products start here
     const fetchProducts = async (storeid)=>{
       try{
          const res = await fetch(`http://localhost:3001/api/products/store/${storeid}`);
@@ -107,6 +243,7 @@ import axios from 'axios';
 const handlegetProducts = async(storeid) => {
     try{
        const productsFromServer = await fetchProducts(storeid);
+       console.log(productsFromServer)
        let tmp =[];
           for(let i=0;i<productsFromServer.length;i++){
             tmp.push(productsFromServer[i]);
@@ -121,27 +258,35 @@ const handlegetProducts = async(storeid) => {
 
 const fetchStores = async(user)=>{
   try{
-     const res = await fetch(`http://localhost:3001/api/stores/user/${user._id}`);
-
-     const data= await res.json();
-           console.log(data);
+    
+           const url =`http://localhost:3001/api/stores/user/${user._id}`;
+      
+           return  axios.get(url);
            
-           return data.store;
   }catch(error){
 
   }
 }
 const handlegetStores = async(user) => {
 try{
-   const productsFromServer = await fetchStores(user);
-   let tmp =[];
+    fetchStores(user).then((response)=>{
+      console.log(response)
+      setStores(response.data.store);  
+
+      localStorage.setItem('stores',JSON.stringify(response.data.store))
+
+    });
+  /*  console.log("data: "+storesFromServer)
+     setStores(storesFromServer);  
+      */
+
+ /*   let tmp =[];
       for(let i=0;i<productsFromServer.length;i++){
         tmp.push(productsFromServer[i]);
         
       }
-   setStores(tmp);
-   localStorage.setItem('stores',JSON.stringify(tmp))
-   console.log(tmp);
+ 
+   console.log(tmp); */
 }catch(error){
 
 }
@@ -280,7 +425,7 @@ return ()=>{
     
      <Switch>
      <Route exact  path="/dashboard">
-         <Home stores={stores} setStores={setStores} handlegetStores={handlegetStores} handlegetProducts={handlegetProducts} isStoresLoaded={isStoresLoaded}setIsStoreLoaded={setIsStoreLoaded}/>
+         <Home user={user} stores={stores} transactions={transactions} setStores={setStores} handlegetStores={handlegetStores} handlegetProducts={handlegetProducts} isStoresLoaded={isStoresLoaded}setIsStoreLoaded={setIsStoreLoaded}/>
        </Route>
        <Route path="/dashboard/users">
         <UserList/>
@@ -296,7 +441,7 @@ return ()=>{
          </Route>
 
        <Route path="/dashboard/stores">
-        <StoreList  stores={stores} handlegetStores={handlegetStores}  onDeleteStore={deleteStore}/>
+        <StoreList  stores={stores} setStores={setStores} handlegetStores={handlegetStores}  onDeleteStore={deleteStore}/>
        </Route>
        <Route path="/dashboard/store/:storeId">
        
@@ -318,7 +463,7 @@ return ()=>{
        </Route>
 
        <Route path="/dashboard/transactions">
-        <Transactions stores={stores}   storeindex={storeindex}transactions={transactions}setTransactions={setTransactions} isTransLoaded={isTransLoaded} setIstransLoaded={setIstransLoaded} handlegetTransactions= {handlegetTransactions} handlegetStores={handlegetStores}/>
+        <Transactions transactions={transactions} isTransLoaded={isTransLoaded} setIstransLoaded={setIstransLoaded} handlegetTransactions= {handlegetTransactions} handlegetStores={handlegetStores} handleUpdateManyTransactions={handleUpdateManyTransactions} handleUpdateTransaction={handleUpdateTransaction}/>
        </Route>
        <Route path="/dashboard/sales">
         <Sales sales={sales} setSales={setSales} stores={stores} handlegetSales={handlegetSales} isSalesLoaded={isSalesLoaded}setIsSalesLoaded={setIsSalesLoaded}/>

@@ -8,16 +8,43 @@ var formatter = new Intl.NumberFormat('en-GH', {
 }
 
 const formarttoCurrency = (amount ,symbol)=>{
-  return symbol +amount.toFixed(8).replace(/\d(?=(\d{3})+\.)/g,"$&,");
-}
+  var value=0;
+if (amount!==undefined){
+  if (amount>=1){
 
+    value = symbol +amount.toFixed(3).replace(/\d(?=(\d{3})+\.)/g,"$&,");
+  }else{
+    value =symbol +amount.toFixed(8).replace(/\d(?=(\d{3})+\.)/g,"$&,");
+   }
+}
+  return value
+  }
+  
+  
+  const formarttoPiCurrency = (amount)=>{
+    var value=0;
+    var symbol='π'
+  if (amount!==undefined){
+    if (amount>=1){
+  
+      value = symbol +amount.toFixed(3).replace(/\d(?=(\d{3})+\.)/g,"$&,");
+    }else{
+      value =symbol +amount.toFixed(8).replace(/\d(?=(\d{3})+\.)/g,"$&,");
+     }
+  }
+    return value
+    }
+    
+    
 const truncateString=(str, num) => {
   try{
- if(str.length>num){
-    return str.slice(0,num)+"...";
-  }else{
-    return str;
-  }
+    if (str!==''){
+      if(str.length>num){
+        return str.slice(0,num)+"...";
+      }else{
+        return str;
+      }
+    }
   }catch(err ){
      console.log(err)
   }
@@ -67,6 +94,7 @@ const randNumber= (count)=> {//Unique Identifier
   } */
  
   module.exports.formatWithCurrencySymbol = formatWithCurrencySymbol
-  module.exports.formarttoCurrency = formarttoCurrency
-  module.exports.truncateString           = truncateString
- module.exports.randNumber               = randNumber
+  module.exports.formarttoCurrency  = formarttoCurrency
+  module.exports.formarttoPiCurrency= formarttoPiCurrency
+  module.exports.truncateString     = truncateString
+  module.exports.randNumber          = randNumber
