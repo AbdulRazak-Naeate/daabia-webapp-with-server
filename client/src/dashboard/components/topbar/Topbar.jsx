@@ -94,7 +94,7 @@ export const Topbar = () => {
                     </div>
                     
                 </div>
-        {loggedin && <React.Fragment>
+        {loggedin && <React.Fragment >
          <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"
@@ -116,8 +116,9 @@ export const Topbar = () => {
             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
             mt: 1.5,
             '& .MuiAvatar-root': {
-              width: 32,
+              width: 12,
               height: 32,
+              bgcolor:'red',
               ml: -0.5,
               mr: 1,
             },
@@ -139,7 +140,7 @@ export const Topbar = () => {
         <Link className="topbarLink" to={{pathname:`/dashboard/user/_id=${userId}`,search:`user=${JSON.stringify(user)}`}}>
         <MenuItem onClick={handleClose} className="topbarLink"><ListItemIcon> <Person fontSize="small" /> </ListItemIcon>Account</MenuItem></Link>
         <Link className="topbarLink" to={{pathname:`/dashboard/stores`}}>
-        <MenuItem onClick={handleClose}><ListItemIcon><Store/></ListItemIcon>My Stores</MenuItem>
+        <MenuItem onClick={handleClose}><ListItemIcon><Store/></ListItemIcon>Stores</MenuItem>
         </Link>
         <Divider/>
       {/*<MenuItem>

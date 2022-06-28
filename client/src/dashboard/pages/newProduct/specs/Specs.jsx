@@ -1,9 +1,9 @@
 import React,{useState} from 'react';
 import './specs.css';
 import {Button} from '@mui/material'
-const MesurementItem = ({itemval,index,name,onUpdateColors})=>{
+const MesurementItem = ({key,itemval,index,name,onUpdateColors})=>{
   const [val,setValue]=useState(itemval);
- return( <input type="text" className={`measurementItem ${name}`} placeholder="" value={val} key={index} onChange={(e)=>{setValue(e.target.value);onUpdateColors(name)}}  id={`${name}${index}`}/>)
+ return( <input type="text" className={`measurementItem ${name}`} placeholder="" value={val} key={key} onChange={(e)=>{setValue(e.target.value);onUpdateColors(name)}}  id={`${name}${index}`}/>)
 }
 
 const SizeMesurementItem = ({itemval,index,name,onUpdateSizes})=>{
@@ -52,7 +52,7 @@ const onUpdateColors =(name)=>{
                         
                           {   
                              mcolors.map((color,index)=>{
-                               return( <MesurementItem itemval={color} index={index} name='color' onUpdateColors={onUpdateColors}/>)
+                               return( <MesurementItem itemval={color} index={index} name='color' key={`color-spec-${index}`} onUpdateColors={onUpdateColors}/>)
                              })
                           }
                         
@@ -70,7 +70,7 @@ const onUpdateColors =(name)=>{
                         
                           {   
                              msizes.map((size,index)=>{
-                               return( <SizeMesurementItem itemval={size} index={index} name='size' onUpdateSizes={onUpdateSizes}/>)
+                               return( <SizeMesurementItem key={`size-spec${index}`} itemval={size} index={index} name='size' onUpdateSizes={onUpdateSizes}/>)
                              })
                           }
                         

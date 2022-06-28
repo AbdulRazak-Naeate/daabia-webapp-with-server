@@ -8,19 +8,19 @@ import {useState,useEffect} from "react";
 import AlertDialog from '../../components/alertdialog/AlertDialog'
 import { formarttoCurrency } from "../../../utils/Utils"
 
-export default function ProductsList({products,handlegetProducts,handleDeleteProduct}) {   
+export default function ProductsList({products,handlegetProducts,handleDeleteProduct,isproductsLoaded,setIsproductsLoaded,store}) {   
+  console.log(store)
     const query=QueryParams();
     const history=useHistory();
     const [pageSize, setPageSize] =useState(10);
 
-    const [storeid]=useState(query.get("storeId"));
-    const [storename] =useState(query.get("storeName"));
-    const [category] =useState(query.get("categoryId"));
-     
+  /*   const [storeid]=useState(store._id);
+    const [storename] =useState(store.name);
+    const [category]  =useState(store.categoryId);
+      */
     //alert Dialog
     const [open,setOpen]=useState(false);
     const [productId,setProductId]=useState('');
-    const [isProductLoaded,setIsproductsLoaded]=useState(false)
     const handleClickOpen = () => {
       setOpen(true);
      };
@@ -39,21 +39,21 @@ export default function ProductsList({products,handlegetProducts,handleDeletePro
 
     const handleEdit = (params)=>{
          //navigate to product page
-        history.push(`/dashboard/product?productId=${params.row._id}&productName=${params.row.name}&storeId=${storeid}&storeName=${storename}`);
+        history.push(`/dashboard/product?productId=${params.row._id}&productName=${params.row.name}&storeId=${store._id}&storeName=${store.name}`);
 
         localStorage.setItem('product', JSON.stringify(params.row));        
     }
       useEffect(()=>{
 
         
-         if (!isProductLoaded){
-          handlegetProducts(storeid);
+         if (!isproductsLoaded){
+          handlegetProducts();
 
          }
          return ()=>{
              setIsproductsLoaded(true)
          }
-      },[handlegetProducts, isProductLoaded, storeid]);
+      },[handlegetProducts,isproductsLoaded,setIsproductsLoaded]);
      /*   
       async function deleteProduct(_id) {
         try {
@@ -137,12 +137,12 @@ export default function ProductsList({products,handlegetProducts,handleDeletePro
     return (
         <div className="productsList"> 
             <AlertDialog open={open} handleClickOpen={handleClickOpen} handleClose={handleClose} title="Are you sure you want to delete!"DeleteOutline={DeleteOutline}/>
-          <span className="productsTitle">{storename}  </span> 
+          <span className="productsTitle">{store.name}  </span> 
 
          <div className="productsTitleContainer">
          <h1 className="addProductTitle">Products </h1>
 
-         <Link to={`/dashboard/newProduct?storeId=${storeid}&storeName=${storename}&categoryId=${category}`}>
+         <Link to={`/dashboard/newProduct?storeId=${store._id}&storeName=${store.name}&categoryId=${store.categoryId}`}>
           <button className="AddProductButton">New Product</button>
           </Link> 
          

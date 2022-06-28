@@ -42,7 +42,50 @@ router.get('/transactions/:storeId', async (req,res)=>{
     res.json({transactions:transactions,total:aggr,message:'transactions loaded'});
 
 });
+//transactions and sales report
 
+router.get('/report/:storeId', async (req,res)=>{
+    // const analytics =[]
+  
+      const transactions = await Order.find({storeId:req.params.storeId});
+      //get Completed orders = sales 
+      const completedAggr = await Order.aggregate([{$match:{$and:[{storeId:req.params.storeId},{status:'Completed'}]}},{$unwind:'$totalPrice'},
+      {
+          $group:{
+              _id:'0',
+              count:{$sum:1},
+              total:{$sum:'$totalPrice'}
+          }
+      }
+  ]);
+  
+  //Current orders or imcompleted transactiond
+  const inCompletedAggr = await Order.aggregate([{$match:{storeId:req.params.storeId}},{$match:{$or:[{status:'Pending'},{status:'Processing'}]}},{$unwind:'$totalPrice'},
+      {
+          $group:{
+              _id:'0',
+              count:{$sum:1},
+              total:{$sum:'$totalPrice'}
+          }
+      }
+  ]);
+  
+  
+  const alltimeAggr = await Order.aggregate([{$match:{storeId:req.params.storeId}},{$unwind:'$totalPrice'},
+  {
+      $group:{
+          _id:'0',
+          count:{$sum:1},
+          total:{$sum:'$totalPrice'}
+      }
+  }
+  ]);
+      
+  
+      res.json({transactions:transactions,completedAggregate:completedAggr,inCompleteAggregate:inCompletedAggr,alltimeAggregate:alltimeAggr,message:'transactions loaded'});
+  
+  });
+  
 //get sales base on store Id
 
 router.get('/sales/:storeId', async (req,res)=>{

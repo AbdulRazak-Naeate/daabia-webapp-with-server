@@ -3,7 +3,7 @@ import './sidebar.css'
 import {useState} from 'react'
 import { LineStyle,Timeline,TrendingUp
     ,PermIdentity,MailOutline,AttachMoney 
-    ,Storefront,BarChart,DynamicFeed,
+    ,Storefront,Add,BarChart,DynamicFeed,
     ChatBubbleOutline,WorkOutline,Report } from '@material-ui/icons'
 import { Link} from 'react-router-dom';
 
@@ -33,22 +33,22 @@ export const Sidebar = ({stores,storeindex,storeid,setIstranscLoaded,handleOnSto
                  </ul>
                 {/*  <h3 className="sidebarTitle">Quick menu</h3> */}
                  <ul className="sidebarList">
-                  <Link to="/dashboard/users" className="sidebarlink">
+                 {/*  <Link to="/dashboard/users" className="sidebarlink">
                   <li className="sidebarListItem">
                          <PermIdentity className="sidebarIcon"/>
                          Users
-                     </li></Link>
-                    <Link to="/dashboard/stores"  className="sidebarlink">
+                     </li></Link> */}
+                   {/*  <Link to="/dashboard/stores"  className="sidebarlink">
                     <li className="sidebarListItem">
                          <Storefront className="sidebarIcon"/>
                          Store
                      </li>  
-                     </Link>
-                    { /* <Link to="/dashboard/products" className="link">
+                     </Link> */}
+                     <Link to="/dashboard/products" className="sidebarlink">
                        <li className="sidebarListItem">
-                         <Storefront className="sidebarIcon"/>
+                         <Add className="sidebarIcon"/>
                          Products
-                     </li> </Link>*/}
+                     </li> </Link>
                        <Link to="/dashboard/transactions" className="sidebarlink"> 
                        <li className="sidebarListItem">
                          <AttachMoney className="sidebarIcon"/>

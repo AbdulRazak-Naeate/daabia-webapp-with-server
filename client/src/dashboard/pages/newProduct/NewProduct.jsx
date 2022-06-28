@@ -11,7 +11,7 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/stackslide.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import ImageGallery from './imageGallery/ImageGallery';
-export default function NewProduct() {
+export default function NewProduct({store,onFormSubmit}) {
     
     const [productImages,setProductImages]=useState([]);
     const [digitalProductUrl, setdigitalProductUrl] = useState('');
@@ -31,10 +31,7 @@ export default function NewProduct() {
 
     const[user]=useState(JSON.parse(localStorage.getItem('user')));
     let query=QueryParams();
-    const storeid= query.get('storeId');
-    const storename =query.get("storeName");
-    const category =query.get("categoryId");
-    
+   
         const onSpecificationChange = (e) => {
         setSpecification(e.target.value)
         if(e.target.value==="no"){
@@ -118,7 +115,7 @@ export default function NewProduct() {
         return inputValues;
       }
 
-      const onFormSubmit = (e) => {
+     /*  const onFormSubmit = (e) => {
        
         const form = e.currentTarget
         if (form.checkValidity() === false) {
@@ -167,11 +164,11 @@ export default function NewProduct() {
         }
         formData.append('name', name);
         formData.append('price', price);
-        formData.append('category',category);
+        formData.append('category',store.categoryId);
         formData.append('description', description);
         formData.append('specification', specification);
         formData.append('digital_product_url', digitalProductUrl);//append digital
-        formData.append('storeId', storeid);
+        formData.append('storeId', store._id);
         formData.append('stock',stock);
         formData.append('active',active)
         console.log(JSON.stringify(formData));
@@ -192,27 +189,27 @@ export default function NewProduct() {
         }
         return post(url, formData, config)
       
-      };
+      }; */
   
    
     return (
         <div className="newProduct">
            <Alert stack={{limit: 3}} />
 
-    <span className="addproductStoreTitle">{storename}
+    <span className="addproductStoreTitle">{store.name}
                 </span> 
           <div className="addProductTitleContainer">
               <h1 className="addProductTitle">Add New Product </h1>
             
             
-          <Link to={`/dashboard/products?storeId=${storeid}&storeName=${storename}&categoryId=${category}`}>
+          <Link to={`/dashboard/products?storeId=${store._id}&storeName=${store.name}&categoryId=${store.categoryId}`}>
           <button className="ProductListButton">Products</button>
           </Link>
 
           </div>
           
           <div className="addProductFormContainer">
-           <form className="addProductForm" onSubmit={onFormSubmit}>
+           <form className="addProductForm" onSubmit={(e)=>{onFormSubmit(e,clearFields,Alert,colors,sizes,name,price,store.categoryId,description,specification,digitalProductUrl,store._id,stock,active,productImages)}}>
                <div className="productFormTop">
                   <div className="productFormTopItem">
 
@@ -244,7 +241,7 @@ export default function NewProduct() {
          </div>
           <div className="addProductItem">
              <label>Stock</label>
-             <input type="number" placeholder="123" required setStock={stock} onChange={onstockChange} />
+             <input type="number" placeholder="123" required onChange={onstockChange} />
            </div>
            </div>
         <div className="productFormTopItem">

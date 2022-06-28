@@ -9,10 +9,11 @@ import QueryParams from '../../QueryParams';
 import {patch}from 'axios';
 
   const MesurementItem = ({itemval,index,name,onUpdateColors})=>{
-          const [val,setValue]=useState(itemval);
+       
+      const [val,setValue]=useState(itemval);
        return( <input type="text" className={`measurementItem ${name}`} placeholder="" value={val} key={index} onChange={(e)=>{setValue(e.target.value);onUpdateColors(name)}}  id={`${name}${index}`}/>)
-      }
-
+       }
+       
       const SizeMesurementItem = ({itemval,index,name,onUpdateSizes})=>{
         const [sval,setsValue]=useState(itemval);
      return( <input type="text" className={`measurementItem ${name}`} placeholder="" value={sval} key={index} onChange={(e)=>{setsValue(e.target.value);onUpdateSizes(name)}}  id={`${name}${index}`}/>)
@@ -76,9 +77,9 @@ export default function Product() {
 
       const editProduct =()=>{
         const url = `http://localhost:3001/api/products/${productid}`;
-        const colval=getValues('color');
+      /*   const colval=getValues('color');
         console.log(colval);
-        const sizeval=getValues('size');
+        const sizeval=getValues('size'); */
         const body={
                  productId:productid,
                  price:price,
@@ -163,7 +164,7 @@ export default function Product() {
                     <div className="productFormLeft">
                        <div className='formItem'>
                        <label>Product Name</label>
-                        <input type="text" value={product.name}placeholder="Apple Airpod"/>
+                        <input type="text" value={product.name} onChange={()=>{}} placeholder="Apple Airpod"/>
                       
                        </div>
                        <div className='formItem'>
@@ -176,8 +177,8 @@ export default function Product() {
                         </div>
                         <div className='formItem'>
                         <label>Active</label>
-                        <select name="active" id="" className="active" onChange={(e)=>{setActive(e.target.value)}}>
-                            <option selected='selected'>{product.active}</option>
+                        <select name="active" id="" className="active" onChange={(e)=>{setActive(e.target.value)}} value={product.active}>
+                           {/*  <option selected='selected'>{product.active}</option> */}
                             <option value="yes">Yes</option>
                             <option value="no">No</option>
                         </select>
@@ -207,7 +208,7 @@ export default function Product() {
                         
                           {   
                              sizes.map((size,index)=>{
-                               return( <SizeMesurementItem itemval={size} index={index} name='size' onUpdateSizes={onUpdateSizes}/>)
+                               return( <SizeMesurementItem  itemval={size} index={index} name='size' onUpdateSizes={onUpdateSizes}/>)
                              })
                           }
                         

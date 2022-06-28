@@ -25,15 +25,9 @@ const Sales = ({sales,setSales,handlegetSales,isSalesLoaded,setIsSalesLoaded}) =
   const [orderid,setOrderId]=useState('');
 
 
-   // const history=useHistory();
-     
-
  
     const handleClickOpen = (row) => {
            setOrderId(row._id);
-     /*   row.status==="Pending" ? setStatus('Approved') :setStatus('');
-       row.status!=="Approved" ? setOpen(true):setOpen(false);
-        */
 
       };
 
@@ -68,6 +62,17 @@ const Sales = ({sales,setSales,handlegetSales,isSalesLoaded,setIsSalesLoaded}) =
 
   const columns = [
     { field: '_id', headerName: 'Id', width: 210 },
+    {
+      field:'user',
+      headerName:"Customer",
+      width:200,
+        renderCell:(params)=>{
+          return(
+            <div className="userListUser">
+                {`${params.row.customer.firstname} ${params.row.customer.lastname}`}
+            </div>
+        )}, 
+    },
     {
       field: 'name',
       headerName: 'Product',

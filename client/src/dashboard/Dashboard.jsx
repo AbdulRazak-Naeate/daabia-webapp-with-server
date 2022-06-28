@@ -34,12 +34,13 @@ import axios from 'axios';
  const [inCompletedAggregate,setinCompletedAggregate]=useState([]);
  const [alltimeAggregate,setAlltimeAggregate]=useState([]);
  const [analyticsLoaded,setIsanalyticsLoaded]=useState(false);
- const [isproductsLoaded,setIsproductsLoaded]=useState(false);
  const [monthlySales,setMonthlySales]=useState([]);
  const [ismonthlySalesLoaded,setIsmonthlySalesLoaded]=useState(false);
  const [isStoresLoaded,setIsStoreLoaded]=useState(false);
  const [isTransLoaded,setIstransLoaded]=useState(false);
  const [isSalesLoaded,setIsSalesLoaded]=useState(false);
+  const [isproductsLoaded,setIsproductsLoaded]=useState(false);
+
 
  const handletoggleSideBar=(bol)=>{
    setShowSideBar(bol);
@@ -50,7 +51,9 @@ import axios from 'axios';
   const handleOnStoreChange =(e)=>{
     console.log(e.target.value)
     setIstransLoaded(false);
-    setIsSalesLoaded(false)
+    setIsSalesLoaded(false);
+    setIsproductsLoaded(false);
+    setIsanalyticsLoaded(false);
     setStoreindex(e.target.value)
     localStorage.setItem('storeindex',e.target.value)
   }
@@ -229,10 +232,89 @@ return axios.patch(url, body,config)
 
 };
 
+   //New Products Here
+
+   const onFormSubmit = (e,clearFields,Alert,colors,sizes,name,price,categoryId,description,specification,digitalProductUrl,storeid,stock,active,productImages) => {
+       
+    const form = e.currentTarget
+    if (form.checkValidity() === false) {
+      e.stopPropagation()
+    }
+    
+    
+    e.preventDefault()// Stop form default submit
+    
+        initiateAndCreateProduct(colors,sizes,name,price,categoryId,description,specification,digitalProductUrl,storeid,stock,active,productImages).then((response) => {
+          console.log(response.data);
+         if (response.data.status===200){
+          //window.location.reload();
+           
+            clearFields();
+         }else if (response.data.status===400){ 
+
+          Alert.error(response.data.message, {
+            position: 'top-right',
+            effect: 'jelly'
+
+        });
+       // history.go(0);
+         }
+        });
+       
+  }
+ const initiateAndCreateProduct =(colors,sizes,name,price,categoryId,description,specification,digitalProductUrl,storeid,stock,active,productImages)=>{
+    
+    const url = 'http://localhost:3001/api/products/';
+
+    console.log(colors);
+    const formData = new FormData();
+    //getInput values
+   // let colors = getInputValues('color-specs');
+    //let sizes  = getInputValues('size-specs');
+
+    for (let i = 0; i < colors.length; i++) {
+       if(colors[i]!==""){
+        formData.append('color', colors[i]);
+       }
+    }
+    for (let j = 0; j < sizes.length; j++) {
+      if (sizes[j]!==""){
+        formData.append('size', sizes[j]);
+      }
+    }
+    formData.append('name', name);
+    formData.append('price', price);
+    formData.append('category',categoryId);
+    formData.append('description', description);
+    formData.append('specification', specification);
+    formData.append('digital_product_url', digitalProductUrl);//append digital
+    formData.append('storeId', storeid);
+    formData.append('stock',stock);
+    formData.append('active',active)
+    console.log(JSON.stringify(formData));
+ 
+    //append files to image to create an a file array
+  
+    for (var i = 0; i <= productImages.length; i++) {
+      formData.append('image', productImages[i]);
+      //console.log(productImages);
+    }
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'auth-token':
+          user.auth_token,
+      },
+    }
+    return axios.post(url, formData, config)
+  
+  };
+
    //Products start here
-    const fetchProducts = async (storeid)=>{
+    const fetchProducts = async ()=>{
       try{
-         const res = await fetch(`http://localhost:3001/api/products/store/${storeid}`);
+         const res = await fetch(`http://localhost:3001/api/products/store/${stores[storeindex]._id}`);
          const data=await res.json();
                console.log(data);
                return data.products;
@@ -240,10 +322,12 @@ return axios.patch(url, body,config)
 
       }
 }
-const handlegetProducts = async(storeid) => {
+const handlegetProducts = async ()=> {
+
     try{
-       const productsFromServer = await fetchProducts(storeid);
-       console.log(productsFromServer)
+       const productsFromServer = await fetchProducts();
+       console.log(productsFromServer);
+       
        let tmp =[];
           for(let i=0;i<productsFromServer.length;i++){
             tmp.push(productsFromServer[i]);
@@ -276,17 +360,7 @@ try{
       localStorage.setItem('stores',JSON.stringify(response.data.store))
 
     });
-  /*  console.log("data: "+storesFromServer)
-     setStores(storesFromServer);  
-      */
-
- /*   let tmp =[];
-      for(let i=0;i<productsFromServer.length;i++){
-        tmp.push(productsFromServer[i]);
-        
-      }
  
-   console.log(tmp); */
 }catch(error){
 
 }
@@ -295,18 +369,11 @@ try{
 const fetchTransactions = async (stores) => {//get Orders 
   
   try {
-    /* if (storeid===null){
-     try{
-       //setStoreId(stores[0]._id)
-     }catch(err){
-       console.log(err)
-     } */
-
-    
+   
     
    if (stores){
-    //console.log(stores[storeindex]._id)
     const res = await fetch(`http://localhost:3001/api/orders/${stores[storeindex]._id}`);
+
        const data = await res.json();
        console.log(data)
        return data.orders;
@@ -366,10 +433,10 @@ const handlegetSales = async (stores) => {
   console.log({message:error})
 }
 };
-/* useEffect(()=>{ */
+ useEffect(()=>{ 
   const handlegetMonthAnalytics =  async (storeid) => {//get Orders 
  
-    var url = `http://localhost:${process.env.REACT_APP_SERVER_PORT}/api/analytics/transactions/sales/monthly`
+    var url = `http://localhost:${process.env.REACT_APP_SERVER_PORT}/api/analytics/sales/monthly/${storeid}`
   
     await axios.post(url,{year:2022}).then((response)=>{
       //console.log(response.data)
@@ -380,30 +447,28 @@ const handlegetSales = async (stores) => {
   }
   const handlegetAnalytics =  async (storeid) => {//get Orders 
  
-    var url = `http://localhost:${process.env.REACT_APP_SERVER_PORT}/api/analytics/transactions/${storeid}`
+    var url = `http://localhost:${process.env.REACT_APP_SERVER_PORT}/api/analytics/report/${storeid}`
 
     await axios.get(url).then((response)=>{
      // console.log(response.data.transactions)
           //setAnalytics(response.data);
-          setTransactions(response.data.transactions);
+         // setTransactions(response.data.transactions);
           setCompletedAggregate(response.data.completedAggregate);
           setinCompletedAggregate(response.data.inCompleteAggregate);
           setAlltimeAggregate(response.data.alltimeAggregate);
 
    });
  }
- /* if (!isproductsLoaded) {handlegetProducts();}
- if (!ismonthlySalesLoaded){ handlegetMonthAnalytics();}
- if (!analyticsLoaded){ handlegetAnalytics();}
+ if (!ismonthlySalesLoaded){ handlegetMonthAnalytics(stores[storeindex]._id);}
+ if (!analyticsLoaded){ handlegetAnalytics(stores[storeindex]._id);}
 
 return ()=>{
   
-     setIsproductsLoaded(true);
      setIsanalyticsLoaded(true);
      setIsmonthlySalesLoaded(true);
   
 }
-}); */
+},[analyticsLoaded, ismonthlySalesLoaded, isproductsLoaded, storeindex, stores]);
  
   return (
     <Router>
@@ -425,7 +490,7 @@ return ()=>{
     
      <Switch>
      <Route exact  path="/dashboard">
-         <Home user={user} stores={stores} transactions={transactions} setStores={setStores} handlegetStores={handlegetStores} handlegetProducts={handlegetProducts} isStoresLoaded={isStoresLoaded}setIsStoreLoaded={setIsStoreLoaded}/>
+         <Home user={user} stores={stores} transactions={transactions} setStores={setStores} handlegetStores={handlegetStores} handlegetProducts={handlegetProducts} isStoresLoaded={isStoresLoaded}setIsStoreLoaded={setIsStoreLoaded} completedAggregate={completedAggregate} inCompletedAggregate={inCompletedAggregate} alltimeAggregate={alltimeAggregate} monthlySales={monthlySales}/>
        </Route>
        <Route path="/dashboard/users">
         <UserList/>
@@ -452,14 +517,14 @@ return ()=>{
        </Route>
 
        <Route path="/dashboard/products">
-        <ProductsList products={products} handlegetProducts={handlegetProducts} handleDeleteProduct={handleDeleteProduct}/>
+        <ProductsList products={products} handlegetProducts={handlegetProducts} handleDeleteProduct={handleDeleteProduct} isproductsLoaded={isproductsLoaded}setIsproductsLoaded={setIsproductsLoaded} store={stores[storeindex]}/>
        </Route>
        <Route path="/dashboard/product">
         <Product/>
        </Route>
 
        <Route path="/dashboard/newProduct">
-        <NewProduct/>
+        <NewProduct store={stores[storeindex]} onFormSubmit={onFormSubmit}/>
        </Route>
 
        <Route path="/dashboard/transactions">
