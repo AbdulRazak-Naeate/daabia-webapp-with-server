@@ -1,10 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
+import {useHistory} from 'react-router-dom'
 import "./featuredInfo.css";
 import { ArrowDownward,ArrowUpward,Add} from "@material-ui/icons"
-import { formatWithCurrencySymbol } from "../../../utils/Utils"
+import { formatWithCurrencySymbol,formarttoCurrency } from "../../../utils/Utils"
 
 export const FeaturedInfo = ({completedAggregate,inCompletedAggregate,alltimeAggregate}) => {
+
+    const history = useHistory()
    
    var completeCount=0;
    var completeSales=0
@@ -28,10 +31,13 @@ export const FeaturedInfo = ({completedAggregate,inCompletedAggregate,alltimeAgg
    }catch(err){
        console.log(err)
    }
+   const onFeatureItemOnclik =(address)=>{
+       history.push(`/dashboard/${address}`)
+   }
    const Featured =({completeCount,completeSales})=>(
     <div className="featured">
   
-  <div className="featuredItem">
+  <div className="featuredItem" onClick={()=>{onFeatureItemOnclik('transactions')}}>
     <span className="featureTitle">In Progress</span>
      <div className="featuredMoneyContainer">
          <span className="featuredMoney">{inCompleteCount}</span>
@@ -42,7 +48,7 @@ export const FeaturedInfo = ({completedAggregate,inCompletedAggregate,alltimeAgg
      <span className="featuredSub">Current orders</span>
     </div>
 
-   <div className="featuredItem">
+   <div className="featuredItem"  onClick={()=>{onFeatureItemOnclik('sales')}}>
     <span className="featureTitle">Completed</span>
      <div className="featuredMoneyContainer">
          <span className="featuredMoney">{completeCount}</span>
@@ -67,7 +73,7 @@ export const FeaturedInfo = ({completedAggregate,inCompletedAggregate,alltimeAgg
     <div className="featuredItem">
     <span className="featureTitle">Sales</span>
      <div className="featuredMoneyContainer">
-         <span className="featuredMoney">{`${formatWithCurrencySymbol(completeSales,'GHS')}`}</span>
+         <span className="featuredMoney">{`${formarttoCurrency(completeSales,'π')}`}</span>
          <span className="featuredMoneyRate">-11.4
          <ArrowDownward className="featuredIcon negative"/>
          </span>

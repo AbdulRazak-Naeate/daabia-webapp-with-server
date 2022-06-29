@@ -4,7 +4,6 @@ import {Link,useHistory} from 'react-router-dom';
 import './signup.css';
 import {post} from 'axios';
 import country from '../../world-db/countries.json'
-var loki = require('lokijs');
 export default function SignUp({toggleSideBar}) {
   const [username,setUsername]=useState('');
   const [email,setEmail]=useState('');
@@ -18,8 +17,6 @@ export default function SignUp({toggleSideBar}) {
   const history=useHistory();
 
 
-  const _db = new loki('csc.db');
-  const[db]=useState(_db);
     
   const onFormSubmit =(e)=>{
     
@@ -45,15 +42,7 @@ export default function SignUp({toggleSideBar}) {
     }
   } 
 
-  const onCountryChange=(e)=>{
-    var sid=e.target.value;
-     filterStates(sid,db);
-  }
-
-  const onStateChange=(e)=>{
-    var cid=e.target.value;
-     filterCities(cid,db);
-  }
+ 
 
   
 const filterStates = async(cid,db)=> {
@@ -124,36 +113,14 @@ const initiateCities = async (db,citiesJSON) =>{
     toggleSideBar(false);
 
      const init = async () =>{
-     const countriesJSON = 'https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/countries.json';
+  
 
-    const statesJSON = 'https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/states.json';
-    const citiesJSON = 'https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/cities.json';
+     
 
-      try{
-       //get country data from server
-      const countriesfromServer = await initializeData(db,countriesJSON)
-      setCountries(countriesfromServer.data);
-     // console.log(countriesfromServer.data[0]);
-
-       //get states data from server
-      const statesfromServer = await initiateStates(db,statesJSON)
-      setStates(statesfromServer.data);
-     // console.log(statesfromServer.data[0]);
-     //get cities data from server
-      const citiesfromServer = await initiateCities(db,citiesJSON)
-      setCities(citiesfromServer.data);
-     // console.log(citiesfromServer.data[0]);
-      }catch(err){
-        console.log(err);
-      }
-    }
-    
-    init();
-
-    
+     }
      
     
-   },[toggleSideBar,db]);
+   });
 
   
   const SignUp =()=>{

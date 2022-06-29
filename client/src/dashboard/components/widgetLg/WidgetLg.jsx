@@ -1,6 +1,9 @@
-import { formatWithCurrencySymbol } from "../../../utils/Utils"
 import "./widgetLg.css"
+import {Person} from '@material-ui/icons'
+import {  formarttoCurrency} from "../../../utils/Utils"
+
  function WidgetLg({transactions}) {
+    console.log(transactions)
      const Button=({type})=>{
          return <button className={"widgetLgButton "+type}>{type}</button>
      }
@@ -22,11 +25,11 @@ import "./widgetLg.css"
                       
                       <tr className="widgetLgTr" key={index}>
                       <td className="widgetLgUser">
-                          <img src="https://images.pexels.com/photos/4620866/pexels-photo-4620866.jpeg?cs=srgb&dl=pexels-cottonbro-4620866.jpg&fm=jpg" alt="user" className="widgetLgImg" />
+                          <div className="customerIcon"> <Person/></div>
                           <span className="widgetLgName">{transaction.customer.firstname}</span>
                       </td>
                       <td className="widgetLgDate">{new Date(transaction.date).toLocaleDateString()}</td>
-                      <td className="widgetLgAmount">{formatWithCurrencySymbol(transaction.totalPrice,'GHS')}</td>
+                      <td className="widgetLgAmount">{formarttoCurrency(transaction.totalPrice,'π')}</td>
                       <td className="widgetLgStatus"><Button type={`${transaction.status}`}/></td>
                   </tr>)
                   })

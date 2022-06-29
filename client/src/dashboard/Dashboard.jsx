@@ -28,6 +28,7 @@ import axios from 'axios';
  const [storeindex,setStoreindex]=useState(parseInt(localStorage.getItem('storeindex')));
  const user = JSON.parse(localStorage.getItem('user'));
  const [products,setProducts]=useState([]);
+ const [productxs,set_Products]=useState([]);
  const [transactions,setTransactions]=useState([]);
  const [sales,setSales]=useState([]);
  const [completedAggregate,setCompletedAggregate]=useState([]);
@@ -39,8 +40,8 @@ import axios from 'axios';
  const [isStoresLoaded,setIsStoreLoaded]=useState(false);
  const [isTransLoaded,setIstransLoaded]=useState(false);
  const [isSalesLoaded,setIsSalesLoaded]=useState(false);
-  const [isproductsLoaded,setIsproductsLoaded]=useState(false);
-
+ const [isproductsLoaded,setIsproductsLoaded]=useState(false);
+ const [_isProductsLoaded,_setIsproductsLoaded]=useState(false)
 
  const handletoggleSideBar=(bol)=>{
    setShowSideBar(bol);
@@ -54,6 +55,7 @@ import axios from 'axios';
     setIsSalesLoaded(false);
     setIsproductsLoaded(false);
     setIsanalyticsLoaded(false);
+    _setIsproductsLoaded(false)
     setStoreindex(e.target.value)
     localStorage.setItem('storeindex',e.target.value)
   }
@@ -393,7 +395,8 @@ const handlegetTransactions = async (stores) => {
   for(let i=0;i<ordersFromServer.length;i++){
     tmp.push(ordersFromServer[i]);
     
-  }
+  } 
+  handlegetProducts()
    setTransactions(tmp)
 
 } catch (error) {
@@ -434,6 +437,33 @@ const handlegetSales = async (stores) => {
 }
 };
  useEffect(()=>{ 
+  const fetchProducts = async ()=>{
+    try{
+       const res = await fetch(`http://localhost:3001/api/products/store/${stores[storeindex]._id}`);
+       const data=await res.json();
+             console.log(data);
+             return data.products;
+    }catch(error){
+
+    }
+}
+const handleget_Products = async ()=> {
+
+  try{
+     const productsFromServer = await fetchProducts();
+     console.log(productsFromServer);
+     
+     let tmp =[];
+        for(let i=0;i<productsFromServer.length;i++){
+          tmp.push(productsFromServer[i]);
+          
+        }
+     set_Products(tmp);
+     console.log(tmp);
+  }catch(error){
+
+  }
+}
   const handlegetMonthAnalytics =  async (storeid) => {//get Orders 
  
     var url = `http://localhost:${process.env.REACT_APP_SERVER_PORT}/api/analytics/sales/monthly/${storeid}`
@@ -452,7 +482,7 @@ const handlegetSales = async (stores) => {
     await axios.get(url).then((response)=>{
      // console.log(response.data.transactions)
           //setAnalytics(response.data);
-         // setTransactions(response.data.transactions);
+          setTransactions(response.data.transactions);
           setCompletedAggregate(response.data.completedAggregate);
           setinCompletedAggregate(response.data.inCompleteAggregate);
           setAlltimeAggregate(response.data.alltimeAggregate);
@@ -461,14 +491,17 @@ const handlegetSales = async (stores) => {
  }
  if (!ismonthlySalesLoaded){ handlegetMonthAnalytics(stores[storeindex]._id);}
  if (!analyticsLoaded){ handlegetAnalytics(stores[storeindex]._id);}
-
+  if (!_isProductsLoaded){
+    handleget_Products()
+  }
 return ()=>{
   
      setIsanalyticsLoaded(true);
      setIsmonthlySalesLoaded(true);
-  
+     setIsproductsLoaded(true);
+     
 }
-},[analyticsLoaded, ismonthlySalesLoaded, isproductsLoaded, storeindex, stores]);
+},[_isProductsLoaded, analyticsLoaded, ismonthlySalesLoaded, isproductsLoaded, storeindex, stores]);
  
   return (
     <Router>
@@ -490,7 +523,7 @@ return ()=>{
     
      <Switch>
      <Route exact  path="/dashboard">
-         <Home user={user} stores={stores} transactions={transactions} setStores={setStores} handlegetStores={handlegetStores} handlegetProducts={handlegetProducts} isStoresLoaded={isStoresLoaded}setIsStoreLoaded={setIsStoreLoaded} completedAggregate={completedAggregate} inCompletedAggregate={inCompletedAggregate} alltimeAggregate={alltimeAggregate} monthlySales={monthlySales}/>
+         <Home user={user} stores={stores} transactions={transactions} setStores={setStores} handlegetStores={handlegetStores} handlegetProducts={handlegetProducts} isStoresLoaded={isStoresLoaded}setIsStoreLoaded={setIsStoreLoaded} completedAggregate={completedAggregate} inCompletedAggregate={inCompletedAggregate} alltimeAggregate={alltimeAggregate} monthlySales={monthlySales} productxs={productxs}/>
        </Route>
        <Route path="/dashboard/users">
         <UserList/>

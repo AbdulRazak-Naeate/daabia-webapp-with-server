@@ -9,8 +9,7 @@ import AlertDialog from '../../components/alertdialog/AlertDialog'
 import { formarttoCurrency } from "../../../utils/Utils"
 
 export default function ProductsList({products,handlegetProducts,handleDeleteProduct,isproductsLoaded,setIsproductsLoaded,store}) {   
-  console.log(store)
-    const query=QueryParams();
+    console.log(store)
     const history=useHistory();
     const [pageSize, setPageSize] =useState(10);
 
@@ -47,8 +46,9 @@ export default function ProductsList({products,handlegetProducts,handleDeletePro
 
         
          if (!isproductsLoaded){
-          handlegetProducts();
 
+           handlegetProducts();
+   
          }
          return ()=>{
              setIsproductsLoaded(true)

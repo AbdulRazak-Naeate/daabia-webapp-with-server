@@ -47,3 +47,7 @@
   align-items: center;
   font-weight: 600;
 }
+.customerIcon{
+  padding: 5px;
+  color:gray
+}
