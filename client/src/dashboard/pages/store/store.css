@@ -11,7 +11,7 @@
 .storeAddButton{ 
     border: none;
     padding:5px 10px ;
-    background-color: teal;
+    background-color: var(--dashboard-primary);
     color: white;
     cursor: pointer;
     border-radius: 5px;
@@ -135,7 +135,7 @@
     border: none;
     padding:5px;
     cursor: pointer;
-    background-color: darkblue;
+    background-color: var(--dashboard-primary);
     color: white;
     font-weight: 600;
 }

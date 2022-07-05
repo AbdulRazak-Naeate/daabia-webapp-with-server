@@ -13,7 +13,7 @@
 .AddProductButton{
     border: none;
     padding:5px 10px ;
-    background-color: teal;
+    background-color: var(--dashboard-primary);
     color: white;
     cursor: pointer;
     border-radius: 5px;

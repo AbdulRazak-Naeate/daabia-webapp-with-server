@@ -7,6 +7,7 @@ import { productData } from '../../dummyData';
 import { Publish } from '@material-ui/icons';
 import QueryParams from '../../QueryParams';
 import {patch}from 'axios';
+import { convertValueFromExponent} from "../../../utils/Utils"
 
   const MesurementItem = ({itemval,index,name,onUpdateColors})=>{
        
@@ -19,7 +20,7 @@ import {patch}from 'axios';
      return( <input type="text" className={`measurementItem ${name}`} placeholder="" value={sval} key={index} onChange={(e)=>{setsValue(e.target.value);onUpdateSizes(name)}}  id={`${name}${index}`}/>)
     }
 
-export default function Product() {
+export default function Product({store}) {
     const query=QueryParams();
     const [product,setProduct]= useState(JSON.parse(localStorage.getItem('product')));
     const [storeid]=useState(query.get('storeId'));
@@ -28,15 +29,14 @@ export default function Product() {
     const [productname]=useState(product.name);
     const [colors,setColors]=useState(product.color);
     const [sizes,setSizes]=useState(product.size);
-    console.log(product.color);
     // eslint-disable-next-line no-unused-vars
     const [stock,setStock]=useState(product.stock.currentstock);
     const [addStock,setaddStock]=useState(0);
     const [active,setActive]=useState(product.active);
-    const [price,setPrice]=useState(product.price);
+    const [price,setPrice]=useState(convertValueFromExponent(product.price));
     const [productUpdated,setProductUpdated]=useState(false);
     const[user]=useState(JSON.parse(localStorage.getItem('user')));
-       
+       console.log(store)
       const removeLastIndex = (values) => {
           let arr=[...values];
            arr.pop(values.length-1);
@@ -63,7 +63,7 @@ export default function Product() {
                 if(response.status===200){
                      setProduct(response.data)
                      setStock(response.data.stock.currentstock);
-                     setPrice(response.data.price);
+                     setPrice(convertValueFromExponent(response.data.price));
                      setActive(response.data.active);
                      setColors(response.data.color);
                      setSizes(response.data.size);
@@ -114,7 +114,10 @@ export default function Product() {
       })
     return (
         <div className="product">
-            <span>{storename}</span>
+           <div className='storeCurrencyLabel'>
+           <span>{storename}</span>
+            <span>{` Local currency: ${store.currency}`}</span>
+           </div>
             <div className="productTitleContainer">
                 <h1 className="productTitle">Product</h1>
                  <div style={{width:'25%',display:'flex',justifyContent:'space-between'}}>
@@ -154,7 +157,7 @@ export default function Product() {
                         </span>
                         <span className="productInfoItem">
                             <span className="productInfoKey">price:</span>
-                            <label className="productInfoValue" id="stock">{`π${product.price}`}</label>
+                            <label className="productInfoValue" id="stock">{`π${convertValueFromExponent(product.price)}`}</label>
                         </span>
                     </div>
                     </div>

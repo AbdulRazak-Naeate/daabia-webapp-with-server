@@ -14,8 +14,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import ShoppingBagOutlined from '@mui/icons-material/ShoppingBagOutlined'
 import MoreIcon from '@mui/icons-material/MoreVert';
-
+import {useHistory} from 'react-router-dom'
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -56,10 +57,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Appbar() {
+export default function Appbar({totalItems, totalOrders,handlesearchProduct,handleUserClick}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+ const history =useHistory()
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -79,7 +80,10 @@ export default function Appbar() {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
-
+  const handlenavigate=(location)=>{
+    console.log(location)
+     history.push(location)
+  }
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -139,6 +143,18 @@ export default function Appbar() {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
+      <MenuItem>
+        <IconButton
+          size="large"
+          aria-label="show 17 new notifications"
+          color="inherit"
+        >
+          <Badge badgeContent={17} color="error">
+            <ShoppingBagOutlined />
+          </Badge>
+        </IconButton>
+        <p>Orders</p>
+      </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -185,6 +201,11 @@ export default function Appbar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <IconButton size="large" aria-label="orders" color="inherit" >
+              <Badge badgeContent={totalOrders} color="error" onClick={handlenavigate('/orders')}>
+                <ShoppingBagOutlined />
+              </Badge>
+            </IconButton>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
                 <MailIcon />

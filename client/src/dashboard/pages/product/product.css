@@ -11,7 +11,7 @@
     width: 80px;
     border: none;
     padding: 5px 10px;
-    background-color: teal;
+    background-color: var(--dashboard-primary);
     color: white;
     cursor: pointer;
     border-radius: 5px;
@@ -185,4 +185,9 @@
     color: white;
     font-weight: 600;
     cursor: pointer;
+}
+.storeCurrencyLabel{
+    width:30%;
+    display:flex;
+    justify-content:space-between;
 }

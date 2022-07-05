@@ -21,6 +21,7 @@ import Sales from './pages/sales/Sales';
 import LogIn from "./pages/login/LogIn";
 import SignUp from "./pages/signup/SignUp";
 import axios from 'axios';
+import Daabia from './daabia/daabia'
 
  function  Dashboard() {
  const [showSidebar,setShowSideBar]=useState(true);
@@ -30,6 +31,7 @@ import axios from 'axios';
  const [products,setProducts]=useState([]);
  const [productxs,set_Products]=useState([]);
  const [transactions,setTransactions]=useState([]);
+ const [temp_transactions,set_tempTransactions]=useState([]);
  const [sales,setSales]=useState([]);
  const [completedAggregate,setCompletedAggregate]=useState([]);
  const [inCompletedAggregate,setinCompletedAggregate]=useState([]);
@@ -42,20 +44,42 @@ import axios from 'axios';
  const [isSalesLoaded,setIsSalesLoaded]=useState(false);
  const [isproductsLoaded,setIsproductsLoaded]=useState(false);
  const [_isProductsLoaded,_setIsproductsLoaded]=useState(false)
+ const  [showAlltransactions,setShowAllTrans]=useState(localStorage.getItem('show_all')!==null ?localStorage.getItem('show_all'):false);
+ const [switchText,setSwitchText]=useState('Show all');
+ const [showprogress,setShowProgress]=useState(false)
 
+ const daabia = new Daabia(stores[storeindex]._id);
  const handletoggleSideBar=(bol)=>{
    setShowSideBar(bol);
  }
   const toggleSideBar=()=>{
     setShowSideBar(!showSidebar);
   }
+  const handleShowAllTransactions = (e)=>{
+    //console.log(e.target.checked)
+    
+    setShowAllTrans(e.target.checked);
+    var status=''; 
+    var checked=e.target.checked;
+    checked ? status='' :status='Completed';
+    checked ? setSwitchText('Show less') :setSwitchText('Show all');
+    localStorage.setItem('show_all', checked)
+    
+    setTransactions(temp_transactions)
+    setTransactions(temp_transactions.filter((item)=> item.status!==status));
+
+
+    
+  }
   const handleOnStoreChange =(e)=>{
-    console.log(e.target.value)
     setIstransLoaded(false);
     setIsSalesLoaded(false);
     setIsproductsLoaded(false);
     setIsanalyticsLoaded(false);
-    _setIsproductsLoaded(false)
+    _setIsproductsLoaded(false);
+    setShowProgress(true)
+    setTransactions([]);
+
     setStoreindex(e.target.value)
     localStorage.setItem('storeindex',e.target.value)
   }
@@ -78,7 +102,7 @@ import axios from 'axios';
     async function deleteStore(_id) {
       try {
         const response = await axios.delete(`http://localhost:3001/api/stores/${_id}`);
-        console.log(response);
+       // console.log(response);
         if (response.data.deletedCount>=1){
         setStores(stores.filter((item) => item._id !==_id))
 
@@ -90,7 +114,7 @@ import axios from 'axios';
     async function handleDeleteProduct(_id) {
       try {
         const response = await axios.delete(`http://localhost:3001/api/products/${_id}`);
-        console.log(response);
+        //console.log(response);
         if (response.data.deletedCount>=1){
         setProducts(products.filter((item) => item._id !==_id))
 
@@ -105,6 +129,7 @@ const handleUpdateTransaction=(orderid,status,setSelectionModel)=>{
   editTransaction(orderid,status).then((response)=>{
 
     const data=response.data.data;
+    
     setTransactions(data)//set transaction data  with new updated one 
     setSelectionModel([]);
     //console.log(response.data);
@@ -246,8 +271,8 @@ return axios.patch(url, body,config)
     
     e.preventDefault()// Stop form default submit
     
-        initiateAndCreateProduct(colors,sizes,name,price,categoryId,description,specification,digitalProductUrl,storeid,stock,active,productImages).then((response) => {
-          console.log(response.data);
+       daabia.initiateAndCreateProduct(user.auth_token,colors,sizes,name,price,categoryId,description,specification,digitalProductUrl,storeid,stock,active,productImages).then((response) => {
+         // console.log(response.data);
          if (response.data.status===200){
           //window.location.reload();
            
@@ -268,7 +293,7 @@ return axios.patch(url, body,config)
     
     const url = 'http://localhost:3001/api/products/';
 
-    console.log(colors);
+    //console.log(colors);
     const formData = new FormData();
     //getInput values
    // let colors = getInputValues('color-specs');
@@ -293,7 +318,6 @@ return axios.patch(url, body,config)
     formData.append('storeId', storeid);
     formData.append('stock',stock);
     formData.append('active',active)
-    console.log(JSON.stringify(formData));
  
     //append files to image to create an a file array
   
@@ -324,19 +348,17 @@ return axios.patch(url, body,config)
 
       }
 }
-const handlegetProducts = async ()=> {
+const handlegetProducts = async()=> {
 
     try{
-       const productsFromServer = await fetchProducts();
-       console.log(productsFromServer);
+       const products = await daabia.fetchProducts();
        
        let tmp =[];
-          for(let i=0;i<productsFromServer.length;i++){
-            tmp.push(productsFromServer[i]);
+          for(let i=0;i<products.length;i++){
+            tmp.push(products[i]);
             
           }
        setProducts(tmp);
-       console.log(tmp);
     }catch(error){
 
     }
@@ -356,7 +378,6 @@ const fetchStores = async(user)=>{
 const handlegetStores = async(user) => {
 try{
     fetchStores(user).then((response)=>{
-      console.log(response)
       setStores(response.data.store);  
 
       localStorage.setItem('stores',JSON.stringify(response.data.store))
@@ -377,7 +398,6 @@ const fetchTransactions = async (stores) => {//get Orders
     const res = await fetch(`http://localhost:3001/api/orders/${stores[storeindex]._id}`);
 
        const data = await res.json();
-       console.log(data)
        return data.orders;
    }
  
@@ -390,14 +410,25 @@ const fetchTransactions = async (stores) => {//get Orders
 const handlegetTransactions = async (stores) => {
 
  try {
- const ordersFromServer = await fetchTransactions(stores);  
+ const transactions = await fetchTransactions(stores); 
+
   let tmp =[];
-  for(let i=0;i<ordersFromServer.length;i++){
-    tmp.push(ordersFromServer[i]);
-    
+  for(let i=0;i<transactions.length;i++){
+    tmp.push(transactions[i]);
+
   } 
+
   handlegetProducts()
-   setTransactions(tmp)
+  set_tempTransactions(tmp);
+
+   var status = ''
+   setShowAllTrans(false);
+   setShowProgress(false)
+   localStorage.setItem('show_all',false);
+   showAlltransactions ? status='' :status='Completed';
+   showAlltransactions ? setSwitchText('Show less') :setSwitchText('Show all');
+
+   setTransactions(tmp.filter((item)=> item.status!==status))
 
 } catch (error) {
   //setStoreId(stores[0]._id);
@@ -441,7 +472,6 @@ const handlegetSales = async (stores) => {
     try{
        const res = await fetch(`http://localhost:3001/api/products/store/${stores[storeindex]._id}`);
        const data=await res.json();
-             console.log(data);
              return data.products;
     }catch(error){
 
@@ -459,7 +489,6 @@ const handleget_Products = async ()=> {
           
         }
      set_Products(tmp);
-     console.log(tmp);
   }catch(error){
 
   }
@@ -553,7 +582,7 @@ return ()=>{
         <ProductsList products={products} handlegetProducts={handlegetProducts} handleDeleteProduct={handleDeleteProduct} isproductsLoaded={isproductsLoaded}setIsproductsLoaded={setIsproductsLoaded} store={stores[storeindex]}/>
        </Route>
        <Route path="/dashboard/product">
-        <Product/>
+        <Product store={stores[storeindex]}/>
        </Route>
 
        <Route path="/dashboard/newProduct">
@@ -561,7 +590,7 @@ return ()=>{
        </Route>
 
        <Route path="/dashboard/transactions">
-        <Transactions transactions={transactions} isTransLoaded={isTransLoaded} setIstransLoaded={setIstransLoaded} handlegetTransactions= {handlegetTransactions} handlegetStores={handlegetStores} handleUpdateManyTransactions={handleUpdateManyTransactions} handleUpdateTransaction={handleUpdateTransaction}/>
+        <Transactions transactions={transactions} isTransLoaded={isTransLoaded} setIstransLoaded={setIstransLoaded} handlegetTransactions= {handlegetTransactions} handlegetStores={handlegetStores} handleUpdateManyTransactions={handleUpdateManyTransactions} handleUpdateTransaction={handleUpdateTransaction} handleShowAllTransactions={handleShowAllTransactions} showAlltransactions={showAlltransactions} switchText={switchText} setShowProgress={setShowProgress} showprogress={showprogress} />
        </Route>
        <Route path="/dashboard/sales">
         <Sales sales={sales} setSales={setSales} stores={stores} handlegetSales={handlegetSales} isSalesLoaded={isSalesLoaded}setIsSalesLoaded={setIsSalesLoaded}/>

@@ -22,7 +22,7 @@
     .pageTitleButton{
         border: none;
         padding: 5px 10px;
-        background-color: teal;
+        background-color: --dashboard-primary;
         color: white;
         cursor: pointer;
         border-radius: 5px;
@@ -31,7 +31,7 @@
     .select-store{
         padding: 5px 7px;
         margin-right: 10px;
-        border-color: teal;
+        border-color: --dashboard-primary;
         border-radius: 5px;
     }
 .transStatusSpan{
@@ -64,7 +64,7 @@
   .actionButtonsWrapper{
     display:flex;
     justify-content:space-between;
-    width:30%;
+    width:50%;
     margin:10px
   }
   .actionButtons{
@@ -72,4 +72,16 @@
     background-color: #ebf1fe;
     color:#2a7ade ;
     border-radius: 4px;
+  }
+  .showall{
+    padding: 3px 5px ;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #2a7ade;
+
+  }
+  .circularProgress{
+    position: absolute;
+    margin: 25% 40%;
   }

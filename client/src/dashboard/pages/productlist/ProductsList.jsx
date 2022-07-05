@@ -1,15 +1,15 @@
  import './productsList.css'
-import {DataGrid} from '@material-ui/data-grid';
+import {DataGrid,GridToolbar
+} from '@material-ui/data-grid';
+import { Stack } from '@mui/material';
 import { DeleteOutline,EditOutlined } from '@material-ui/icons';
 import {Tooltip} from '@material-ui/core';
 import QueryParams from '../../QueryParams';
 import { Link ,useHistory} from 'react-router-dom';
 import {useState,useEffect} from "react";
 import AlertDialog from '../../components/alertdialog/AlertDialog'
-import { formarttoCurrency } from "../../../utils/Utils"
-
+import { formarttoCurrency , convertValueFromExponent} from "../../../utils/Utils"
 export default function ProductsList({products,handlegetProducts,handleDeleteProduct,isproductsLoaded,setIsproductsLoaded,store}) {   
-    console.log(store)
     const history=useHistory();
     const [pageSize, setPageSize] =useState(10);
 
@@ -36,7 +36,7 @@ export default function ProductsList({products,handlegetProducts,handleDeletePro
        handleClickOpen();
     }
 
-    const handleEdit = (params)=>{
+    const handlenavigateProductPage = (params)=>{
          //navigate to product page
         history.push(`/dashboard/product?productId=${params.row._id}&productName=${params.row.name}&storeId=${store._id}&storeName=${store.name}`);
 
@@ -79,7 +79,7 @@ export default function ProductsList({products,handlegetProducts,handleDeletePro
           width: 330,
           renderCell:(params)=>{
               return(
-                  <div className="productListItem">
+                  <div className="productListItem"  onClick={()=>{handlenavigateProductPage(params)}}>
                       <img className="productListImg" src={`http://localhost:3001/server/uploads/products/${params.row.image[0].filename}`} alt=""/>
                       {params.row.name}
                   </div>
@@ -124,7 +124,7 @@ export default function ProductsList({products,handlegetProducts,handleDeletePro
                 return(
                    <>
                     <Tooltip title="edit product"  enterDelay={500} leaveDelay={200}>
-                    <EditOutlined className="productlistEditIcon" onClick={()=>{handleEdit(params)}}>Edit</EditOutlined>
+                    <EditOutlined className="productlistEditIcon" onClick={()=>{handlenavigateProductPage(params)}}>Edit</EditOutlined>
                   </Tooltip>
                   <Tooltip title="delete product" enterDelay={500} leaveDelay={200}>
                     <DeleteOutline className="productlistDelete" onClick={() => {onDelete(params.row._id)}}/>
@@ -154,7 +154,20 @@ export default function ProductsList({products,handlegetProducts,handleDeletePro
             rowsPerPageOptions={[10, 10, 20,50]}
             pagination
            checkboxSelection
-            disableSelectionOnClick />
+            disableSelectionOnClick 
+            components={{
+              Toolbar:GridToolbar,
+              NoRowsOverlay: () => (
+                <Stack height="100%" alignItems="center" justifyContent="center">
+                  No sales recorded
+                </Stack>
+              ),
+              NoResultsOverlay: () => (
+                <Stack height="100%" alignItems="center" justifyContent="center">
+                  Local filter returns no result
+                </Stack>
+              )
+            }}/>
             </div>
         </div>
     )

@@ -81,7 +81,7 @@ flex:1
     font-weight: 600;
 }
 .btnsignup{
-    background-color: darkblue;
+    background-color: var(--dashboard-primary);
 }
 .btnSignUp{
     background-color: rgb(109, 240, 183);

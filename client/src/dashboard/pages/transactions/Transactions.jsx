@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React,  { useRef } from 'react';
 import './transactions.css';
-import {DataGrid} from '@material-ui/data-grid';
-import { Stack,Button } from '@mui/material';
+import {DataGrid,GridToolbar} from '@material-ui/data-grid';
+import { Stack,Button,Switch,CircularProgress } from '@mui/material';
 import {  Edit } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import {useState , useEffect} from "react";
@@ -13,7 +13,7 @@ import {TransacModal} from  './modal/TransacModal'
 
 import {PrintBox} from './printbox/PrintBox.jsx';
 
-const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTransLoaded ,setIstransLoaded,handleUpdateManyTransactions,handleUpdateTransaction}) => {
+const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTransLoaded ,setIstransLoaded,handleUpdateManyTransactions,handleUpdateTransaction,handleShowAllTransactions,showAlltransactions,switchText,showprogress,setShowProgress}) => {
   const [pageSize, setPageSize] = useState(20);
   const [stores]=useState(JSON.parse(localStorage.getItem('stores')));
   const [selectedRows,setSelectedRows]=useState([]);
@@ -24,9 +24,14 @@ const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTran
   const [openModal,setOpenModal]=useState(false)
   const [orderid,setOrderId]=useState('');
   const [tranxData,setTranxData]=useState([]);
-
+  const label ={inputProps:{'aria-label':'Show all'}}
    // const history=useHistory();
   //const componentRef = useRef();
+  const [switchstate, setSwitchState] = React.useState(false);
+  function handleSwitchChange (e) {
+    switchstate(e.target.checked);
+    // Add actions here for when the switch is triggered
+  };
 
    const handlePrint = ()=>{
     setOpenModal(true);
@@ -78,25 +83,26 @@ const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTran
   const Span=({id,onClick,type})=>{ 
     /*@param id is the order id 
      *@param onClick is the click event 
-     *@param type is the button class type Pending ,Approved Declined
+     *@param type is the Button class type Pending ,Approved Declined
      */
     return <span onClick={onClick} id={"status-span-"+id} className={"transStatusSpan "+type}>{type}</span>
 }
  
-   
+   console.log(showprogress)
   useEffect(() => {  
 
-  
-   
     if (!isTransLoaded){
-    if (stores.length >0){handlegetTransactions(stores); 
-}
+    if (stores.length >0){
+      handlegetTransactions(stores); 
+      setShowProgress(true)
+    }
     }
   return () =>{
-    
+       
+
     setIstransLoaded(true)
   }
-  },[handlegetStores, handlegetTransactions, isTransLoaded, setIstransLoaded, stores]);
+  },[handlegetStores, handlegetTransactions, isTransLoaded, setIstransLoaded, setShowProgress, stores]);
   const getDateNow =(dateNumber)=>{
     var dateString = new Date(parseInt(dateNumber)*1000);
       var newDate= `${dateString.getFullYear()}-${dateString.getMonth()}-${dateString.getDate()} ${dateString.getHours()}:${dateString.getMinutes()}`
@@ -228,36 +234,51 @@ const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTran
 
   return (
     <div className="transactions">
-      {/* <button onClick={()=>{
+      
+      {/* <Button onClick={()=>{
           var datenow= new Date()
         var futureDate = new Date(datenow.setMonth(datenow.getMonth()+1))
         console.log(futureDate.toISOString())
-      }}>future Date</button> */}
+      }}>future Date</Button> */}
+      { showprogress ? <CircularProgress className='circularProgress' variant='indeterminate' color ='primary' size={25} />:''}
         <TransacModal openModal={openModal} handleCloseTransacModal={handleCloseTransacModal} tranxData={tranxData} />
        <AlertDialog open={open} handleClickOpen={handleClickOpen} handleClose={handleClose} title="Mark transaction" textContent={`Are you sure you want to mark transaction status as ${status} !`}DeleteOutline={Edit}/>
        <div className="pageTitleContainer">
            <h1 className="pageTitle">Transactions</h1>    
-            <div>
-          {/*   { stores ?  <select  className="select-store" value={storeid} onChange={(e)=>{setStoreId(e.target.value)}}>
+           <div>
+            {/*{ stores ?  <select  className="select-store" value={storeid} onChange={(e)=>{setStoreId(e.target.value)}}>
                   {stores ? stores.map((store,index)=>{
                   return(  <option key={index} value={store._id} className="opt">{store.name}</option>)
                   }):`<option value="0" class="opt">No stores found </option>`}
               </select>:''} */}
             <Link to={`/dashboard/transactions?`}>
-          <button className="pageTitleButton">Reports</button>
+          <Button className="pageTitleButton">Reports</Button>
           </Link>
             </div>
           </div>
       <div className="actionButtonsWrapper">
-     <button className="actionButtons" onClick={()=>{handleUpdateManyTransactions("Approved",setSelectionModel,selected_Ids);         
-      }}>Approve</button>
-     <button className="actionButtons" onClick={()=>{handleUpdateManyTransactions("Completed",setSelectionModel,selected_Ids)}}>Completed</button>
-     <button className="actionButtons" onClick={()=>{handleUpdateManyTransactions("Pending",setSelectionModel,selected_Ids)}}>Pending</button>
-     <button className="actionButtons" onClick={()=>{handleUpdateManyTransactions("Declined",setSelectionModel,selected_Ids)}}>Decline</button>
-    {/*  <button className="actionButtons" onClick={()=>{
+     <Button variant='outlined' size='small' onClick={()=>{handleUpdateManyTransactions("Approved",setSelectionModel,selected_Ids);         
+      }}>Approve</Button>
+     <Button variant='outlined' size='small'  onClick={()=>{handleUpdateManyTransactions("Completed",setSelectionModel,selected_Ids)}}>Completed</Button>
+     <Button variant='outlined' size='small'  onClick={()=>{handleUpdateManyTransactions("Pending",setSelectionModel,selected_Ids)}}>Pending</Button>
+     <Button variant='outlined' size='small'  onClick={()=>{handleUpdateManyTransactions("Declined",setSelectionModel,selected_Ids)}}>Decline</Button>
+     <Button variant='outlined' size='small'>
+      {switchText}
+    <Switch checked={showAlltransactions} onChange={(e)=>{handleShowAllTransactions(e)}}/>
+    </Button>
+   
+  {/*  <div>
+      {text}
+      <Switch
+        checked={switchstate}
+        onChange={handleSwitchChange}
+        color="primary"
+      />
+    </div> */}
+    {/*  <Button className="actionButtons" onClick={()=>{
        setOpenModal(true);
        setTranxData(selectedRows);
-       }}>Print List</button>
+       }}>Print List</Button>
           */}
      </div>    
 
@@ -282,6 +303,8 @@ const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTran
         }}
         selectionModel={selectionModel}
         components={{
+          Toolbar:GridToolbar,
+
           NoRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
               No transactions recorded

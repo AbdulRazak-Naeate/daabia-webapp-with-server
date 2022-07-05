@@ -26,14 +26,14 @@
 }
 
 
-.measurementWrapper{
+.specsmeasurementWrapper{
     display:grid;
     grid-template-columns: auto auto auto auto;
     border:0px solid darkgray;
     width:100%;
     height: auto;
 }
-.measurementItem{
+.specsmeasurementItem{
     width:90%;
     height: 4vh;
     font-size: 12px;

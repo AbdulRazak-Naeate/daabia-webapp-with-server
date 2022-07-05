@@ -3,12 +3,12 @@ import './specs.css';
 import {Button} from '@mui/material'
 const MesurementItem = ({key,itemval,index,name,onUpdateColors})=>{
   const [val,setValue]=useState(itemval);
- return( <input type="text" className={`measurementItem ${name}`} placeholder="" value={val} key={key} onChange={(e)=>{setValue(e.target.value);onUpdateColors(name)}}  id={`${name}${index}`}/>)
+ return( <input type="text" className={`specsmeasurementItem ${name}`} placeholder="" value={val} key={index} onChange={(e)=>{setValue(e.target.value);onUpdateColors(name)}}  id={`${name}${index}`}/>)
 }
 
 const SizeMesurementItem = ({itemval,index,name,onUpdateSizes})=>{
   const [sval,setsValue]=useState(itemval);
-return( <input type="text" className={`measurementItem ${name}`} placeholder="" value={sval} key={index} onChange={(e)=>{setsValue(e.target.value);onUpdateSizes(name)}}  id={`${name}${index}`}/>)
+return( <input type="text" className={`specsmeasurementItem ${name}`} placeholder="" value={sval} key={index} onChange={(e)=>{setsValue(e.target.value);onUpdateSizes(name)}}  id={`${name}${index}`}/>)
 }
 const Specs = ({setColors,setSizes}) => {
     const[mcolors,setmColors] = useState([""]); //initiliaze color inputs 
@@ -48,7 +48,7 @@ const onUpdateColors =(name)=>{
         <div className='specsformItem'>
                            <label>Color Specifications</label>
                            <small>Type in all Product colors you have in stock For example White ,black or blue </small>
-                          <div className="measurementWrapper">
+                          <div className="specsmeasurementWrapper">
                         
                           {   
                              mcolors.map((color,index)=>{
@@ -66,7 +66,7 @@ const onUpdateColors =(name)=>{
                         <div className='specsformItem'>
                            <label>Size Specifications</label>
                            <small>Type in Product  sizes For example 34 for shoes , 5 inch for phones</small>
-                           <div className="measurementWrapper">
+                           <div className="specsmeasurementWrapper">
                         
                           {   
                              msizes.map((size,index)=>{

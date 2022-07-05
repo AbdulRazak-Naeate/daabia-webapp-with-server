@@ -75,7 +75,7 @@ export const Topbar = () => {
       },[user,loggedin,history])
       
     return (
-        <div className="topbar">
+        <div className="dashboard-topbar">
             <div className="topbarWrapper">
                 <div className="topLeft">
                     <span className="title">{`${process.env.REACT_APP_WEBSITE_NAME}`}</span>

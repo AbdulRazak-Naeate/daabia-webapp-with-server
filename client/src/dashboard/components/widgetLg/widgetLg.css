@@ -47,7 +47,10 @@
   align-items: center;
   font-weight: 600;
 }
-.customerIcon{
+.widgetLgName{
+  font-size: medium;
+}
+.customerIcon,.widgetLgName{
   padding: 5px;
   color:gray
 }

@@ -1,3 +1,7 @@
+:root{
+    --dashboard-primary:darkblue;
+    --dashboard-secondary:snow;
+}
 .content{
     display: flex;
     width: 100%;

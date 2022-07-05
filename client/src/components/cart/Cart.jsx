@@ -13,7 +13,7 @@ const Cart = ({cart, handleUpdateCartQty,handleupdateColorSize,handleupdateMeasu
     const [onHookFormError,setOnhookFormError]=useState(false);
     var colorSizeError=false;
     var measurementError=false;
-
+     console.log(cart.subtotal)
    const history=useHistory();
 
    const handleCheckOut=()=>{

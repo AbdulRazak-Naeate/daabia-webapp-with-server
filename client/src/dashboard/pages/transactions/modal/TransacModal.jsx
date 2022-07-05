@@ -23,7 +23,6 @@ const style = {
 
  export const TransacModal =  React.forwardRef((props,ref) => {
 
-  console.log(props.tranxData)
   const componentRef = useRef();
   return (
     <div>

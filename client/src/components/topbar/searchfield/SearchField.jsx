@@ -51,12 +51,15 @@ const StyledInputElement = styled('input')(
 `,
 );
 
-const CustomInput = React.forwardRef(function CustomInput(props, ref) {
+ function CustomInput(props) {
+    const ref =React.forwardRef();
   return (
     <InputUnstyled  components={{ Input: StyledInputElement }} className={props.className} placeholder={props.placeholder} ref={ref} onChange={(e)=>{props.handlesearchProduct(e.target.value)}}/>
   );
-});
+};
 
-export default function SearchField({handlesearchProduct}) {
-  return <CustomInput aria-label="search input" placeholder="Search products..." handlesearchProduct={handlesearchProduct} />;
+export default function SearchField({handlesearchProduct,ref}) {
+
+
+  return <CustomInput aria-label="search input" placeholder="Search products..." handlesearchProduct={handlesearchProduct} ref={ref}/>;
 }

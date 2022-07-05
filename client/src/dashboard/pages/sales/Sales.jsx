@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import './sales.css';
-import {DataGrid} from '@material-ui/data-grid';
+import {DataGrid,GridToolbar} from '@material-ui/data-grid';
 import { Stack } from '@mui/material';
 import {  Edit } from '@material-ui/icons';
 import { Link} from 'react-router-dom';
@@ -217,6 +217,7 @@ const Sales = ({sales,setSales,handlegetSales,isSalesLoaded,setIsSalesLoaded}) =
         }}
         selectionModel={selectionModel}
         components={{
+          Toolbar:GridToolbar,
           NoRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
               No sales recorded

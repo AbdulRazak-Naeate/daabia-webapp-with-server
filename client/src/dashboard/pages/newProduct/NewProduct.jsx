@@ -195,9 +195,10 @@ export default function NewProduct({store,onFormSubmit}) {
     return (
         <div className="newProduct">
            <Alert stack={{limit: 3}} />
-
-    <span className="addproductStoreTitle">{store.name}
-                </span> 
+          <div className='storeCurrencyLabel'>
+           <span className="addproductStoreTitle" >{store.name}</span>
+            <span>{` Local currency: ${store.currency}`}</span>
+           </div>
           <div className="addProductTitleContainer">
               <h1 className="addProductTitle">Add New Product </h1>
             

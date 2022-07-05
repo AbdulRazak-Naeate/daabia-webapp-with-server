@@ -8,68 +8,18 @@ var formatter = new Intl.NumberFormat('en-GH', {
 }
 
 const formarttoCurrency = (amount ,symbol)=>{
-
-  const getDigitsAfterPeriod =(amount)=>{
-
-    var stringvalue=amount.toString().split('');//convert to Array
-    var periodIndex=stringvalue.indexOf('.');//get period index number
-    var stringval=amount.toString();
-     
-      if (periodIndex >=1){ //check for NaN values if non exist continue
-        if (periodIndex!==-1){ //if period exist in value start extraction from its index
-   
-         var extract=stringval.slice(stringval.length - (stringval.length-2))
-          console.log(extract)
-          return extract.toString().split('');
-      
-        }
-      }else{
-        //console.log(amount)
-         return ['0'];
-      }
-
-    
-  }
-  console.log();
-
-   function isDigitContainNonZeroz(arr){
-    
-    for(var i=0;i<arr.length;i++){
-      var bool=false
-      console.log(arr[i])
-      if (arr[i]!==0){
-
-        bool= true
-      }
-    }     
-     return bool
-
-   }
+  var value=0;
 if (amount!==undefined){
-
   if (amount>=1){
-   var arr=getDigitsAfterPeriod(amount);
 
-       console.log(isDigitContainNonZeroz(arr))
-       if (isDigitContainNonZeroz(arr)===true){
-        return symbol + amount.toFixed(0).replace(/\d(?=(\d{3})+\.)/g,"$&,");
-       }else if(isDigitContainNonZeroz(arr)===false){
-        return symbol + amount.toFixed(8);
-       }
-      
+    value = symbol +amount.toFixed(3).replace(/\d(?=(\d{3})+\.)/g,"$&,");
   }else{
-   return  symbol +amount.toFixed(8).replace(/\d(?=(\d{3})+\.)/g,"$&,");
+    value =symbol +amount.toFixed(8).replace(/\d(?=(\d{3})+\.)/g,"$&,");
    }
 }
+  return value
   }
-
-  const convertValueFromExponent = (value)=>{
-    if (value >=1){
-      return value
-    }else{
-      return value.toFixed(8)
-    }
-  }
+  
   
   const formarttoPiCurrency = (amount)=>{
     var value=0;
@@ -112,25 +62,6 @@ const randNumber= (count)=> {//Unique Identifier
  // console.log(result);
   return result;
 }
-
-//Fiat Currency Crypto conversion
-const convertFiatCurrencyToCrypto = ()=>{
-  var localFiatCurrency=1;
-  var foreignFiatCurrency=localFiatCurrency/7;
-  console.log(foreignFiatCurrency)
-  var crypto=2199113;
-
- return  foreignFiatCurrency/crypto
-
-}
-const converCryptoFiatCurrency= ()=>{
-  var localFiatCurrency=0;
-  //var foreignFiatCurrency=0;
-  var crypto=0.00000000;
-
- return  crypto/localFiatCurrency
-
-}
 /* function toDate(date) {
     if (date === void 0) {
       return new Date(0);
@@ -165,8 +96,5 @@ const converCryptoFiatCurrency= ()=>{
   module.exports.formatWithCurrencySymbol = formatWithCurrencySymbol
   module.exports.formarttoCurrency  = formarttoCurrency
   module.exports.formarttoPiCurrency= formarttoPiCurrency
-  module.exports.convertFiatCurrencyToCrypto=convertFiatCurrencyToCrypto
-  module.exports.converCryptoFiatCurrency=converCryptoFiatCurrency
   module.exports.truncateString     = truncateString
   module.exports.randNumber          = randNumber
-  module.exports.convertValueFromExponent=convertValueFromExponent

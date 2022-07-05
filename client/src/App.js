@@ -219,7 +219,7 @@ const analytics = getAnalytics(app);
   }
   
   const updateCartQty =(productId,quantity,price)=>{
-    
+    console.log(price)
     const url = `http://localhost:3001/api/carts/quantity/${productId}`;
      
  
@@ -684,6 +684,7 @@ const searchProduct =(searchString)=>{
            <TopbarcontacInfo/>
            
          <Topbar totalItems={itemsCount} totalOrders={orderCount} handlesearchProduct={handlesearchProduct} handleUserClick={handleUserClick}/>
+        {/*  <Appbar totalItems={itemsCount} totalOrders={orderCount} handlesearchProduct={handlesearchProduct} handleUserClick={handleUserClick}/> */}
          </Route>
          <RModal openModal={openModal} handleCloseModal={handleCloseModal} ref={ref}/>
 

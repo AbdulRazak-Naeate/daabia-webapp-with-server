@@ -64,7 +64,7 @@ router.post('/',async (req,res)=>{
                      //console.log("Matched Items length : "+matchItems.length);
                 if (matchItems.length>0){
                     let product=req.body.product
-                    let line_item_sub_price=((pQty)*parseInt(product.price))
+                    let line_item_sub_price=((pQty)*parseFloat(product.price))
                    // console.log(req.body.quantity);
                     console.log('product exist in cart inc qty, sub price :'+line_item_sub_price)
                     const updateCartQuantity =await Cart.findOneAndUpdate({//update item
@@ -87,7 +87,8 @@ router.post('/',async (req,res)=>{
                  //let line_item_sub_price=req.body.quantity*product.price
 
                 console.log('add new product into cart')
-                var sub_price = parseInt(req.body.product.price)
+                var sub_price = convertValueFromExponent(req.body.product.price)
+                console.log(sub_price)
                const addtoCart = await Cart.findOneAndUpdate({userId:req.body.userId},{
                       $push:{items:{
                
@@ -114,7 +115,8 @@ router.post('/',async (req,res)=>{
             console.log('user cart not exist creating new one')
 
             var pid=req.body.productId
-            let subprice=parseInt(req.body.product.price)
+            let subprice=convertValueFromExponent(req.body.product.price);
+            console.log(subprice)
             //let line_item_sub_price=req.body.quantity*product.price
             var cartItem={};
              cartItem={
@@ -125,7 +127,7 @@ router.post('/',async (req,res)=>{
                     size:'null',
                     measurement:{back:"",chest:"",shirtLength:"",sleeve:"",trouserLength:"",waist:"",thigh:"",bust:""},
                     product:req.body.product,
-                    line_item_sub_price:subprice,
+                    line_item_sub_price:parseFloat(subprice),
                     selected:false
                    
             }
@@ -153,7 +155,7 @@ router.patch('/quantity/:productId',async (req,res)=>{
     try{
         var pId =req.body.productId;
         var value= parseInt(req.body.quantity)
-        var subtotalqty=(value)*parseInt(req.body.price);
+        var subtotalqty=(value)*convertValueFromExponent(req.body.price);
        // console.log("value "+subtotalqty)
         Cart.findOneAndUpdate({userId:req.body.userId,
             items:{
@@ -163,7 +165,7 @@ router.patch('/quantity/:productId',async (req,res)=>{
             {
                 $set: {
                       'items.$.quantity':value,
-                      'items.$.line_item_sub_price':subtotalqty,
+                      'items.$.line_item_sub_price':parseFloat(subtotalqty),
                       }
             },   
             { new:true,useFindAndModify:false}).then(ret=>{
@@ -417,7 +419,7 @@ const exactMatchQuantity =(matchItems,productId)=>{//search and get the exact ca
 
 }
 const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
-     var subtotal = 0;
+     var subtotal = 0.0;
   const aggr= await Cart.aggregate([{$match:{userId:req.body.userId}},{$unwind:"$items"},
         {$match:{'items.selected':true}},
     {
@@ -433,7 +435,7 @@ const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
       var retLength=ret.length
        console.log("aggr : "+JSON.stringify(ret)+ " length :"+retLength);
        if(retLength!==0){
-        subtotal=ret[0].subTotal;
+        subtotal=convertValueFromExponent(ret[0].subTotal);
 
         }
        }catch(err){
@@ -441,7 +443,7 @@ const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
        }
         Cart.findOneAndUpdate({userId:req.body.userId},
         {
-          $set:{subtotal:subtotal},
+          $set:{subtotal:parseFloat(subtotal)},
         },   
         { new:true,useFindAndModify:false}
         ).then((ret=>{
@@ -457,5 +459,12 @@ const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
 
    
 }
+function convertValueFromExponent(value){
+    if (value >=1){
+      return value
+    }else{
+      return value.toFixed(8)
+    }
+  }
 
 module.exports = router;

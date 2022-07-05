@@ -4,15 +4,15 @@ import {NotificationsNone,ShoppingCartOutlined,AccountCircleOutlined,EmailOutlin
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import Menu from '@mui/material/Menu';
 import {MenuItem,Typography} from '@mui/material';
-import {Link} from 'react-router-dom';
+import {Link,useHistory} from 'react-router-dom';
 import SearchField from './searchfield/SearchField';
-
+const ref= React.forwardRef()
  const Topbar = ({totalItems,totalOrders,handlesearchProduct,handleUserClick}) => {
    const[loggedin]=useState(false);
    //const [user] = useState(JSON.parse(localStorage.getItem('user')));
    // const [loggedin] = useState(JSON.parse(localStorage.getItem('loggedin')));
   
-    //const history=useHistory();
+    const history=useHistory();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     //eslint-disable-next-line no-unused-vars
@@ -22,6 +22,10 @@ import SearchField from './searchfield/SearchField';
     const handleClose = () => {
       setAnchorEl(null);
     };
+    const handlenavigate=(location)=>{
+      console.log(location)
+       history.push(location)
+    }
     useEffect(()=>{
       var user =localStorage.getItem('user');
        //console.log("user "+user)
@@ -45,7 +49,7 @@ import SearchField from './searchfield/SearchField';
                   </div>
                 </div>
                 <div className="searchfield">
-                  <SearchField handlesearchProduct={handlesearchProduct}/>
+                  {/* <SearchField handlesearchProduct={handlesearchProduct}/> */}
                 </div>
                 <div className="topRight">
                    {/*  <div className="topbarIonContainer">
@@ -54,16 +58,16 @@ import SearchField from './searchfield/SearchField';
                     </div> */}
 
 
-                    <div className="topbarIonContainer" onClick={()=>{}}>
-                       <Link to="/orders">
+                    <div className="topbarIonContainer" onClick={()=>{handlenavigate('/orders')}}>
+                      
                        <ShoppingBagOutlinedIcon className="link"/>
-                       </Link>
+                      
                         <span className="topIconBadge">{totalOrders}</span>
                     </div>
-                    <div className="topbarIonContainer">
-                      <Link  to="/cart"><ShoppingCartOutlined className="link"/>
+                    <div className="topbarIonContainer"onClick={()=>{handlenavigate('/cart')}}>
+                     <ShoppingCartOutlined className="link"/>
                         <span className="topIconBadge" >{totalItems}</span>
-                        </Link>
+                       
                     </div> 
                    
                    

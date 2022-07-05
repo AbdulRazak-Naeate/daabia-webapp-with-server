@@ -131,10 +131,10 @@ const CartItem = ({cartitem,onUpdateCartQty,onUpdateColorSize,onUpdateMeasuremen
           },
         }} checked={checked} onChange={(e)=>{setChecked(e.target.checked); console.log(e.target.checked)
                 onUpdateSelect(cartitem.product._id,e.target.checked) }} />
-
-                <Button type="button" size="small" onClick={()=>{onUpdateCartQty(cartitem.product._id,cartitem.quantity-1,cartitem.product.price)}}>-</Button>
+                
+                <Button type="button" size="small" onClick={()=>{onUpdateCartQty(cartitem.product._id,cartitem.quantity-1,parseFloat(cartitem.product.price))}}>-</Button>
                 <Typography>{cartitem.quantity}</Typography>
-                <Button type="button" size="small"  color="secondary" onClick={()=>{onUpdateCartQty(cartitem.product._id,cartitem.quantity+1,cartitem.product.price)}}>+</Button>
+                <Button type="button" size="small"  color="secondary" onClick={()=>{onUpdateCartQty(cartitem.product._id,cartitem.quantity+1,parseFloat(cartitem.product.price))}}>+</Button>
                    <Button type="button"   variant="contained" color="secondary" onClick={()=>{onRemoveFromCart(cartitem.product._id)}}>Remove</Button>
               </div>
            
