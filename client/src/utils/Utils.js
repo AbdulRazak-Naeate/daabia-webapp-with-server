@@ -52,9 +52,9 @@ if (amount!==undefined){
 
        console.log(isDigitContainNonZeroz(arr))
        if (isDigitContainNonZeroz(arr)===true){
-        return symbol + amount.toFixed(0).replace(/\d(?=(\d{3})+\.)/g,"$&,");
+        return symbol + amount.toFixed(8).replace(/\d(?=(\d{3})+\.)/g,"$&,");
        }else if(isDigitContainNonZeroz(arr)===false){
-        return symbol + amount.toFixed(8);
+        return symbol + amount.toFixed(0);
        }
       
   }else{

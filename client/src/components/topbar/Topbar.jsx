@@ -49,7 +49,7 @@ const ref= React.forwardRef()
                   </div>
                 </div>
                 <div className="searchfield">
-                  {/* <SearchField handlesearchProduct={handlesearchProduct}/> */}
+                  {<SearchField handlesearchProduct={handlesearchProduct}/>}
                 </div>
                 <div className="topRight">
                    {/*  <div className="topbarIonContainer">
@@ -58,16 +58,19 @@ const ref= React.forwardRef()
                     </div> */}
 
 
-                    <div className="topbarIonContainer" onClick={()=>{handlenavigate('/orders')}}>
+                    <div className="topbarIonContainer" onClick={()=>{}}>
+                      <Link to ="/orders" className="link">
                       
                        <ShoppingBagOutlinedIcon className="link"/>
-                      
+                      </Link>
                         <span className="topIconBadge">{totalOrders}</span>
                     </div>
-                    <div className="topbarIonContainer"onClick={()=>{handlenavigate('/cart')}}>
+                    <div className="topbarIonContainer"onClick={()=>{}}>
+                  <Link to ="/cart" className="link">
+
                      <ShoppingCartOutlined className="link"/>
                         <span className="topIconBadge" >{totalItems}</span>
-                       
+                       </Link>
                     </div> 
                    
                    

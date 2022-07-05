@@ -1,5 +1,5 @@
 import {useState}from 'react';
-import {BrowserRouter as Switch,Route,useHistory
+import {BrowserRouter as Router,Switch,Route,useHistory
 } from "react-router-dom";
 import  Dashboard from './dashboard/Dashboard';
 import './App.css';
@@ -219,7 +219,7 @@ const analytics = getAnalytics(app);
   }
   
   const updateCartQty =(productId,quantity,price)=>{
-    console.log(price)
+    console.log()
     const url = `http://localhost:3001/api/carts/quantity/${productId}`;
      
  
@@ -690,7 +690,7 @@ const searchProduct =(searchString)=>{
 
        <Switch>         
        <Route exact path="/">  
-       <CategoryWidget categories={categories} handlesearchByCategory={handlesearchByCategory}/> 
+       {filteredProducts.length > 0 ? '':<CategoryWidget categories={categories} handlesearchByCategory={handlesearchByCategory}/> }
       {filteredProducts.length > 0 ? <Products products={filteredProducts}  onAddToCart={handleAddtoCart} onUpdateLikes={handleUpdateLikes} favorites={favorites}/>:<Products products={products}  onAddToCart={handleAddtoCart} onUpdateLikes={handleUpdateLikes} favorites={favorites}/>}
        </Route>
        <Route exact path="/cart">

@@ -536,7 +536,7 @@ return ()=>{
     <Router>
     <Route exact path={paths}>
          <Topbar/>
-         </Route>
+    </Route>
      <div className="content">
 
     <div>
