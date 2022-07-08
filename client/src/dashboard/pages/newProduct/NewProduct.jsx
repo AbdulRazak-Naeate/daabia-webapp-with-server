@@ -296,7 +296,7 @@ export default function NewProduct({store,onFormSubmit}) {
            <select id="validationCustom05" onChange={onDigitalProuctInputChange}>
               <option>no</option>
               <option>yes</option>
-             </select></>:''}  
+             </select></>:''} 
           </div>
 
              </Grid>
