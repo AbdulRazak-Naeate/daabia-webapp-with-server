@@ -33,6 +33,7 @@ padding: 10px 5px;
 .addProductFormContainer{
     border: 0px solid;
     padding: 10px;
+    width: 100%;
 }
 .addProductForm{
     margin-top: 10px;

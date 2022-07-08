@@ -53,6 +53,7 @@ const loginValidation = data =>{
       filename:Joi.string(),
       priceEach:Joi.number(),
       totalPrice:Joi.number(),
+      shippingFees:Joi.number(),
       status:Joi.string(), 
       userId:Joi.string().min(20),
       paymentMethod:Joi.string(),

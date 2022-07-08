@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import { Grid,Select,Button, InputLabel, Typography, MenuItem} from '@material-ui/core';
 import axios from 'axios';
+import {convertValueFromExponent} from '../../utils/Utils'
 /* var loki = require('lokijs');
  */
 
@@ -38,7 +39,7 @@ const AddressForm = ({checkoutToken,next}) => {
     const [city,setCity]=useState('');
     const [citylabel,setCityLabel]=useState('');
     const [orderNumber]=useState(uniqueOrderNumber());
-    const [shippingFees,setShippingFees]=useState(0);
+    const [shippingFees,setShippingFees]=useState(0.00000020);
    
 
     
@@ -50,7 +51,7 @@ const AddressForm = ({checkoutToken,next}) => {
     setCountry(index);
     setCountryLabel(name)
     getStates(cid);
-    setShippingFees(5)
+    //setShippingFees(parseFloat(0.00000020))
   }
   const onStateChange=(e)=>{
     const index=e.target.value;

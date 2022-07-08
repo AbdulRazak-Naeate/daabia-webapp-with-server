@@ -4,11 +4,11 @@ import {DataGrid,GridToolbar
 import { Stack } from '@mui/material';
 import { DeleteOutline,EditOutlined } from '@material-ui/icons';
 import {Tooltip} from '@material-ui/core';
-import QueryParams from '../../QueryParams';
+//import QueryParams from '../../QueryParams';
 import { Link ,useHistory} from 'react-router-dom';
 import {useState,useEffect} from "react";
 import AlertDialog from '../../components/alertdialog/AlertDialog'
-import { formarttoCurrency , convertValueFromExponent} from "../../../utils/Utils"
+import { formarttoCurrency } from "../../../utils/Utils"
 export default function ProductsList({products,handlegetProducts,handleDeleteProduct,isproductsLoaded,setIsproductsLoaded,store}) {   
     const history=useHistory();
     const [pageSize, setPageSize] =useState(10);

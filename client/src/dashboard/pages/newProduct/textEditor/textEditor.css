@@ -1,0 +1,8 @@
+.editorWrapper{
+    border: 1px solid gainsboro;
+}
+.editor{
+    min-height: 30vh;
+    max-height: max-content;
+    border: 1px solid gainsboro;
+}

@@ -1,3 +1,4 @@
+const double = require('@mongoosejs/double');
 const mongoose = require('mongoose');
 
 
@@ -51,6 +52,10 @@ const OrderSchema  =  new mongoose.Schema({
         required:true
     },
     totalPrice:{
+        type:Number,
+        required:true,
+    },
+    shippingFees:{
         type:Number,
         required:true,
     },

@@ -7,10 +7,11 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import useStyles from './styles';
-import { formatWithCurrencySymbol } from '../../utils/Utils';
+import {formarttoCurrency,convertValueFromExponent } from '../../utils/Utils';
 
 const Review = ({checkoutToken,fees}) => {
-    console.log(fees)
+     var fess =convertValueFromExponent(fees)
+    console.log(fess)
     const[checkoutCart]=useState(checkoutToken);
     const[items]=useState(checkoutToken.items);
     const[refresh,setRefresh]=useState(false);
@@ -19,17 +20,17 @@ const Review = ({checkoutToken,fees}) => {
   const handleClick = () => {
     setOpen(!open);
   };
-
-  const ListItemSecondaryContent= ({item})=>{
-    return(<div className={classes.secondaryItemContent}>
-      <div className={classes.measuremenItem}><span>Back</span><span>{item.measurement.back}</span></div> 
-      <div className={classes.measuremenItem}><span>Chest</span><span>{item.measurement.chest}</span></div> 
-      <div className={classes.measuremenItem}><span>Length</span><span>{item.measurement.shirtLength}</span></div> 
-      <div className={classes.measuremenItem}><span>Sleeve</span><span>{item.measurement.sleeve}</span></div> 
-      <div className={classes.measuremenItem}><span>Trouser length</span><span>{item.measurement.trouserLength}</span></div> 
-      <div className={classes.measuremenItem}><span>Waist</span><span>{item.measurement.waist}</span></div> 
-      <div className={classes.measuremenItem}><span>Thigh</span><span>{item.measurement.thigh}</span></div> 
-      <div className={classes.measuremenItem}><span>Bust</span><span>{item.measurement.bust}</span></div> 
+    
+  const ListItemSecondaryContent= ({item,key})=>{
+    return(<div key={'list-item-sec-0'}  className={classes.secondaryItemContent}>
+      <div key={'list-item-sec-1'}  className={classes.measuremenItem}><span>Back</span><span>{item.measurement.back}</span></div> 
+      <div key={'list-item-sec-2'}  className={classes.measuremenItem}><span>Chest</span><span>{item.measurement.chest}</span></div> 
+      <div key={'list-item-sec-3'}  className={classes.measuremenItem}><span>Length</span><span>{item.measurement.shirtLength}</span></div> 
+      <div key={'list-item-sec-4'}  className={classes.measuremenItem}><span>Sleeve</span><span>{item.measurement.sleeve}</span></div> 
+      <div key={'list-item-sec-5'}  className={classes.measuremenItem}><span>Trouser length</span><span>{item.measurement.trouserLength}</span></div> 
+      <div key={'list-item-sec-6'}  className={classes.measuremenItem}><span>Waist</span><span>{item.measurement.waist}</span></div> 
+      <div key={'list-item-sec-7'}  className={classes.measuremenItem}><span>Thigh</span><span>{item.measurement.thigh}</span></div> 
+      <div  key={'list-item-sec-8'} className={classes.measuremenItem}><span>Bust</span><span>{item.measurement.bust}</span></div> 
 
       {/* Chest:${item.measurement.chest} Length:${item.measurement.shirtLength} Sleeve:${item.measurement.sleeve} Trouser Length:${item.measurement.trouserLength} Waist:${item.measurement.waist} Thigh:${item.measurement.thigh} Bust:${item.measurement.bust} */}
     </div>)
@@ -51,10 +52,10 @@ const Review = ({checkoutToken,fees}) => {
         <>
         {
           item.selected === true ? <>
-          <ListItemButton className={classes.listItemButton} onClick={()=>{handleClick()}}  key={index}>
+          <ListItemButton  className={classes.listItemButton} onClick={()=>{handleClick()}}  key={index}>
            <ListItem key={item.product._id}>
            <ListItemText  primary={item.product.name} secondary={`Quantity ${item.quantity}  ${item.color!=='null'? ' , '+item.color+' , '+item.size:''}`} />   
-             <Typography variant="body2">{`$${item.line_item_sub_price}`}</Typography>
+             <Typography variant="body2">{`${formarttoCurrency(item.line_item_sub_price,'π')}`}</Typography>
   
            </ListItem>
           {open ? <ExpandLess key={index} /> : <ExpandMore key={index} />}
@@ -73,13 +74,13 @@ const Review = ({checkoutToken,fees}) => {
         }
         </>
       ))}
-        <ListItem style={{padding:'10px 0'}}>
+        <ListItem key={'fees'} style={{padding:'10px 0'}}>
             <ListItemText primary="shipping"/>
-            <Typography variant="subtitle1">{`${formatWithCurrencySymbol(fees,'GHS')}`}</Typography>
+            <Typography variant="subtitle1">{`π${convertValueFromExponent(fees)}`}</Typography>
           </ListItem>
-        <ListItem style={{padding:'10px 0'}}>
+        <ListItem key={'total'} style={{padding:'10px 0'}}>
             <ListItemText primary="total"/>
-            <Typography variant="subtitle1">{`${formatWithCurrencySymbol(checkoutCart.subtotal+fees,'GHS')}`}</Typography>
+            <Typography variant="subtitle1">{`${formarttoCurrency(checkoutCart.subtotal+fees,'π')}`}</Typography>
           </ListItem>
     </List>:setRefresh(!refresh)
       }

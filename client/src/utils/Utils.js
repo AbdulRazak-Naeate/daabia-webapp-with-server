@@ -19,7 +19,7 @@ const formarttoCurrency = (amount ,symbol)=>{
         if (periodIndex!==-1){ //if period exist in value start extraction from its index
    
          var extract=stringval.slice(stringval.length - (stringval.length-2))
-          console.log(extract)
+         // console.log(extract)
           return extract.toString().split('');
       
         }
@@ -36,7 +36,6 @@ const formarttoCurrency = (amount ,symbol)=>{
     
     for(var i=0;i<arr.length;i++){
       var bool=false
-      console.log(arr[i])
       if (arr[i]!==0){
 
         bool= true
@@ -47,19 +46,23 @@ const formarttoCurrency = (amount ,symbol)=>{
    }
 if (amount!==undefined){
 
-  if (amount>=1){
+  //if (amount>=1){
    var arr=getDigitsAfterPeriod(amount);
-
-       console.log(isDigitContainNonZeroz(arr))
-       if (isDigitContainNonZeroz(arr)===true){
-        return symbol + amount.toFixed(8).replace(/\d(?=(\d{3})+\.)/g,"$&,");
-       }else if(isDigitContainNonZeroz(arr)===false){
-        return symbol + amount.toFixed(0);
+   var bool=isDigitContainNonZeroz(arr);
+     //  console.log(bool)
+       if (bool===true){
+       
+        return symbol + amount.toFixed(arr.length).replace(/\d(?=(\d{3})+\.)/g,"$&,");
+       }else if(bool===false){
+       // console.log(amount)
+        return symbol + amount;
        }
-      
+  /*     
   }else{
+    console.log(amount)
+
    return  symbol +amount.toFixed(8).replace(/\d(?=(\d{3})+\.)/g,"$&,");
-   }
+   } */
 }
   }
 

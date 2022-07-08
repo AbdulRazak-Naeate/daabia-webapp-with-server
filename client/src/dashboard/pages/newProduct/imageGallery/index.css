@@ -1,7 +1,7 @@
 .productImg{
-    height: 36vh;
+    height: 25%;
+    width: 100%;
     padding: 3px;
-    width: 26vw;
   object-fit: cover;
   border: 1px solid rgb(151, 150, 150);
   margin-right: 2px;
@@ -22,6 +22,7 @@
     justify-content: space-between;
     align-items: center;
     border: 0px solid;
+    width: 100%;
   }
 
   .imageswrapper {

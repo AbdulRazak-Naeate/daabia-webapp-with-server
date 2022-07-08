@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import thumbnail from './thumbnail-wide.png';
+import {Grid,Typography} from '@material-ui/core'
 import './index.css'
 const ImageGallery = ({handleImages,productImages}) => {
   
@@ -54,14 +55,17 @@ const ImageGallery = ({handleImages,productImages}) => {
     }
 
   return (
-    <div className="imageGallery">
+   <div>
+      <Typography variant='h5'>Gallery</Typography>
+     <Grid className="imageGallery" justifiContent='space-between' container spacing={1} padding={0} xs={4} sm={6} md={12} lg={12}>
          {
              imagediv.map((img,index)=>{
-                 return(<img className="productImg" alt={img}key={index} id={`product-image${img}`} src={thumbnail}  onClick={ (e) => { onImageClicked(e) }}/>)
+                 return(<Grid item xs={12} sm={12} md={4} lg={4}>   <img className="productImg" alt={img}key={index} id={`product-image${img}`} src={thumbnail}  onClick={ (e) => { onImageClicked(e) }}/></Grid>)
              })
          }
           <input style={{display:"none"}} type="file" id="product-file" multiple onChange={onFileInputChange} />
-    </div>
+    </Grid>
+   </div>
   )
 }
 

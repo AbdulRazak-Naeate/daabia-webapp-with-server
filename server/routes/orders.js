@@ -107,6 +107,7 @@ router.post('/',async (req,res)=>{
           filename:req.body.filename,
           priceEach:req.body.priceEach,
           totalPrice:req.body.totalPrice,
+          shippingFees:req.body.shippingFees,
           userId:req.body.userId,
           date:req.body.date,
           status:req.body.status,

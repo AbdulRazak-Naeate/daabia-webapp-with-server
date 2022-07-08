@@ -4,15 +4,24 @@ const msgs = require('./email.messages')
 const templates = require('./email.templates')
 
 exports.confirmOrder =(req,res)=>{
-  const { email,data } = req.body
-  User.findOne({ email })
+  const { email,data } = req.body;
+  console.log(email)
+  User.findOne({ email:email })
     .then(user => {
 
-     // Send the user orderconfirmation email on successful order.
+    if(user!==null){ //if user is found in db
+        // Send the user orderconfirmation email on successful order.
     sendEmail(user.email, templates.confirmOrder(data))
-          .then(() => res.json({ msg: msgs.confirm }))
-          .catch(err => console.log(err))
-      }
+    .then(() => res.json({ msg: msgs.confirm }))
+    .catch(err => console.log(err))
+
+    }else{
+        // Send the user orderconfirmation email on successful order.
+    sendEmail(email, templates.confirmOrder(data))
+    .then(() => res.json({ msg: msgs.confirm }))
+    .catch(err => console.log(err))
+}
+    }
 )}
 
 // The callback that is invoked when the user submits the form on the client.

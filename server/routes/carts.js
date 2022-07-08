@@ -64,7 +64,7 @@ router.post('/',async (req,res)=>{
                      //console.log("Matched Items length : "+matchItems.length);
                 if (matchItems.length>0){
                     let product=req.body.product
-                    let line_item_sub_price=((pQty)*parseFloat(product.price))
+                    let line_item_sub_price=((pQty)*product.price)
                    // console.log(req.body.quantity);
                     console.log('product exist in cart inc qty, sub price :'+line_item_sub_price)
                     const updateCartQuantity =await Cart.findOneAndUpdate({//update item
@@ -87,8 +87,9 @@ router.post('/',async (req,res)=>{
                  //let line_item_sub_price=req.body.quantity*product.price
 
                 console.log('add new product into cart')
-                var sub_price = convertValueFromExponent(req.body.product.price)
+                var sub_price = req.body.product.price
                 console.log(sub_price)
+                console.log(parseFloat(sub_price))
                const addtoCart = await Cart.findOneAndUpdate({userId:req.body.userId},{
                       $push:{items:{
                
@@ -115,7 +116,7 @@ router.post('/',async (req,res)=>{
             console.log('user cart not exist creating new one')
 
             var pid=req.body.productId
-            let subprice=convertValueFromExponent(req.body.product.price);
+            let subprice=req.body.product.price;
             console.log(subprice)
             //let line_item_sub_price=req.body.quantity*product.price
             var cartItem={};
@@ -127,7 +128,7 @@ router.post('/',async (req,res)=>{
                     size:'null',
                     measurement:{back:"",chest:"",shirtLength:"",sleeve:"",trouserLength:"",waist:"",thigh:"",bust:""},
                     product:req.body.product,
-                    line_item_sub_price:parseFloat(subprice),
+                    line_item_sub_price:subprice,
                     selected:false
                    
             }
@@ -155,7 +156,7 @@ router.patch('/quantity/:productId',async (req,res)=>{
     try{
         var pId =req.body.productId;
         var value= parseInt(req.body.quantity)
-        var subtotalqty=(value)*convertValueFromExponent(req.body.price);
+        var subtotalqty=(value)*req.body.price;
        // console.log("value "+subtotalqty)
         Cart.findOneAndUpdate({userId:req.body.userId,
             items:{
@@ -165,7 +166,7 @@ router.patch('/quantity/:productId',async (req,res)=>{
             {
                 $set: {
                       'items.$.quantity':value,
-                      'items.$.line_item_sub_price':parseFloat(subtotalqty),
+                      'items.$.line_item_sub_price':subtotalqty,
                       }
             },   
             { new:true,useFindAndModify:false}).then(ret=>{
@@ -435,7 +436,7 @@ const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
       var retLength=ret.length
        console.log("aggr : "+JSON.stringify(ret)+ " length :"+retLength);
        if(retLength!==0){
-        subtotal=convertValueFromExponent(ret[0].subTotal);
+        subtotal=  ret[0].subTotal;
 
         }
        }catch(err){
@@ -443,7 +444,7 @@ const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
        }
         Cart.findOneAndUpdate({userId:req.body.userId},
         {
-          $set:{subtotal:parseFloat(subtotal)},
+          $set:{subtotal:subtotal},
         },   
         { new:true,useFindAndModify:false}
         ).then((ret=>{
@@ -459,12 +460,33 @@ const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
 
    
 }
-function convertValueFromExponent(value){
-    if (value >=1){
+
+   function convertValueFromExponent(value){
+    if (value >= 1){
       return value
     }else{
-      return value.toFixed(8)
+
+      return decimalPlaces(parseFloat(value),8) ;
     }
+  }
+  function decimalPlaces(float, length) {
+    var ret = "";
+    var str = float.toString();
+    var array = str.split(".");
+    if (array.length === 2) {
+      ret += array[0] + ".";
+      for ( let i = 0; i < length; i++) {
+        if (i >= array[1].length) ret += '0';
+        else ret += array[1][i];
+      }
+    } else if (array.length === 1) {
+      ret += array[0] + ".";
+      for (let i = 0; i < length; i++) {
+        ret += '0'
+      }
+    }
+  
+    return ret;
   }
 
 module.exports = router;

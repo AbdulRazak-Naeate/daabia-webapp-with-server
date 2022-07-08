@@ -3,17 +3,17 @@ import {Typography,Button,Divider} from '@material-ui/core';
 import Review from './Review'
 import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 import axios from 'axios';
-import {formatWithCurrencySymbol} from '../../utils/Utils';
+import {formarttoCurrency,convertValueFromExponent} from '../../utils/Utils';
 
 const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,nextStep}) => {
-  console.log(shippingData);
+  console.log(shippingData.shippingFees);
   var handleFlutterPayment =null;
   
       try{
         const config = {
         public_key:"FLWPUBK-37d2e9fba8018282c3139e2a90c8ef76-X",
         tx_ref: Date.now(),
-        amount: checkoutToken.subtotal+shippingData.shippingFees,
+        amount: checkoutToken.subtotal+convertValueFromExponent(parseFloat(shippingData.shippingFees)),
         currency: 'GHS',
         payment_options: 'card,mobilemoneyghana,ussd',
         customer: {
@@ -70,7 +70,7 @@ const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,next
                     postal_zip_code:shippingData.zip,
                     country:shippingData.countrylabel,
                     orderNumber:shippingData.orderNumber,
-                    shippingFees:shippingData.shippingFees,
+                    shippingFees:convertValueFromExponent(parseFloat(shippingData.shippingFees)),
                     date:new Date().toUTCString(),
                     }
                 } 
@@ -106,7 +106,7 @@ const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,next
                                 <div style={{display:'flex',justifyContent:'space-between'}}>
                                 <Button variant="outlined" onClick={backStep}>Back</Button>
                                 <Button type="submit"variant="contained" color="primary">
-                                    Pay {`${formatWithCurrencySymbol(checkoutToken.subtotal+shippingData.shippingFees,'GHS')}`}
+                                    Pay {`${formarttoCurrency(checkoutToken.subtotal+shippingData.shippingFees,'π')}`}
                                 </Button>
                                 </div>
                             </form>

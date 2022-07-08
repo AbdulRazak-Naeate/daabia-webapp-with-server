@@ -140,7 +140,8 @@ const analytics = getAnalytics(app);
       const url = `http://localhost:3001/api/email/confirmorder/${_id}`;
 
     post(url,{email:newOrder.customer.email,data:newOrder}).then((response)=>{
-        console.log(response)
+        console.log(response);
+        setOrder([])
     })
   }
 
@@ -412,7 +413,8 @@ const analytics = getAnalytics(app);
             state:shippingData.county_state,
             city:shippingData.town_city,
             street:shippingData.street,
-            homeAddress:shippingData.home_address    
+            homeAddress:shippingData.home_address ,
+            shippingFees:shippingData.shippingFees   
           // eslint-disable-next-line no-loop-func
           },).then(ret=>{
             console.log(ret)

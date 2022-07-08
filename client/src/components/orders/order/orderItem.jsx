@@ -29,7 +29,9 @@ const OrderItem = ({order,onReviewClick}) => {
                       <Typography variant="body2">
                         Quantity :{order.quantity}  
                       </Typography>
-
+                      <Typography variant="body2">
+                        Shipping Fees :{`${formarttoCurrency(order.shippingFees,'π')}`} 
+                      </Typography>
                       <Typography variant="body2">
                        Total :{`${formarttoCurrency(order.totalPrice,'π')}`}  
                       </Typography>

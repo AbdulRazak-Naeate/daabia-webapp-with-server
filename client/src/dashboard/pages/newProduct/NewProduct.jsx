@@ -4,13 +4,14 @@ import {Link} from 'react-router-dom';
 import './newProduct.css';
 import QueryParams from '../../QueryParams';
 import Specs from './specs/Specs'
-import { post } from 'axios';
+import { Grid } from '@material-ui/core';
 import thumbnail from './ImagesContainer/thumbnail-wide.png';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/stackslide.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import ImageGallery from './imageGallery/ImageGallery';
+import TextEditor from './textEditor/TextEditor'
 export default function NewProduct({store,onFormSubmit}) {
     
     const [productImages,setProductImages]=useState([]);
@@ -24,7 +25,7 @@ export default function NewProduct({store,onFormSubmit}) {
     const [showSpecification,setShowSpeicification]=useState(false);
     const [showDigitalProductFileInput,setShowDigitalProductFileInput] = useState(false);
     const [clearImages,setClearImages]=useState(false);
-
+    const [htmlcontent,setHtmlContent]=useState('')
     //retrieves specs variables eg colors  ans size
     const [colors,setColors]=useState([]);
     const [sizes,setSizes]=useState([]);
@@ -97,6 +98,10 @@ export default function NewProduct({store,onFormSubmit}) {
           return null
        })
        //setProductImages(tmp);
+    }
+    const getEditorContent = (htmltoContent)=>{
+          setHtmlContent(htmltoContent);
+          console.log(htmltoContent)
     }
     
     
@@ -211,19 +216,50 @@ export default function NewProduct({store,onFormSubmit}) {
           
           <div className="addProductFormContainer">
            <form className="addProductForm" onSubmit={(e)=>{onFormSubmit(e,clearFields,Alert,colors,sizes,name,price,store.categoryId,description,specification,digitalProductUrl,store._id,stock,active,productImages)}}>
-               <div className="productFormTop">
-                  <div className="productFormTopItem">
-
-                <div className="addProductItem">
+           <Grid container justifyContent="space-between"  xs={12} sm={12} md={12} lg={12} spacing={1} padding={0}>
+           <Grid item justifyContent="space-between" spacing={1} padding={0} xs={12} sm={12} md={6} lg={6}>
+       
+            <Grid item key={'product-name'} xs={12} sm={12} md={12} lg={12}>
+           <div className="addProductItem">
                 <label>Name</label>
                   <input type="text" placeholder="Name" value={name} required onChange={(e)=>{setName(e.target.value)}} />
                 </div>
-                <div className="addProductItem">
+           
+             </Grid>
+             
+               <Grid item key={'product-description'} xs={12} sm={12} md={12} lg={12}>
+             <div className="addProductItem">
+              <label htmlFor="validationTextarea">Description</label>
+              <TextEditor getEditorContent={getEditorContent}/>
+              <Grid item key={'product-gallery'} xs={6} sm={6} md={12} lg={12}>
+           {/* <ImagesContainer handleImages={handleImages} onSubmit={onSubmit} setOnsubmit={setOnsubmit} clearImagesonSubmit={clearImagesonSubmit}/> */}
+             <ImageGallery handleImages={handleImages} productImages={productImages}/>
+             
+         
+           
+          </Grid>
+        {/* <textarea id="description" name="description" rows="4"
+         placeholder="Describe the product you are selling" value={description}
+         required onChange={(e)=>{setDescription(e.target.value)}}></textarea> */
+         }
+         </div>
+       
+        </Grid>
+
+         </Grid>
+
+         <Grid item justifyContent="space-between" xs={12} sm={12} md={4} lg={4} spacing={1} padding={0}>
+         
+             <Grid item key={'product-price'} xs={12} sm={12} md={10} lg={10}>
+             <div className="addProductItem">
             <label >Price</label>
              <input type="number"  placeholder="100 pi" value={price} required onChange={(e)=>{setPrice(e.target.value)}} />
          </div>
-
-         <div className="addProductItem">
+           
+          </Grid>
+          <Grid item key={'product-status'} xs={12} sm={12} md={10} lg={10}>
+          
+           <div className="addProductItem">
              <label>Active</label>
              <select name="active" id="active" className="active" value={active} onChange={(e)=>{setActive(e.target.value)}}>
                <option value=""></option>
@@ -231,29 +267,30 @@ export default function NewProduct({store,onFormSubmit}) {
                <option value="no">No</option>
               </select>
             </div>
-       
-      </div>
-         <div className="productFormTopItem">
-          <div className="addProductItem">
-              <label htmlFor="validationTextarea">Description</label>
-        <textarea id="description" name="description" rows="4"
-         placeholder="Describe the product you are selling" value={description}
-         required onChange={(e)=>{setDescription(e.target.value)}}></textarea>
-         </div>
+             </Grid>
+
+           
+             <Grid item key={'product-stock'} xs={12} sm={12} md={10} lg={10}>
           <div className="addProductItem">
              <label>Stock</label>
              <input type="number" placeholder="123" required onChange={onstockChange} />
            </div>
-           </div>
-        <div className="productFormTopItem">
-      <div className="addProductItem">
+           
+             </Grid>
+             <Grid item key={'product-sec'} xs={12} sm={12} md={6} lg={6}>
+          
+            <div className="addProductItem">
            <label htmlFor="validationCustom04">Specification</label>
           <select id="validationCustom04" value={specification} onChange={onSpecificationChange}>
              <option>no</option>
              <option>yes</option>
           </select> 
       </div>
-       <div className="addProductItem">
+             </Grid>
+  
+             <Grid item key={'product-notif'} xs={6} sm={6} md={10} lg={10}>
+          
+           <div className="addProductItem">
           { !showSpecification ? <>
          <label htmlFor="validationCustom05">Digital Product</label>
            <select id="validationCustom05" onChange={onDigitalProuctInputChange}>
@@ -262,6 +299,14 @@ export default function NewProduct({store,onFormSubmit}) {
              </select></>:''}  
           </div>
 
+             </Grid>
+             <Grid item key={'product-specs'} xs={6} sm={6} md={10} lg={10}>
+               <div className="addProductItem">
+                 {showSpecification ? <Specs setColors={setColors} setSizes={setSizes}/>:<></>}
+             </div>
+             </Grid>
+
+             <Grid item key={'product-digital_url'} xs={6} sm={6} md={10} lg={10}>
           <div className="addProductItem">
             {  showDigitalProductFileInput ?   <div className="digital_product">
                <label>Google Drive Url File</label>
@@ -271,14 +316,40 @@ export default function NewProduct({store,onFormSubmit}) {
                </div> :<></>
            }
             </div>
+           
+             </Grid>
+
+             {/* <Grid item key={'product-na'} xs={6} sm={6} md={6} lg={12}>
+         
+             </Grid> */}
+          </Grid> 
+          
+            </Grid>
+       
+{/* 
+             <div className="productFormTop">
+                  <div className="productFormTopItem">
+
+               
+             
+
+         
+       
+      </div>
+         <div className="productFormTopItem">
+       
+          
+           </div>
+        <div className="productFormTopItem">
+     
+       
+
+          
         
          </div>
-        </div>
+        </div> */}
            
-             {/* <ImagesContainer handleImages={handleImages} onSubmit={onSubmit} setOnsubmit={setOnsubmit} clearImagesonSubmit={clearImagesonSubmit}/> */}
-             <ImageGallery handleImages={handleImages} productImages={productImages}/>
-              {showSpecification ? <Specs setColors={setColors} setSizes={setSizes}/>:<></>}
-         
+            
            
         <div className="addProductItem">
         <button className="addProductButton" type="submit" onClick={onAddProductCLick}>Create</button>
