@@ -207,6 +207,7 @@ router.patch('/:productId',verify,async (req,res)=> {
             {_id:oId},
             { 
                 $set:{ price:req.body.price,
+                       description:req.body.description,
                        active:req.body.active,
                        color:req.body.color,
                        size:req.body.size

@@ -5,7 +5,9 @@ import React from 'react';
 import useStyles from './styles';
 import {Link } from 'react-router-dom';
 import { formarttoCurrency, truncateString } from '../../../utils/Utils';
-
+import { EditorState , convertFromRaw} from 'draft-js';
+import { Editor } from "react-draft-wysiwyg";
+import draftToHtml from 'draftjs-to-html'
 
 const ProductDetails = ({product,onAddToCart}) => {
     const classes =useStyles();
@@ -26,9 +28,7 @@ const ProductDetails = ({product,onAddToCart}) => {
               {product.name}
           </Typography>
          
-          <Typography variant="body1">
-              {truncateString(product.description,200)}
-          </Typography>
+          <div dangerouslySetInnerHTML={{ __html: product.description }} />
          </div>
          <div className={classes.actions}>
          <Button to="/" component={Link} variant='outlined'>Back to Home</Button>

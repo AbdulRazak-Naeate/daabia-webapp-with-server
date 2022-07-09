@@ -1,12 +1,17 @@
 import {useEffect, useState} from 'react'
 import './product.css';
 import {Link} from "react-router-dom";
-import {Button} from '@mui/material';
+import {Button,Grid} from '@mui/material';
 import { Chart } from '../../components/charts/Chart';
 import { productData } from '../../dummyData';
 import { Publish } from '@material-ui/icons';
 import QueryParams from '../../QueryParams';
 import {patch}from 'axios';
+import { EditorState , convertToRaw,ContentState} from 'draft-js';
+import draftToHtml from 'draftjs-to-html'
+import TextEditor from '../newProduct/textEditor/TextEditor';
+import htmlToDraft from 'html-to-draftjs';
+
 import { convertValueFromExponent} from "../../../utils/Utils"
 
   const MesurementItem = ({itemval,index,name,onUpdateColors})=>{
@@ -35,6 +40,15 @@ export default function Product({store}) {
     const [active,setActive]=useState(product.active);
     const [price,setPrice]=useState(convertValueFromExponent(product.price));
     const [productUpdated,setProductUpdated]=useState(false);
+    //Editor
+    const [description,setDescription]=useState('');
+    const blocksFromHtml = htmlToDraft(product.description);
+    const { contentBlocks, entityMap } = blocksFromHtml;
+    const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+    const editorState = EditorState.createWithContent(contentState);
+    const [editorstate,setEditorState]=useState(editorState);
+
+
     const[user]=useState(JSON.parse(localStorage.getItem('user')));
        console.log(store)
       const removeLastIndex = (values) => {
@@ -43,7 +57,13 @@ export default function Product({store}) {
            console.log(values);
         return arr;
       }
-
+      const onEditorStateChange = (editorstate)=>{
+        console.log(editorstate.value)
+        const htmlcontent=draftToHtml(convertToRaw(editorstate.getCurrentContent()))
+        setEditorState(editorstate)
+        setDescription(htmlcontent);
+        
+    }
       const getValues =(classname)=>{
           let values =[];
         let elems =  document.getElementsByClassName(classname);
@@ -67,6 +87,7 @@ export default function Product({store}) {
                      setActive(response.data.active);
                      setColors(response.data.color);
                      setSizes(response.data.size);
+                     setDescription(response.data.description)
                      console.log(response);              
                      setProductUpdated(!productUpdated)
 }                    setaddStock(0);
@@ -83,6 +104,7 @@ export default function Product({store}) {
         const body={
                  productId:productid,
                  price:price,
+                 description:description,
                  stock:addStock,
                  active:active,
                  color:colors,
@@ -130,10 +152,11 @@ export default function Product({store}) {
                  </div>
             </div>
             <div className="productTop">
-                <div className="productTopLeft">
+            <Grid container justsifyContent='center' sx={12} sm={12} md={12} lg={12}>
+                    <Grid item sx={12} sm={12} md={8} lg={8} >
                     <Chart data={productData} datakey="Sales" title="Sales Performance"/>
-                </div>
-                <div className="productTopRight">
+                    </Grid>
+                    <Grid item sx={12} sm={12} md={4} lg={4} className='productTopRight' >
                     <div className="productInfoTop">
                         <img src={`http://localhost:3001/server/uploads/products/${product.image[0].filename}`} alt="" className="productInfoImg" />
                        <span className="productName">{productname}</span>
@@ -160,17 +183,28 @@ export default function Product({store}) {
                             <label className="productInfoValue" id="stock">{`π${convertValueFromExponent(product.price)}`}</label>
                         </span>
                     </div>
-                    </div>
+                    </Grid>
+                </Grid>
             </div>
             <div className="productBottom">
+               
                 <form className="productForm" onSubmit={handleUpdate}>
-                    <div className="productFormLeft">
-                       <div className='formItem'>
+                    
+                <Grid container justifyContent='space-around' sx={12} sm={12} md={12} lg={12}>
+                   <Grid item sx={12} sm={12} md={8} lg={8}>
+                     <div className='formItem'>
                        <label>Product Name</label>
-                        <input type="text" value={product.name} onChange={()=>{}} placeholder="Apple Airpod"/>
-                      
-                       </div>
-                       <div className='formItem'>
+                        <input type="text" className='productNameinput' value={product.name} onChange={()=>{}} placeholder="Apple Airpod"/></div>
+                        <div className='formItem'>
+                        <label htmlFor="validationTextarea">Description</label>
+                       <TextEditor onEditorStateChange={onEditorStateChange} editorstate={editorstate}/>
+                        </div>
+                   </Grid>
+                   <Grid item sx={12} sm={12} md={1} lg={1}>
+                   
+                    </Grid>
+                    <Grid item justifyContent='flex-start' direction={'column'} sx={12} sm={12} md={3} lg={3}>
+                    <div className='formItem'>
                          <label>Price</label>
                         <input type="text" placeholder="π10.00"value={price}onChange={(e)=>{setPrice(e.target.value)}}/>
                        </div>
@@ -180,15 +214,13 @@ export default function Product({store}) {
                         </div>
                         <div className='formItem'>
                         <label>Active</label>
-                        <select name="active" id="" className="active" onChange={(e)=>{setActive(e.target.value)}} value={product.active}>
+                        <select name="active" id="" className="active" onChange={(e)=>{setActive(e.target.value)}} value={active}>
                            {/*  <option selected='selected'>{product.active}</option> */}
                             <option value="yes">Yes</option>
                             <option value="no">No</option>
                         </select>
                         </div>
-                    </div>
-                    <div className="productFormMiddle">
-                       <div className='formItem'>
+                        <div className='formItem'>
                            <label>Color</label>
                           <div className="productmeasurementWrapper">
                         
@@ -221,24 +253,36 @@ export default function Product({store}) {
                            <Button variant="btn-outlined" id="action-btn-size-add" size='small' onClick={()=>{setSizes([...sizes,""])}}>+</Button>
                           </div>
                         </div>
-                        <div className='formItem'>
-                          
-                        </div>
-                     
-                    </div>
-                    <div className="productFormRight">
                         <div className="productUpload">
-                            <img src={`http://localhost:3001/server/uploads/products/${product.image[0].filename}`} alt="" className="productUploadImg" />
+                              <img src={`http://localhost:3001/server/uploads/products/${product.image[0].filename}`} alt="" className="productUploadImg" />
                             <label htmlFor="file" style={{display:'block'}}>
                                 <Publish/>
                             </label>
                             <input type="file" id="file" style={{display:"none"}} />
+                 
+                        
                         </div>
-                        <div className='ButtonContainer'>
+                          <div className='ButtonContainer'>
                         <button type="submit" className="productButton" >Update</button>
-
+                        </div>
+                    </Grid>
+               </Grid>
+                   {/*  <div className="productFormLeft">                    
+                  
+                        <div className='formItem'>
+                          
                         </div>
                     </div>
+                    <div className="productFormMiddle">
+                   
+                      
+                     
+                    </div>
+                    <div className="productFormRight">
+                
+                           
+                       
+                    </div> */}
                 </form>
             </div>
         </div>

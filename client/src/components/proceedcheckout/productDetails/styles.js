@@ -9,7 +9,8 @@ export default  makeStyles((theme)=>({
            },
     },
     card:{
-       height:440,
+       minheight:440,
+       maxHeight:'auto',
        [theme.breakpoints.down(620)]:{
         height:340,
         width:'100%'

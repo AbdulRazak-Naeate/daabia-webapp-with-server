@@ -11,13 +11,16 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/stackslide.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import ImageGallery from './imageGallery/ImageGallery';
+import { EditorState , convertToRaw} from 'draft-js';
+import draftToHtml from 'draftjs-to-html'
+ 
 import TextEditor from './textEditor/TextEditor'
 export default function NewProduct({store,onFormSubmit}) {
     
     const [productImages,setProductImages]=useState([]);
     const [digitalProductUrl, setdigitalProductUrl] = useState('');
     const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
+    const [description, setDescription] = useState();
     const [price, setPrice] = useState('');
     const [stock,setStock]=useState('');
     const [active,setActive]=useState('');
@@ -29,7 +32,7 @@ export default function NewProduct({store,onFormSubmit}) {
     //retrieves specs variables eg colors  ans size
     const [colors,setColors]=useState([]);
     const [sizes,setSizes]=useState([]);
-
+    const [editorstate,setEditorState]=useState(EditorState.createEmpty());
     const[user]=useState(JSON.parse(localStorage.getItem('user')));
     let query=QueryParams();
    
@@ -66,7 +69,7 @@ export default function NewProduct({store,onFormSubmit}) {
         setStock(0)
         setActive('no')
         setPrice('0')
-
+        setEditorState(EditorState.createEmpty());
         document.getElementById("product-image0").src=thumbnail;
         document.getElementById("product-image1").src=thumbnail;
         document.getElementById("product-image2").src=thumbnail;
@@ -74,6 +77,7 @@ export default function NewProduct({store,onFormSubmit}) {
        setShowDigitalProductFileInput(false);
        setProductImages([]);
        setClearImages(true);
+
      
       }
     
@@ -99,11 +103,15 @@ export default function NewProduct({store,onFormSubmit}) {
        })
        //setProductImages(tmp);
     }
-    const getEditorContent = (htmltoContent)=>{
-          setHtmlContent(htmltoContent);
-          console.log(htmltoContent)
-    }
-    
+   
+    const onEditorStateChange = (editorstate)=>{
+      console.log(editorstate.value)
+      const htmlcontent=draftToHtml(convertToRaw(editorstate.getCurrentContent()))
+      setEditorState(editorstate)
+      setDescription(htmlcontent);
+      
+  }
+ 
     
     
     
@@ -216,7 +224,7 @@ export default function NewProduct({store,onFormSubmit}) {
           
           <div className="addProductFormContainer">
            <form className="addProductForm" onSubmit={(e)=>{onFormSubmit(e,clearFields,Alert,colors,sizes,name,price,store.categoryId,description,specification,digitalProductUrl,store._id,stock,active,productImages)}}>
-           <Grid container justifyContent="space-between"  xs={12} sm={12} md={12} lg={12} spacing={1} padding={0}>
+           <Grid container justifyContent="space-around"  xs={12} sm={12} md={12} lg={12} spacing={1} padding={0}>
            <Grid item justifyContent="space-between" spacing={1} padding={0} xs={12} sm={12} md={6} lg={6}>
        
             <Grid item key={'product-name'} xs={12} sm={12} md={12} lg={12}>
@@ -228,9 +236,9 @@ export default function NewProduct({store,onFormSubmit}) {
              </Grid>
              
                <Grid item key={'product-description'} xs={12} sm={12} md={12} lg={12}>
-             <div className="addProductItem">
+             <div className="addProductItem description">
               <label htmlFor="validationTextarea">Description</label>
-              <TextEditor getEditorContent={getEditorContent}/>
+              <TextEditor onEditorStateChange={onEditorStateChange} editorstate={editorstate}/>
               <Grid item key={'product-gallery'} xs={6} sm={6} md={12} lg={12}>
            {/* <ImagesContainer handleImages={handleImages} onSubmit={onSubmit} setOnsubmit={setOnsubmit} clearImagesonSubmit={clearImagesonSubmit}/> */}
              <ImageGallery handleImages={handleImages} productImages={productImages}/>
@@ -277,7 +285,7 @@ export default function NewProduct({store,onFormSubmit}) {
            </div>
            
              </Grid>
-             <Grid item key={'product-sec'} xs={12} sm={12} md={6} lg={6}>
+             <Grid item key={'product-sec'} xs={12} sm={12} md={10} lg={10}>
           
             <div className="addProductItem">
            <label htmlFor="validationCustom04">Specification</label>
