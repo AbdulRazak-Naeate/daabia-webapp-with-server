@@ -68,7 +68,7 @@ padding: 10px 5px;
 .addProductButton{
     margin: 20px 0px;
     padding: 7px 10px;
-    width:20%;
+    width:100%;
     border: none;
     border-radius: 10px;
     background-color: var(--dashboard-primary);

@@ -257,12 +257,12 @@ const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTran
             </div>
           </div>
       <div className="actionButtonsWrapper">
-     <Button variant='outlined' size='small' onClick={()=>{handleUpdateManyTransactions("Approved",setSelectionModel,selected_Ids);         
+     <Button variant='text' color='primary' size='small' onClick={()=>{handleUpdateManyTransactions("Approved",setSelectionModel,selected_Ids);         
       }}>Approve</Button>
-     <Button variant='outlined' size='small'  onClick={()=>{handleUpdateManyTransactions("Completed",setSelectionModel,selected_Ids)}}>Completed</Button>
-     <Button variant='outlined' size='small'  onClick={()=>{handleUpdateManyTransactions("Pending",setSelectionModel,selected_Ids)}}>Pending</Button>
-     <Button variant='outlined' size='small'  onClick={()=>{handleUpdateManyTransactions("Declined",setSelectionModel,selected_Ids)}}>Decline</Button>
-     <Button variant='outlined' size='small'>
+     <Button variant='text' color='primary' size='small'  onClick={()=>{handleUpdateManyTransactions("Completed",setSelectionModel,selected_Ids)}}>Completed</Button>
+     <Button variant='text' color='primary' size='small'  onClick={()=>{handleUpdateManyTransactions("Pending",setSelectionModel,selected_Ids)}}>Pending</Button>
+     <Button variant='text' color='primary' size='small'  onClick={()=>{handleUpdateManyTransactions("Declined",setSelectionModel,selected_Ids)}}>Decline</Button>
+     <Button variant='text' color='primary' size='small'>
       {switchText}
     <Switch checked={showAlltransactions} onChange={(e)=>{handleShowAllTransactions(e)}}/>
     </Button>

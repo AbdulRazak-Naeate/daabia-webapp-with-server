@@ -25,7 +25,7 @@ export default function NewProduct({store,onFormSubmit}) {
     const [stock,setStock]=useState('');
     const [active,setActive]=useState('');
     const [specification,setSpecification] = useState('none');
-    const [showSpecification,setShowSpeicification]=useState(false);
+    const [showSpecification,setShowSpeicification]=useState(true);
     const [showDigitalProductFileInput,setShowDigitalProductFileInput] = useState(false);
     const [clearImages,setClearImages]=useState(false);
     const [htmlcontent,setHtmlContent]=useState('')
@@ -325,8 +325,14 @@ export default function NewProduct({store,onFormSubmit}) {
            }
             </div>
            
+           
              </Grid>
+             <Grid item key={'product-digital_url'} xs={6} sm={6} md={10} lg={10}>
+               <div className="addProductItem">
+              <button className="addProductButton" type="submit" onClick={onAddProductCLick}>Create</button>
 
+        </div>
+             </Grid>
              {/* <Grid item key={'product-na'} xs={6} sm={6} md={6} lg={12}>
          
              </Grid> */}
@@ -359,10 +365,7 @@ export default function NewProduct({store,onFormSubmit}) {
            
             
            
-        <div className="addProductItem">
-        <button className="addProductButton" type="submit" onClick={onAddProductCLick}>Create</button>
-
-        </div>
+      
         </form>
         </div>
        </div>         
