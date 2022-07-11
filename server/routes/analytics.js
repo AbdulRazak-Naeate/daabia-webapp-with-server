@@ -172,9 +172,11 @@ router.post('/transactions/product/sales/monthly/:storeId/:productId',async (req
     var months =[{label:'jan',num:1},{label:'feb',num:2},{label:'mar',num:3},{label:'apr',num:4},
                    {label:'may',num:5},{label:'jun',num:6},{label:'jul',num:7},{label:'aug',num:8},
                    {label:'sep',num:9},{label:'oct',num:10},{label:'nov',num:11},{label:'dec',num:12}];
+
     var year =parseInt(req.body.year) ;
    
-    var total=0;            
+    var total=0;  
+    var count=0;          
     const data=[];
      for(var i = 0;i < months.length;i++){
          //var m=months[i].num;         
@@ -216,6 +218,7 @@ router.post('/transactions/product/sales/monthly/:storeId/:productId',async (req
         if (transMonthly.length>0){ //if get results ,record it
             data.push({name:label,"Monthly Sales":transMonthly[0].sales});
             total+=transMonthly[0].sales;
+            count+=transMonthly[0].count;
             
         }else{//no data is found put 0
             data.push({name:label,"Monthly Sales":0});
@@ -223,8 +226,35 @@ router.post('/transactions/product/sales/monthly/:storeId/:productId',async (req
         }
      }
    
-     res.json({monthlySales:data,totalSales:total})
+     res.json({monthlySales:data,totalSales:total,count})
 })
+
+//get specific product all time sales
+router.post('/product/sales',async (req,res)=>{
+           
+
+         var productid=req.body.productId
+         var storeid = req.body.storeId
+           
+        const sales = await Order.aggregate(
+            [
+                {
+                $match:{productId:productid,storeId:storeid}
+                },
+           {
+               $match:{status:"Completed"}
+           },{
+            $group:{
+                _id:'0',
+                count:{$sum:1},
+                sales:{$sum:'$totalPrice'}
+            }
+        }
+        ]);
+   
+     res.json({totalSales:sales[0].sales,count:sales[0].count})
+    
+ })
 
 //get all transactions base on store Id
 

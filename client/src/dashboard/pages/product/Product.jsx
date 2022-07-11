@@ -3,14 +3,14 @@ import './product.css';
 import {Link} from "react-router-dom";
 import {Button,Grid} from '@mui/material';
 import { Chart } from '../../components/charts/Chart';
-import { productData } from '../../dummyData';
-import { Publish } from '@material-ui/icons';
+import { Publish,Edit } from '@material-ui/icons';
 import QueryParams from '../../QueryParams';
 import {patch}from 'axios';
 import { EditorState , convertToRaw,ContentState} from 'draft-js';
 import draftToHtml from 'draftjs-to-html'
 import TextEditor from '../newProduct/textEditor/TextEditor';
 import htmlToDraft from 'html-to-draftjs';
+import axios from 'axios';
 
 import { convertValueFromExponent} from "../../../utils/Utils"
 
@@ -39,6 +39,7 @@ export default function Product({store}) {
     const [addStock,setaddStock]=useState(0);
     const [active,setActive]=useState(product.active);
     const [price,setPrice]=useState(convertValueFromExponent(product.price));
+    const [monthlySales,setmonthlySales]=useState([]);
     const [productUpdated,setProductUpdated]=useState(false);
     //Editor
     const [description,setDescription]=useState('');
@@ -47,10 +48,11 @@ export default function Product({store}) {
     const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
     const editorState = EditorState.createWithContent(contentState);
     const [editorstate,setEditorState]=useState(editorState);
-
-
+    const [showForms,setShowForms]=useState(false)
+    const [sales,setSales]=useState({})
+    const [isSalesLoaded,setIsSalesLoaded]=useState(false);
     const[user]=useState(JSON.parse(localStorage.getItem('user')));
-       console.log(store)
+
       const removeLastIndex = (values) => {
           let arr=[...values];
            arr.pop(values.length-1);
@@ -64,6 +66,9 @@ export default function Product({store}) {
         setDescription(htmlcontent);
         
     }
+     const handleonEditClicked=()=>{
+        setShowForms(!showForms);
+     }
       const getValues =(classname)=>{
           let values =[];
         let elems =  document.getElementsByClassName(classname);
@@ -131,9 +136,43 @@ export default function Product({store}) {
       
       
       useEffect(()=>{
-         //var addStockput = document.getElementById('stock');
-        // addStockput.innerText=product.stock;
-      })
+        const handlegetSales = async ()=>{
+          // console.log("get cart"+userid)
+          
+            getSales().then((response) => {
+
+              if (response.status===200){
+                try{
+                 
+                      setmonthlySales(response.data)
+                  
+                }catch(err){
+                  console.log(err)
+                }
+              }
+            })
+          
+        }
+        
+        
+          
+        
+          const getSales =()=>{
+             
+            const url = `http://localhost:3001/api/analytics/transactions/product/sales/monthly/${product.storeId}/${product._id}`;
+            
+            return axios.post(url,{year:2022})
+          
+          };
+
+          if(!isSalesLoaded){
+            handlegetSales()
+          }
+
+         return  () =>{
+          setIsSalesLoaded(true)
+         }
+      },[isSalesLoaded, monthlySales, product])
     return (
         <div className="product">
            <div className='storeCurrencyLabel'>
@@ -153,13 +192,19 @@ export default function Product({store}) {
             </div>
             <div className="productTop">
             <Grid container justsifyContent='center' sx={12} sm={12} md={12} lg={12}>
-                    <Grid item sx={12} sm={12} md={8} lg={8} >
-                    <Chart data={productData} datakey="Sales" title="Sales Performance"/>
+                    <Grid item sx={12} sm={12} md={7} lg={7} >
+                      <div className="productInfoTopWrapper">
+                       <Chart data={monthlySales.monthlySales} datakey="Monthly Sales"  title="Sales Performance"/> 
+                      </div>
+                    
                     </Grid>
-                    <Grid item sx={12} sm={12} md={4} lg={4} className='productTopRight' >
-                    <div className="productInfoTop">
+                    <Grid item sx={12} sm={12} md={5} lg={5} >
+                      <div className="productInfoTopWrapper">
+                         <div className="productInfoTop">
                         <img src={`http://localhost:3001/server/uploads/products/${product.image[0].filename}`} alt="" className="productInfoImg" />
                        <span className="productName">{productname}</span>
+                        <Edit onClick={handleonEditClicked}/>
+
                     </div>
                     <div className="productInfoBottom">
                         <span className="productInfoItem">
@@ -168,7 +213,7 @@ export default function Product({store}) {
                         </span>
                         <span className="productInfoItem">
                             <span className="productInfoKey">sales</span>
-                            <span className="productInfoValue">5123</span>
+                            {monthlySales ? <span className="productInfoValue">{monthlySales.count}</span>:'0'}
                         </span>
                         <span className="productInfoItem">
                             <span className="productInfoKey">active</span>
@@ -183,10 +228,12 @@ export default function Product({store}) {
                             <label className="productInfoValue" id="stock">{`π${convertValueFromExponent(product.price)}`}</label>
                         </span>
                     </div>
+                      </div>
+                   
                     </Grid>
                 </Grid>
             </div>
-            <div className="productBottom">
+           { showForms ? <div className="productBottom">
                
                 <form className="productForm" onSubmit={handleUpdate}>
                     
@@ -253,6 +300,7 @@ export default function Product({store}) {
                            <Button variant="btn-outlined" id="action-btn-size-add" size='small' onClick={()=>{setSizes([...sizes,""])}}>+</Button>
                           </div>
                         </div>
+                        
                         <div className="productUpload">
                               <img src={`http://localhost:3001/server/uploads/products/${product.image[0].filename}`} alt="" className="productUploadImg" />
                             <label htmlFor="file" style={{display:'block'}}>
@@ -262,7 +310,7 @@ export default function Product({store}) {
                  
                         
                         </div>
-                          <div className='ButtonContainer'>
+                          <div className='editButtonContainer'>
                         <button type="submit" className="productButton" >Update</button>
                         </div>
                     </Grid>
@@ -284,7 +332,7 @@ export default function Product({store}) {
                        
                     </div> */}
                 </form>
-            </div>
+            </div>:''}
         </div>
     );
 }
