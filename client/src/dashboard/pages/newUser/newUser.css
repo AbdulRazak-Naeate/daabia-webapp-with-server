@@ -53,3 +53,8 @@ color: #555;
     margin-top: 20px;
     cursor: pointer;
 }
+@media only  screen and (max-width:620px){
+    .newUser{
+        padding: 0px;
+    }
+}

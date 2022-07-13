@@ -6,11 +6,11 @@ import {useState,useEffect} from "react";
 import {Tooltip} from '@material-ui/core';
 import AlertDialog from '../../components/alertdialog/AlertDialog'
 import axios from 'axios';
-export default function StoreList({stores,setStores}) {
+export default function StoreList({stores,setStores,handleOnStoreSelected}) {
 
     const [storeid,setStoreid]=useState(['']);
     const [open,setOpen]=useState(false);
-    //const [stores, setStores] = useState([]);
+    const [isstoresLoaded, setisStoresLoaded] = useState([]);
     const user = JSON.parse(localStorage.getItem('user'));
   console.log(stores)
     const history=useHistory();
@@ -36,6 +36,11 @@ export default function StoreList({stores,setStores}) {
      }
     const handleList=(params)=>{
    //navigate to store Products
+    var storeid=params.row._id;
+    var storeindex = stores.findIndex(item=>item._id===storeid);
+
+   console.log(storeindex)
+   handleOnStoreSelected(storeindex)
    history.push(`/dashboard/products?storeId=${params.row._id}&storeName=${params.row.name}&categoryId=${params.row.categoryId}`);
    localStorage.setItem('store', JSON.stringify(params.row));       
     }
@@ -104,15 +109,16 @@ export default function StoreList({stores,setStores}) {
                     <Tooltip title="edit store" enterDelay={500} leaveDelay={200}>
                     <Edit className="iconEditstoreProduct storeListIcons" onClick={() => {handleEdit(params)}}/> 
                     </Tooltip>
-                    <Tooltip title="add new product" enterDelay={500} leaveDelay={200}>
-                    <Add className="iconAddstoreProduct storeListIcons" onClick={() => {handleNewproduct(params)}}/></Tooltip>
-                    <Tooltip title="show store products" enterDelay={500} leaveDelay={200}>
+                   {params.row.validStatus==='VALID' ? <Tooltip title="add new product" enterDelay={500} leaveDelay={200}>
+                    <Add className="iconAddstoreProduct storeListIcons" onClick={() => {handleNewproduct(params)}}/></Tooltip>:''}
+                   
+                    {params.row.validStatus==='VALID' ? <Tooltip title="show store products" enterDelay={500} leaveDelay={200}>
                     <List className="iconListstoreProducts storeListIcons" onClick={() => {handleList(params)}}/>
-                    </Tooltip>
+                    </Tooltip>:''}
 
-                    <Tooltip title="show store transactions" enterDelay={500} leaveDelay={200}>
+                    {params.row.validStatus==='VALID' ? <Tooltip title="show store transactions" enterDelay={500} leaveDelay={200}>
                     <Business className="iconListstoreProducts storeListIcons" onClick={() => {handleTransactions(params)}}/>
-                    </Tooltip>
+                    </Tooltip>:''}
 
                     <Tooltip title="delete store" enterDelay={500} leaveDelay={200}>
                     <DeleteOutline className="storelistDelete" onClick={() => {handleDelete(params.row._id)}}/>
@@ -145,18 +151,19 @@ export default function StoreList({stores,setStores}) {
             return  axios.get(url).then((response)=>{
                //setStores(response.data.store)
               /*  localStorage.setItem('stores',JSON.stringify(response.data.store)); */
-          
+        
              });
         }
        
-         
+        /*  if (!isstoresLoaded){
+          handlegetStores(user);
+         }
           
-       // handlegetStores(user);
-
-         //fetchStores();
-         //handlegetTransactions(stores)
+       return ()=>{
+          setisStoresLoaded(true);
+       } */
         
-        },[ user]);
+        },[isstoresLoaded, user]);
     return (
         <div className="storesList"> 
            <AlertDialog open={open} handleClickOpen={handleClickOpen} handleClose={handleClose} title="Delete Store" textContent="Are you sure you want to delete!"DeleteOutline={DeleteOutline}/>

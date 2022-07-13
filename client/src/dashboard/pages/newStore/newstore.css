@@ -104,3 +104,8 @@ box-shadow:0px 0px 15px -10px rgb(0,0,0.75);
     margin-right: 10px;
     border: 1px solid rgb(151, 150, 150);
 }
+@media only  screen and (max-width:620px){
+    .newstore{
+        padding: 0px;
+    }
+}

@@ -54,3 +54,13 @@
   padding: 5px;
   color:gray
 }
+
+@media only  screen and (max-width:620px){
+  .widgetLg{
+      padding: 4px;
+      width: 100%;
+  }
+  .widgetLgTable{
+    border-spacing: 2px;
+  }
+}

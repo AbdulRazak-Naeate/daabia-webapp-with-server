@@ -55,3 +55,9 @@
     color: #555;
     cursor: pointer;
 }
+
+@media only  screen and (max-width:620px){
+    .productsList{
+        padding: 0px;
+    }
+}

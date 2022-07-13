@@ -142,13 +142,13 @@ export default function ProductsList({products,handlegetProducts,handleDeletePro
          <div className="productsTitleContainer">
          <h1 className="addProductTitle">Products </h1>
 
-         <Link to={`/dashboard/newProduct?storeId=${store._id}&storeName=${store.name}&categoryId=${store.categoryId}`}>
-          <button className="AddProductButton">New Product</button>
-          </Link> 
+          {store.validStatus==='VALID' ? <Link to={`/dashboard/newProduct?storeId=${store._id}&storeName=${store.name}&categoryId=${store.categoryId}`}>
+        <button className="AddProductButton">New Product</button> 
+          </Link> :''}
          
           </div>
           <div className="" style={{ height: '100vh', width: '100%' }}>
-           <DataGrid rows={products} getRowId={(row) => row._id} columns={columns} 
+        { products ?  <DataGrid rows={products} getRowId={(row) => row._id} columns={columns} 
            pageSize={pageSize}
            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[10, 10, 20,50]}
@@ -159,7 +159,7 @@ export default function ProductsList({products,handlegetProducts,handleDeletePro
               Toolbar:GridToolbar,
               NoRowsOverlay: () => (
                 <Stack height="100%" alignItems="center" justifyContent="center">
-                  No sales recorded
+                  No products recorded ...loading
                 </Stack>
               ),
               NoResultsOverlay: () => (
@@ -167,7 +167,7 @@ export default function ProductsList({products,handlegetProducts,handleDeletePro
                   Local filter returns no result
                 </Stack>
               )
-            }}/>
+            }}/>:''}
             </div>
         </div>
     )

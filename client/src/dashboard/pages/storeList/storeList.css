@@ -53,7 +53,7 @@
     border:none;
     border-radius: 10px;
     padding: 5px 10px; 
-    background-color: darkblue;
+    background-color: var(--dashboard-primary);
     color: white;
     cursor: pointer;
     margin-right: 10px;
@@ -67,5 +67,12 @@
     
 }
 .storeListIcons{
-    color:lightslategrey
+    color:lightslategrey;
+   
+}
+
+@media only  screen and (max-width:620px){
+    .storeList{
+        padding: 0px;
+    }
 }

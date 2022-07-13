@@ -50,7 +50,7 @@ const Sales = ({sales,setSales,handlegetSales,isSalesLoaded,setIsSalesLoaded}) =
   useEffect(() => {  
     
   if(!isSalesLoaded){
-   if (stores.length>0){ handlegetSales(stores);}
+   if (stores.length>=0){ handlegetSales(stores);}
   }
  
    return ()=>{
@@ -196,7 +196,7 @@ const Sales = ({sales,setSales,handlegetSales,isSalesLoaded,setIsSalesLoaded}) =
           </Link>
             </div>
           </div>
-          <DataGrid rows={sales} getRowId={(row) => row._id}   columns={columns}
+         {sales ? <DataGrid rows={sales} getRowId={(row) => row._id}   columns={columns}
            pageSize={pageSize}
            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
            rowsPerPageOptions={[5, 10, 20]}
@@ -229,7 +229,7 @@ const Sales = ({sales,setSales,handlegetSales,isSalesLoaded,setIsSalesLoaded}) =
             </Stack>
           )
         }}
-      />
+      />:''}
   {/*    <div className="actionButtonsContainer">
      <button className="actionButtons" onClick={()=>{handleUpdateMany("Approved");         
 }}>Approve</button>

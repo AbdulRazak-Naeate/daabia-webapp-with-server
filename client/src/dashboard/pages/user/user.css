@@ -141,3 +141,8 @@
     color: white;
     font-weight: 600;
 }
+@media only  screen and (max-width:620px){
+    .user{
+        padding: 0px;
+    }
+}

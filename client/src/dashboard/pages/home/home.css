@@ -6,5 +6,15 @@
 }
 .homeWidgets{
     display: flex;
+    width: 98%;
     margin: 20px;
+}
+@media only  screen and (max-width:620px){
+    .home{
+        padding: 0px;
+        width: 100%;
+    }
+    .homeWidgets{
+        margin: 0px;
+    }
 }

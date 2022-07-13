@@ -3,9 +3,10 @@ import React , {useState,useEffect} from 'react';
 import {Link, useHistory} from 'react-router-dom';
 import "./topbar.css"
 import imgAvatar from '../../../assets/icons/user_96px.png';
-import {NotificationsNone,Language} from '@material-ui/icons'
-import Menu from '@mui/material/Menu';
+import {NotificationsNone,Language,MenuOpenOutlined,MenuOpen} from '@material-ui/icons'
 import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import {MenuOutlined} from '@mui/icons-material';
 import Store from '@mui/icons-material/Store';
 import Avatar from '@mui/material/Avatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -14,8 +15,8 @@ import Person from '@mui/icons-material/Person';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-
-export const Topbar = () => {
+import MenuButton from './menuButton/MenuButton'
+export const Topbar = ({handleMouseDown,devicetype}) => {
     const [user] = useState(JSON.parse(localStorage.getItem('user')));
     const [imagefilename,setImageFilename]=useState('');
     const [userId,setuserId]=useState(null)
@@ -77,7 +78,10 @@ export const Topbar = () => {
     return (
         <div className="dashboard-topbar">
             <div className="topbarWrapper">
-                <div className="topLeft">
+
+                <div className="top-bar-left">
+                 {devicetype ==='mobile'? <MenuOutlined className='topbar-menu-icon' style={{color:'white',pointer:'cursor'}} onClick={(e)=>{handleMouseDown(e) }} />:''}
+                  {/* <MenuButton /> */}
                     <span className="title">{`${process.env.REACT_APP_WEBSITE_NAME}`}</span>
                 </div>
                 <div className="topRight">

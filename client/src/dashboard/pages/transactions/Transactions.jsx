@@ -261,7 +261,7 @@ const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTran
       }}>Approve</Button>
      <Button variant='text' color='primary' size='small'  onClick={()=>{handleUpdateManyTransactions("Completed",setSelectionModel,selected_Ids)}}>Completed</Button>
      <Button variant='text' color='primary' size='small'  onClick={()=>{handleUpdateManyTransactions("Pending",setSelectionModel,selected_Ids)}}>Pending</Button>
-     <Button variant='text' color='primary' size='small'  onClick={()=>{handleUpdateManyTransactions("Declined",setSelectionModel,selected_Ids)}}>Decline</Button>
+     <Button variant='text' color='primary'  size='small'  onClick={()=>{handleUpdateManyTransactions("Declined",setSelectionModel,selected_Ids)}}>Decline</Button>
      <Button variant='text' color='primary' size='small'>
       {switchText}
     <Switch checked={showAlltransactions} onChange={(e)=>{handleShowAllTransactions(e)}}/>

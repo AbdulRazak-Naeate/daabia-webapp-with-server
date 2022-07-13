@@ -2,6 +2,7 @@
     flex: 4;
     padding: 20px;
     margin-bottom: 50px;
+    width: 100%;
    /*  background-color: darkslategrey; */
 }
 .pageTitleContainer{
@@ -85,3 +86,17 @@
     position: absolute;
     margin: 25% 40%;
   }
+  @media only  screen and (max-width:620px){
+    .transactions{
+        padding: 0px;
+
+    }
+    .actionButtonsWrapper {
+      
+      width: 100%;
+      
+  }
+  .pageTitle{
+    font-size: 16px;
+  }
+}

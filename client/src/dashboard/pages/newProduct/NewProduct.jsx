@@ -239,7 +239,7 @@ export default function NewProduct({store,onFormSubmit}) {
              <div className="addProductItem description">
               <label htmlFor="validationTextarea">Description</label>
               <TextEditor onEditorStateChange={onEditorStateChange} editorstate={editorstate}/>
-              <Grid item key={'product-gallery'} xs={6} sm={6} md={12} lg={12}>
+              <Grid item key={'product-gallery'} xs={12} sm={12} md={12} lg={12}>
            {/* <ImagesContainer handleImages={handleImages} onSubmit={onSubmit} setOnsubmit={setOnsubmit} clearImagesonSubmit={clearImagesonSubmit}/> */}
              <ImageGallery handleImages={handleImages} productImages={productImages}/>
              
@@ -308,13 +308,13 @@ export default function NewProduct({store,onFormSubmit}) {
           </div>
 
              </Grid>
-             <Grid item key={'product-specs'} xs={6} sm={6} md={10} lg={10}>
+             <Grid item key={'product-specs'} xs={12} sm={12} md={10} lg={10}>
                <div className="addProductItem">
                  {showSpecification ? <Specs setColors={setColors} setSizes={setSizes}/>:<></>}
              </div>
              </Grid>
 
-             <Grid item key={'product-digital_url'} xs={6} sm={6} md={10} lg={10}>
+             <Grid item key={'product-digital_url'} xs={12} sm={12} md={10} lg={10}>
           <div className="addProductItem">
             {  showDigitalProductFileInput ?   <div className="digital_product">
                <label>Google Drive Url File</label>

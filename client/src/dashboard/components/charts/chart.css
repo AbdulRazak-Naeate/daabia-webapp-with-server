@@ -1,5 +1,6 @@
 .chart{
     width: 100%;
+    height: auto;
 }
 .chartTitle{
     margin-bottom: 20px;

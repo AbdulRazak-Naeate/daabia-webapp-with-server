@@ -52,7 +52,7 @@ const onUpdateColors =(name)=>{
                             <Grid container justifyContent='flex-start' spacing={1} padding={0}>
                             {   
                              mcolors.map((color,index)=>{
-                               return( <Grid item sx={4} sm={4} md={3} lg={3}><MesurementItem itemval={color} index={index} name='color' key={`color-spec-${index}`} onUpdateColors={onUpdateColors}/></Grid>)
+                               return( <Grid item sx={3} sm={3} md={3} lg={3}><MesurementItem itemval={color} index={index} name='color' key={`color-spec-${index}`} onUpdateColors={onUpdateColors}/></Grid>)
                              })
                           }
                             </Grid>
@@ -63,14 +63,14 @@ const onUpdateColors =(name)=>{
                           </div>
                    </Grid>
 
-                        <Grid item sx={4} sm={4} md={4} lg={12}  className='specsformIte'>
+                        <Grid item sx={12} sm={12} md={12} lg={12}  className='specsformIte'>
                            <label>Size Specifications</label>
                            <small>Type in Product  sizes For example 34 for shoes , 5 inch for phones</small>
                          
                            <Grid container justifyContent='flex-start' spacing={2} padding={0}>
                           {   
                              msizes.map((size,index)=>{
-                               return( <Grid item sx={6} sm={6} md={3} lg={3}>
+                               return( <Grid item sx={3} sm={3} md={3} lg={3}>
                                 <SizeMesurementItem key={`size-spec${index}`} itemval={size} index={index} name='size' onUpdateSizes={onUpdateSizes}/>
                                </Grid>)
                              })

@@ -2,6 +2,7 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom'
 import "./featuredInfo.css";
+import {Grid} from '@mui/material';
 import { ArrowDownward,ArrowUpward,Add} from "@material-ui/icons"
 import { formatWithCurrencySymbol,formarttoCurrency } from "../../../utils/Utils"
 
@@ -36,8 +37,9 @@ export const FeaturedInfo = ({completedAggregate,inCompletedAggregate,alltimeAgg
    }
    const Featured =({completeCount,completeSales})=>(
     <div className="featured">
-  
-  <div className="featuredItem" onClick={()=>{onFeatureItemOnclik('transactions')}}>
+    <Grid container justifyContent='space-between' sx={12} sm={12} md={12} lg={12}>
+        <Grid item xs={12} sm={12} md={3} lg={3}>
+                <div className="featuredItem" onClick={()=>{onFeatureItemOnclik('transactions')}}>
     <span className="featureTitle">In Progress</span>
      <div className="featuredMoneyContainer">
          <span className="featuredMoney">{inCompleteCount}</span>
@@ -46,9 +48,10 @@ export const FeaturedInfo = ({completedAggregate,inCompletedAggregate,alltimeAgg
          </span>
      </div>
      <span className="featuredSub">Current orders</span>
-    </div>
-
-   <div className="featuredItem"  onClick={()=>{onFeatureItemOnclik('sales')}}>
+    </div>   
+        </Grid>
+        <Grid item xs={12} sm={12} md={3} lg={3}>
+                  <div className="featuredItem"  onClick={()=>{onFeatureItemOnclik('sales')}}>
     <span className="featureTitle">Completed</span>
      <div className="featuredMoneyContainer">
          <span className="featuredMoney">{completeCount}</span>
@@ -58,8 +61,12 @@ export const FeaturedInfo = ({completedAggregate,inCompletedAggregate,alltimeAgg
      </div>
      <span className="featuredSub">Completed orders</span>
     </div>
+                 
+                 
+    </Grid>
 
-    <div className="featuredItem">
+    <Grid item xs={12} sm={12} md={3} lg={3}>
+         <div className="featuredItem">
     <span className="featureTitle">All time Orders</span>
      <div className="featuredMoneyContainer">
          <span className="featuredMoney">{alltimeCount}</span>
@@ -68,8 +75,11 @@ export const FeaturedInfo = ({completedAggregate,inCompletedAggregate,alltimeAgg
          </span>
      </div>
      <span className="featuredSub">All times orders</span>
-    </div>
+    </div>         
+      </Grid>
 
+      <Grid item xs={12} sm={12} md={3} lg={3}>
+            
     <div className="featuredItem">
     <span className="featureTitle">Sales</span>
      <div className="featuredMoneyContainer">
@@ -79,7 +89,15 @@ export const FeaturedInfo = ({completedAggregate,inCompletedAggregate,alltimeAgg
          </span>
      </div>
      <span className="featuredSub">All time sales made</span>
-    </div>
+    </div>     
+     </Grid>
+    </Grid>
+
+
+  
+
+   
+
   {/*   <div className="featuredItem">
     <span className="featureTitle">Cost</span>
      <div className="featuredMoneyContainer">

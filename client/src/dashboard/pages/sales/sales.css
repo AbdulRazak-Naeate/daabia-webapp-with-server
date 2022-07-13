@@ -50,3 +50,9 @@
     background-color: #ebf1fe;
     color:#2a7ade ;
   }
+
+  @media only  screen and (max-width:620px){
+    .sales{
+        padding: 0px;
+    }
+}

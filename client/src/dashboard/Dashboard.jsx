@@ -1,7 +1,8 @@
 import { useState,useEffect } from "react";
 import React from 'react';
-import { Sidebar } from "./components/sidebar/Sidebar";
-import { Topbar } from "./components/topbar/Topbar";
+ import { Sidebar } from "./components/sidebar/Sidebar";
+ import {MobileSlider} from './components/mobilemenu/MobileSlider'
+ import { Topbar } from "./components/topbar/Topbar";
 import Confirm from "./components/email/Confirm"
 import "./dashboard.css"
 import {BrowserRouter as Router,Switch,Route
@@ -23,9 +24,28 @@ import SignUp from "./pages/signup/SignUp";
 import axios from 'axios';
 import Daabia from './daabia/daabia'
 
- function  Dashboard() {
- const [showSidebar,setShowSideBar]=useState(true);
- const [stores, setStores] = useState(JSON.parse(localStorage.getItem('stores')));
+/* import Sidebar from 'react-sliding-sidemenu'
+ */ function  Dashboard() {
+
+    //get deivce type
+
+    const getDeviceType = () => {
+      const ua = navigator.userAgent;
+      if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+        return "tablet";
+      }
+      if (
+        /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+          ua
+        )
+      ) {
+        return "mobile";
+      }
+      return "desktop";
+    };
+  const [showSidebar,setShowSideBar]=useState(true);
+  const [showMobileSidebar,setShowMobileSideBar]=useState(true);
+  const [stores, setStores] = useState(JSON.parse(localStorage.getItem('stores')));
  const [storeindex,setStoreindex]=useState(parseInt(localStorage.getItem('storeindex')));
  const user = JSON.parse(localStorage.getItem('user'));
  const [products,setProducts]=useState([]);
@@ -46,8 +66,9 @@ import Daabia from './daabia/daabia'
  const [_isProductsLoaded,_setIsproductsLoaded]=useState(false)
  const  [showAlltransactions,setShowAllTrans]=useState(localStorage.getItem('show_all')!==null ?localStorage.getItem('show_all'):false);
  const [switchText,setSwitchText]=useState('Show all');
- const [showprogress,setShowProgress]=useState(false)
-
+ const [showprogress,setShowProgress]=useState(false);
+ const [devicetype]=useState(getDeviceType());
+ 
  const daabia = new Daabia(stores[storeindex]._id);
  const handletoggleSideBar=(bol)=>{
    setShowSideBar(bol);
@@ -55,9 +76,13 @@ import Daabia from './daabia/daabia'
   const toggleSideBar=()=>{
     setShowSideBar(!showSidebar);
   }
-  const handleShowAllTransactions = (e)=>{
-    //console.log(e.target.checked)
-    
+  const handleMouseDown =(e)=>{
+
+     setShowMobileSideBar(!showMobileSidebar);
+     console.log("clicked");
+     e.stopPropagation();
+  }
+  const handleShowAllTransactions = (e)=>{    
     setShowAllTrans(e.target.checked);
     var status=''; 
     var checked=e.target.checked;
@@ -72,6 +97,18 @@ import Daabia from './daabia/daabia'
     
   }
   const handleOnStoreChange =(e)=>{
+    resetStates();
+    setStoreindex(e.target.value)
+    localStorage.setItem('storeindex',e.target.value);
+    setShowMobileSideBar(!showMobileSidebar);
+  }
+  const handleOnStoreSelected =(index)=>{
+    resetStates();
+    setStoreindex(index)
+    localStorage.setItem('storeindex',index)
+  }
+
+  const resetStates=()=>{
     setIstransLoaded(false);
     setIsSalesLoaded(false);
     setIsproductsLoaded(false);
@@ -79,9 +116,6 @@ import Daabia from './daabia/daabia'
     _setIsproductsLoaded(false);
     setShowProgress(true)
     setTransactions([]);
-
-    setStoreindex(e.target.value)
-    localStorage.setItem('storeindex',e.target.value)
   }
   const paths =[ 
     '/dashboard',
@@ -96,7 +130,8 @@ import Daabia from './daabia/daabia'
     '/dashboard/product',
     '/dashboard/newProduct',
     '/dashboard/transactions',
-    '/dashboard/sales',]
+    '/dashboard/sales',];
+
 
 
     async function deleteStore(_id) {
@@ -289,55 +324,9 @@ return axios.patch(url, body,config)
         });
        
   }
- const initiateAndCreateProduct =(colors,sizes,name,price,categoryId,description,specification,digitalProductUrl,storeid,stock,active,productImages)=>{
-    
-    const url = 'http://localhost:3001/api/products/';
-
-    //console.log(colors);
-    const formData = new FormData();
-    //getInput values
-   // let colors = getInputValues('color-specs');
-    //let sizes  = getInputValues('size-specs');
-
-    for (let i = 0; i < colors.length; i++) {
-       if(colors[i]!==""){
-        formData.append('color', colors[i]);
-       }
-    }
-    for (let j = 0; j < sizes.length; j++) {
-      if (sizes[j]!==""){
-        formData.append('size', sizes[j]);
-      }
-    }
-    formData.append('name', name);
-    formData.append('price', price);
-    formData.append('category',categoryId);
-    formData.append('description', description);
-    formData.append('specification', specification);
-    formData.append('digital_product_url', digitalProductUrl);//append digital
-    formData.append('storeId', storeid);
-    formData.append('stock',stock);
-    formData.append('active',active)
- 
-    //append files to image to create an a file array
-  
-    for (var i = 0; i <= productImages.length; i++) {
-      formData.append('image', productImages[i]);
-      //console.log(productImages);
-    }
-
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'auth-token':
-          user.auth_token,
-      },
-    }
-    return axios.post(url, formData, config)
-  
-  };
 
    //Products start here
+    // eslint-disable-next-line no-unused-vars
     const fetchProducts = async ()=>{
       try{
          const res = await fetch(`http://localhost:3001/api/products/store/${stores[storeindex]._id}`);
@@ -348,6 +337,7 @@ return axios.patch(url, body,config)
 
       }
 }
+
 const handlegetProducts = async()=> {
 
     try{
@@ -375,6 +365,7 @@ const fetchStores = async(user)=>{
 
   }
 }
+
 const handlegetStores = async(user) => {
 try{
     fetchStores(user).then((response)=>{
@@ -468,6 +459,36 @@ const handlegetSales = async (stores) => {
 }
 };
  useEffect(()=>{ 
+  const fetchSales= async (stores) => {//get Orders 
+  
+    try {
+    
+      
+   const res = await fetch(`http://localhost:3001/api/orders/completed/${stores[storeindex]._id}`);
+   const data = await res.json();
+   
+   return data.orders;
+  
+   } catch (error) {
+   console.log({fetch_sales_message:error})
+   }
+  }
+  const handlegetSales = async (stores) => {
+
+    try {
+    const ordersFromServer = await fetchSales(stores);  
+     let tmp =[];
+     for(let i=0;i<ordersFromServer.length;i++){
+       tmp.push(ordersFromServer[i]);
+       
+     }
+      setSales(tmp)
+   
+   } catch (error) {
+     //setStoreId(stores[0]._id);
+     console.log({message:error})
+   }
+   };
   const fetchProducts = async ()=>{
     try{
        const res = await fetch(`http://localhost:3001/api/products/store/${stores[storeindex]._id}`);
@@ -518,31 +539,41 @@ const handleget_Products = async ()=> {
 
    });
  }
+ /* if (!isStoresLoaded){handlegetStores(user)} */
  if (!ismonthlySalesLoaded){ handlegetMonthAnalytics(stores[storeindex]._id);}
  if (!analyticsLoaded){ handlegetAnalytics(stores[storeindex]._id);}
   if (!_isProductsLoaded){
     handleget_Products()
   }
+  if(!isSalesLoaded){
+    handlegetSales(stores)
+  }
 return ()=>{
-  
+     setIsSalesLoaded(true);
      setIsanalyticsLoaded(true);
      setIsmonthlySalesLoaded(true);
      setIsproductsLoaded(true);
-     
+     _setIsproductsLoaded(true);
+     setIsStoreLoaded(true)
 }
-},[_isProductsLoaded, analyticsLoaded, ismonthlySalesLoaded, isproductsLoaded, storeindex, stores]);
+},[_isProductsLoaded, analyticsLoaded, isSalesLoaded, isStoresLoaded, ismonthlySalesLoaded, isproductsLoaded, storeindex, stores, user]);
  
   return (
     <Router>
     <Route exact path={paths}>
-         <Topbar/>
+         <Topbar devicetype={devicetype} handleMouseDown={handleMouseDown} />
     </Route>
      <div className="content">
 
     <div>
        {showSidebar &&
-       <Route exact path={paths}> <Sidebar stores={stores} storeindex={storeindex} handleOnStoreChange={handleOnStoreChange}/></Route>
+       <Route exact path={paths}>
+        
+        {devicetype=== 'mobile' ? <MobileSlider showMobileSidebar={showMobileSidebar} stores={stores} storeindex={storeindex} handleOnStoreChange={handleOnStoreChange}      setShowMobileSideBar={setShowMobileSideBar} /> :<Sidebar stores={stores} storeindex={storeindex} handleOnStoreChange={handleOnStoreChange}/>
+         }
+       </Route>
         } 
+     
     </div>
    
       <Route exact path={paths}>
@@ -552,7 +583,7 @@ return ()=>{
     
      <Switch>
      <Route exact  path="/dashboard">
-         <Home user={user} stores={stores} transactions={transactions} setStores={setStores} handlegetStores={handlegetStores} handlegetProducts={handlegetProducts} isStoresLoaded={isStoresLoaded}setIsStoreLoaded={setIsStoreLoaded} completedAggregate={completedAggregate} inCompletedAggregate={inCompletedAggregate} alltimeAggregate={alltimeAggregate} monthlySales={monthlySales} productxs={productxs}/>
+         <Home user={user} stores={stores} transactions={transactions} setStores={setStores} handlegetStores={handlegetStores} handlegetProducts={handlegetProducts} isStoresLoaded={isStoresLoaded}setIsStoreLoaded={setIsStoreLoaded} completedAggregate={completedAggregate} inCompletedAggregate={inCompletedAggregate} alltimeAggregate={alltimeAggregate} monthlySales={monthlySales} productxs={productxs} />
        </Route>
        <Route path="/dashboard/users">
         <UserList/>
@@ -568,7 +599,7 @@ return ()=>{
          </Route>
 
        <Route path="/dashboard/stores">
-        <StoreList  stores={stores} setStores={setStores} handlegetStores={handlegetStores}  onDeleteStore={deleteStore}/>
+        <StoreList  stores={stores} setStores={setStores}  onDeleteStore={deleteStore} handleOnStoreSelected={handleOnStoreSelected}/>
        </Route>
        <Route path="/dashboard/store/:storeId">
        
