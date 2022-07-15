@@ -15,8 +15,12 @@ const Double = require('@mongoosejs/double');
         required:'none'
     },
     price:{
-        type:Double,
+        type:Number,
         required:true
+    },
+    shippingFees:{
+        type:Number,
+        default:0.0
     },
     storeId:{
         type:String,

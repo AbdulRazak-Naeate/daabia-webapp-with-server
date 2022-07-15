@@ -252,7 +252,7 @@ const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTran
                   }):`<option value="0" class="opt">No stores found </option>`}
               </select>:''} */}
             <Link to={`/dashboard/transactions?`}>
-          <Button className="pageTitleButton">Reports</Button>
+          <button className="pageTitleButton">Reports </button>
           </Link>
             </div>
           </div>

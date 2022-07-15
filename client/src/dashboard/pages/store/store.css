@@ -141,6 +141,7 @@
 }
 @media only  screen and (max-width:620px){
     .store{
+        width: 97%;
         padding: 0px;
     }
 }

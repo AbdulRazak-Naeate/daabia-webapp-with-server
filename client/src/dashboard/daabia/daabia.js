@@ -26,7 +26,7 @@ class Daabia {
     }
   }
 
-  async  initiateAndCreateProduct(auth_token,colors,sizes,name,price,categoryId,description,specification,digitalProductUrl,storeid,stock,active,productImages){
+  async  initiateAndCreateProduct(auth_token,colors,sizes,name,price,shippingFees,categoryId,description,specification,digitalProductUrl,storeid,stock,active,productImages){
     
     const url = 'http://localhost:3001/api/products/';
 
@@ -54,8 +54,8 @@ class Daabia {
     formData.append('digital_product_url', digitalProductUrl);//append digital
     formData.append('storeId', storeid);
     formData.append('stock',stock);
-    formData.append('active',active)
- 
+    formData.append('active',active);
+    formData.append('shippingFees',shippingFees);
     //append files to image to create an a file array
   
     for (var i = 0; i <= productImages.length; i++) {

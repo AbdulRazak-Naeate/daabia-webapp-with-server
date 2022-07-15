@@ -296,7 +296,7 @@ return axios.patch(url, body,config)
 
    //New Products Here
 
-   const onFormSubmit = (e,clearFields,Alert,colors,sizes,name,price,categoryId,description,specification,digitalProductUrl,storeid,stock,active,productImages) => {
+   const onFormSubmit = (e,clearFields,Alert,colors,sizes,name,price,shippingFees,categoryId,description,specification,digitalProductUrl,storeid,stock,active,productImages) => {
        
     const form = e.currentTarget
     if (form.checkValidity() === false) {
@@ -306,7 +306,7 @@ return axios.patch(url, body,config)
     
     e.preventDefault()// Stop form default submit
     
-       daabia.initiateAndCreateProduct(user.auth_token,colors,sizes,name,price,categoryId,description,specification,digitalProductUrl,storeid,stock,active,productImages).then((response) => {
+       daabia.initiateAndCreateProduct(user.auth_token,colors,sizes,name,price,shippingFees,categoryId,description,specification,digitalProductUrl,storeid,stock,active,productImages).then((response) => {
          // console.log(response.data);
          if (response.data.status===200){
           //window.location.reload();

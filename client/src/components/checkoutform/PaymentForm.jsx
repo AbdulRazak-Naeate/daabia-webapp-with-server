@@ -13,7 +13,7 @@ const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,next
         const config = {
         public_key:"FLWPUBK-37d2e9fba8018282c3139e2a90c8ef76-X",
         tx_ref: Date.now(),
-        amount: checkoutToken.subtotal+convertValueFromExponent(parseFloat(shippingData.shippingFees)),
+        amount: checkoutToken.subtotal+convertValueFromExponent(parseFloat(checkoutToken.subfees)),
         currency: 'GHS',
         payment_options: 'card,mobilemoneyghana,ussd',
         customer: {
@@ -70,7 +70,7 @@ const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,next
                     postal_zip_code:shippingData.zip,
                     country:shippingData.countrylabel,
                     orderNumber:shippingData.orderNumber,
-                    shippingFees:convertValueFromExponent(parseFloat(shippingData.shippingFees)),
+                    shippingFees:convertValueFromExponent(parseFloat(checkoutToken.subfees)),
                     date:new Date().toUTCString(),
                     }
                 } 
@@ -96,7 +96,7 @@ const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,next
 
   return (
     <>
-     <Review checkoutToken={checkoutToken} fees={shippingData.shippingFees}/> 
+     <Review checkoutToken={checkoutToken} fees={checkoutToken.subfees}/> 
              <Divider/>
             <Typography variant="h6" gutterBottom style={{margin:'20px 0'}}>Payment Method</Typography>
   
@@ -106,7 +106,7 @@ const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,next
                                 <div style={{display:'flex',justifyContent:'space-between'}}>
                                 <Button variant="outlined" onClick={backStep}>Back</Button>
                                 <Button type="submit"variant="contained" color="primary">
-                                    Pay {`${formarttoCurrency(checkoutToken.subtotal+shippingData.shippingFees,'π')}`}
+                                    Pay {`${formarttoCurrency(checkoutToken.subtotal+checkoutToken.subfees,'π')}`}
                                 </Button>
                                 </div>
                             </form>

@@ -206,9 +206,9 @@ const analytics = getAnalytics(app);
     })
   
   };
-  const handleUpdateCartQty = async (productId,quantity,price)=>{
+  const handleUpdateCartQty = async (productId,quantity,price,shippingFees)=>{
           if (quantity>=1){
-            updateCartQty(productId,quantity,price).then((response)=>{
+            updateCartQty(productId,quantity,price,shippingFees).then((response)=>{
               if (response.status===200){
                // console.log(response.data.cart.items)
                 setCart(response.data.cart)
@@ -219,15 +219,15 @@ const analytics = getAnalytics(app);
           }
   }
   
-  const updateCartQty =(productId,quantity,price)=>{
-    console.log()
+  const updateCartQty =(productId,quantity,price,shippingFees)=>{
+    console.log(shippingFees)
     const url = `http://localhost:3001/api/carts/quantity/${productId}`;
-     
  
     return patch(url,  {
       productId:productId,
       quantity:quantity,
       price:price,
+      shippingFees:shippingFees,
       userId:userid,
      
     })
@@ -402,6 +402,7 @@ const analytics = getAnalytics(app);
             measurement:items[i].measurement,
             filename:items[i].product.image[0].filename,
             priceEach:items[i].product.price,
+            shippingFees:items[i].line_item_sub_fees,  
             totalPrice:items[i].line_item_sub_price,
             userId:userid,
             paymentMethod:"flutterwave",
@@ -414,7 +415,6 @@ const analytics = getAnalytics(app);
             city:shippingData.town_city,
             street:shippingData.street,
             homeAddress:shippingData.home_address ,
-            shippingFees:shippingData.shippingFees   
           // eslint-disable-next-line no-loop-func
           },).then(ret=>{
             console.log(ret)

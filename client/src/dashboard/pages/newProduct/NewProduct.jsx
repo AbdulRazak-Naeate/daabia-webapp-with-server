@@ -22,6 +22,7 @@ export default function NewProduct({store,onFormSubmit}) {
     const [name, setName] = useState('');
     const [description, setDescription] = useState();
     const [price, setPrice] = useState('');
+    const [shippingFees,setShippingFees] =useState(0)
     const [stock,setStock]=useState('');
     const [active,setActive]=useState('');
     const [specification,setSpecification] = useState('none');
@@ -48,6 +49,9 @@ export default function NewProduct({store,onFormSubmit}) {
       }
       const onstockChange =(e)=>{
           setStock(e.target.value)
+      }
+      const onshippingFeesChange =(e)=>{
+        setShippingFees(e.target.value)
       }
       const onAddProductCLick =()=>{
         //  let storeid=document.getElementById("storeselect").value
@@ -223,7 +227,7 @@ export default function NewProduct({store,onFormSubmit}) {
           </div>
           
           <div className="addProductFormContainer">
-           <form className="addProductForm" onSubmit={(e)=>{onFormSubmit(e,clearFields,Alert,colors,sizes,name,price,store.categoryId,description,specification,digitalProductUrl,store._id,stock,active,productImages)}}>
+           <form className="addProductForm" onSubmit={(e)=>{onFormSubmit(e,clearFields,Alert,colors,sizes,name,price,shippingFees,store.categoryId,description,specification,digitalProductUrl,store._id,stock,active,productImages)}}>
            <Grid container justifyContent="space-around"  xs={12} sm={12} md={12} lg={12} spacing={1} padding={0}>
            <Grid item justifyContent="space-between" spacing={1} padding={0} xs={12} sm={12} md={6} lg={6}>
        
@@ -261,7 +265,7 @@ export default function NewProduct({store,onFormSubmit}) {
              <Grid item key={'product-price'} xs={12} sm={12} md={10} lg={10}>
              <div className="addProductItem">
             <label >Price</label>
-             <input type="number"  placeholder="100 pi" value={price} required onChange={(e)=>{setPrice(e.target.value)}} />
+             <input type="number"  placeholder="0.00020000" value={price} required onChange={(e)=>{setPrice(e.target.value)}} />
          </div>
            
           </Grid>
@@ -282,6 +286,14 @@ export default function NewProduct({store,onFormSubmit}) {
           <div className="addProductItem">
              <label>Stock</label>
              <input type="number" placeholder="123" required onChange={onstockChange} />
+           </div>
+           
+             </Grid>
+             
+             <Grid item key={'product-stock'} xs={12} sm={12} md={10} lg={10}>
+          <div className="addProductItem">
+             <label>Shipping fees</label>
+             <input type="number" placeholder="0.00000011" required onChange={onshippingFeesChange} />
            </div>
            
              </Grid>

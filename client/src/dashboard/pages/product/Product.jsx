@@ -39,6 +39,7 @@ export default function Product({store}) {
     const [addStock,setaddStock]=useState(0);
     const [active,setActive]=useState(product.active);
     const [price,setPrice]=useState(convertValueFromExponent(product.price));
+    const [shippingFees,setShippingFees]=useState(convertValueFromExponent(product.shippingFees));
     const [monthlySales,setmonthlySales]=useState([]);
     const [productUpdated,setProductUpdated]=useState(false);
     //Editor
@@ -89,6 +90,7 @@ export default function Product({store}) {
                      setProduct(response.data)
                      setStock(response.data.stock.currentstock);
                      setPrice(convertValueFromExponent(response.data.price));
+                     setShippingFees(convertValueFromExponent(response.data.shippingFees))
                      setActive(response.data.active);
                      setColors(response.data.color);
                      setSizes(response.data.size);
@@ -109,6 +111,7 @@ export default function Product({store}) {
         const body={
                  productId:productid,
                  price:price,
+                 shippingFees:shippingFees,
                  description:description,
                  stock:addStock,
                  active:active,
@@ -225,7 +228,11 @@ export default function Product({store}) {
                         </span>
                         <span className="productInfoItem">
                             <span className="productInfoKey">price:</span>
-                            <label className="productInfoValue" id="stock">{`π${convertValueFromExponent(product.price)}`}</label>
+                            <label className="productInfoValue" id="price">{`π${convertValueFromExponent(product.price)}`}</label>
+                        </span>
+                        <span className="productInfoItem">
+                            <span className="productInfoKey">shipping:</span>
+                            <label className="productInfoValue" id="shipping">{`π${convertValueFromExponent(product.shippingFees)}`}</label>
                         </span>
                     </div>
                       </div>
@@ -253,7 +260,7 @@ export default function Product({store}) {
                     <Grid item justifyContent='flex-start' direction={'column'} sx={12} sm={12} md={3} lg={3}>
                     <div className='formItem'>
                          <label>Price</label>
-                        <input type="text" placeholder="π10.00"value={price}onChange={(e)=>{setPrice(e.target.value)}}/>
+                        <input type="number" placeholder="0.0001"value={price}onChange={(e)=>{setPrice(e.target.value)}}/>
                        </div>
                        <div className='formItem'>
                         <label>Add Stock</label>
@@ -266,6 +273,10 @@ export default function Product({store}) {
                             <option value="yes">Yes</option>
                             <option value="no">No</option>
                         </select>
+                        </div>
+                        <div className='formItem'>
+                        <label>setShippingFees</label>
+                        <input type="number" id="shippingfees" value={shippingFees}   placeholder="0.00000012" onChange={(e)=>{setShippingFees(e.target.value)}}/>
                         </div>
                         <div className='formItem'>
                            <label>Color</label>

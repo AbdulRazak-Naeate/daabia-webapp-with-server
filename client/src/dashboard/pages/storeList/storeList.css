@@ -73,6 +73,7 @@
 
 @media only  screen and (max-width:620px){
     .storeList{
+        width: 97%;
         padding: 0px;
     }
 }

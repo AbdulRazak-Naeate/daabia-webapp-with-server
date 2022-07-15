@@ -89,6 +89,7 @@ padding: 10px 5px;
 }
 @media only  screen and (max-width:620px){
     .newProduct{
+        width: 97%;
         padding: 0px;
     }
     .addProductTitle{

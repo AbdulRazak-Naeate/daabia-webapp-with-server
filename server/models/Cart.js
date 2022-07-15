@@ -1,3 +1,4 @@
+const double = require('@mongoosejs/double');
 const mongoose = require('mongoose');
 
 
@@ -11,7 +12,11 @@ const CartSchema = new mongoose.Schema({
         required:true
     },
     subtotal:{
-        type:Number,
+        type:double,
+        default:0
+    },
+    subfees:{
+        type:double,
         default:0
     },
     date:{

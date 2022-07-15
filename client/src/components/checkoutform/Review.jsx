@@ -55,8 +55,8 @@ const Review = ({checkoutToken,fees}) => {
           <ListItemButton  className={classes.listItemButton} onClick={()=>{handleClick()}}  key={index}>
            <ListItem key={item.product._id}>
            <ListItemText  primary={item.product.name} secondary={`Quantity ${item.quantity}  ${item.color!=='null'? ' , '+item.color+' , '+item.size:''}`} />   
-             <Typography variant="body2">{`${formarttoCurrency(item.line_item_sub_price,'π')}`}</Typography>
-  
+             <Typography variant="body2">{`price : ${formarttoCurrency(item.line_item_sub_price,'π')}`}</Typography>
+             <Typography variant="body2">{`fees  : ${formarttoCurrency(item.line_item_sub_fees,'π')}`}</Typography>
            </ListItem>
           {open ? <ExpandLess key={index} /> : <ExpandMore key={index} />}
         </ListItemButton>

@@ -6,13 +6,13 @@ const verify   = require('./verifyToken');
 const Store    = require('../models/Store');
 const {uploadImage}   = require('../upload');
 const fs = require('fs');
-const { promisify } = require('util');
-const path = require('path')
+/* const { promisify } = require('util');
+ */const path = require('path')
 var mongoose=require('mongoose');
 const {productValidation} = require('../validation');
-
+/* 
 const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
+const assert = require('assert'); */
 
 
 /* // Database Name
@@ -61,6 +61,7 @@ router.post('/',uploadImage('./server/uploads/products'),verify, async(req,res)=
         stock:{currentstock:stockvalue,availablestock:stockvalue,
                alltimestock:stockvalue},
         price:req.body.price,
+        shippingFees:req.body.shippingFees,
         likes:req.body.likes,
         storeId:req.body.storeId,
         image:req.files,
@@ -102,6 +103,7 @@ router.post('/prefstyle',uploadImage('./server/uploads/products/prefarestyleprod
         category:req.body.category,
         specification:req.body.specification,
         price:req.body.price,
+        shippingFees:req.body.shippingFees,
         storeId:req.body.storeId,
         image:req.files,
     });
@@ -207,6 +209,7 @@ router.patch('/:productId',verify,async (req,res)=> {
             {_id:oId},
             { 
                 $set:{ price:req.body.price,
+                       shippingFees:req.body.shippingFees,
                        description:req.body.description,
                        active:req.body.active,
                        color:req.body.color,

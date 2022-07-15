@@ -18,7 +18,7 @@ const formarttoCurrency = (amount ,symbol)=>{
       if (periodIndex >=1){ //check for NaN values if non exist continue
         if (periodIndex!==-1){ //if period exist in value start extraction from its index
    
-         var extract=stringval.slice(stringval.length - (stringval.length-2))
+         var extract=stringval.slice(stringval.length - (stringval.length-2)) //extract values after period
          // console.log(extract)
           return extract.toString().split('');
       
@@ -47,12 +47,12 @@ const formarttoCurrency = (amount ,symbol)=>{
 if (amount!==undefined){
 
   //if (amount>=1){
-   var arr=getDigitsAfterPeriod(amount);
-   var bool=isDigitContainNonZeroz(arr);
-     //  console.log(bool)
+   var array_degitsAfterPeriod=getDigitsAfterPeriod(amount);
+   var bool=isDigitContainNonZeroz(array_degitsAfterPeriod);//checlk if any digit after period is > 0 
        if (bool===true){
-       
-        return symbol + amount.toFixed(arr.length).replace(/\d(?=(\d{3})+\.)/g,"$&,");
+          //  console.log("d length : "+array_degitsAfterPeriod.length);
+
+        return symbol + amount.toFixed(8).replace(/\d(?=(\d{3})+\.)/g,"$&,");
        }else if(bool===false){
        // console.log(amount)
         return symbol + amount;

@@ -39,7 +39,7 @@ const AddressForm = ({checkoutToken,next}) => {
     const [city,setCity]=useState('');
     const [citylabel,setCityLabel]=useState('');
     const [orderNumber]=useState(uniqueOrderNumber());
-    const [shippingFees,setShippingFees]=useState(0.00000020);
+    const [shippingFees,setShippingFees]=useState(checkoutToken.cart.subfees);
    
 
     

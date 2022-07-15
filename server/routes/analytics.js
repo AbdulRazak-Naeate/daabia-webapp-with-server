@@ -106,9 +106,9 @@ router.get('/sales/:storeId', async (req,res)=>{
     res.json({transactions:transactions,total:aggr,message:'transactions loaded'});
 
 });
+
+
 //get store monthly sales
-
-
 router.post('/sales/monthly/:storeId',async (req,res)=>{
    
      

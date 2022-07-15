@@ -5,7 +5,6 @@ const Cart    = require('../models/Cart');
 const jwt = require('jsonwebtoken');
 
 
-
 router.get('/generate_token',async(req,res)=>{
     //Create and asigned a token
   const token = jwt.sign({_id:req.body.cartId},process.env.TOKEN_SECRET);
@@ -65,8 +64,9 @@ router.post('/',async (req,res)=>{
                 if (matchItems.length>0){
                     let product=req.body.product
                     let line_item_sub_price=((pQty)*product.price)
+                    let line_item_sub_fees=((pQty)*product.shippingFees)
                    // console.log(req.body.quantity);
-                    console.log('product exist in cart inc qty, sub price :'+line_item_sub_price)
+                    console.log('product exist in cart inc qty, sub price :'+line_item_sub_price+' fess: '+line_item_sub_fees)
                     const updateCartQuantity =await Cart.findOneAndUpdate({//update item
                         items:{
                             $elemMatch:{productId:req.body.productId}
@@ -74,7 +74,8 @@ router.post('/',async (req,res)=>{
                             },
                         {
                             $inc:{'items.$.quantity':1},//increate quantity by 1
-                            $set:{'items.$.line_item_sub_price':line_item_sub_price}, //set subtotal price quantity by price
+                            $set:{'items.$.line_item_sub_price':line_item_sub_price,
+                                   'items.$.line_item_sub_fees':line_item_sub_fees}, //set subtotal price quantity by price
                         },   
                         { new:true,useFindAndModify:false}
                         
@@ -87,9 +88,10 @@ router.post('/',async (req,res)=>{
                  //let line_item_sub_price=req.body.quantity*product.price
 
                 console.log('add new product into cart')
-                var sub_price = req.body.product.price
+                var sub_price = convertValueFromExponent(req.body.product.price)
+                var sub_fees = req.body.product.shippingFees
                 console.log(sub_price)
-                console.log(parseFloat(sub_price))
+                /**/ console.log(parseFloat(sub_price)) 
                const addtoCart = await Cart.findOneAndUpdate({userId:req.body.userId},{
                       $push:{items:{
                
@@ -99,7 +101,8 @@ router.post('/',async (req,res)=>{
                         size:'null',
                         measurement:{back:"",chest:"",shirtLength:"",sleeve:"",trouserLength:"",waist:"",thigh:"",bust:""},
                         product:req.body.product,
-                        line_item_sub_price:sub_price,
+                        line_item_sub_price:parseFloat(sub_price),
+                        line_item_sub_fees:parseFloat(sub_fees),
                         selected:false
                        
                      
@@ -116,7 +119,8 @@ router.post('/',async (req,res)=>{
             console.log('user cart not exist creating new one')
 
             var pid=req.body.productId
-            let subprice=req.body.product.price;
+            let subprice=convertValueFromExponent(req.body.product.price);
+            let subfees =convertValueFromExponent(req.body.product.shippingFees);
             console.log(subprice)
             //let line_item_sub_price=req.body.quantity*product.price
             var cartItem={};
@@ -128,13 +132,15 @@ router.post('/',async (req,res)=>{
                     size:'null',
                     measurement:{back:"",chest:"",shirtLength:"",sleeve:"",trouserLength:"",waist:"",thigh:"",bust:""},
                     product:req.body.product,
-                    line_item_sub_price:subprice,
+                    line_item_sub_price:parseFloat(subprice),
+                    line_item_sub_fees:parseFloat(subfees),
                     selected:false
                    
             }
              const _cart = new Cart({
             userId:req.body.userId,
             items:[cartItem],
+    
 
            }
             ); 
@@ -150,14 +156,17 @@ router.post('/',async (req,res)=>{
     }
 });
 
-//update cart item qty and subprice
+//update cart item qty , subprice and shippingfees
 router.patch('/quantity/:productId',async (req,res)=>{
 
     try{
         var pId =req.body.productId;
-        var value= parseInt(req.body.quantity)
-        var subtotalqty=(value)*req.body.price;
-       // console.log("value "+subtotalqty)
+        var value= parseInt(req.body.quantity);
+        var subtotalqty  = convertValueFromExponent((value) *parseFloat(req.body.price));
+        var subtotalfees = convertValueFromExponent((value) *parseFloat(req.body.shippingFees));
+
+        console.log("value "+subtotalqty)
+        console.log("fees "+subtotalfees)
         Cart.findOneAndUpdate({userId:req.body.userId,
             items:{
                 $elemMatch:{productId:req.body.productId}
@@ -166,7 +175,8 @@ router.patch('/quantity/:productId',async (req,res)=>{
             {
                 $set: {
                       'items.$.quantity':value,
-                      'items.$.line_item_sub_price':subtotalqty,
+                      'items.$.line_item_sub_price':parseFloat(subtotalqty),
+                      'items.$.line_item_sub_fees':parseFloat(subtotalfees),
                       }
             },   
             { new:true,useFindAndModify:false}).then(ret=>{
@@ -331,7 +341,7 @@ router.patch('/:userId', async (req,res)=>{
    try{
          await Cart.findOneAndUpdate({userId:req.params.userId}
                ,{
-                   $set:{items:[],subtotal:0},
+                   $set:{items:[],subtotal:0.0,subfees:0.0},
                  
                },{useFindAndModify:false}).then(ret=>{
                    
@@ -349,7 +359,7 @@ router.patch('/:userId', async (req,res)=>{
 router.patch('/removeitem/:userId', async (req,res)=>{
 
      try{
-           const removeFromCart= await Cart.findOneAndUpdate({userId:req.params.userId,
+           const removeFromCart = await Cart.findOneAndUpdate({userId:req.params.userId,
             items:{
                 $elemMatch:{productId:req.body.productId}
                  }},{
@@ -382,7 +392,8 @@ router.patch('/refreshcart/:userId', async (req,res)=>{
         
           Cart.findOneAndUpdate({userId:req.params.userId},
             {
-              $set:{subtotal:0},
+              $set:{subtotal:0,
+                    subfees:0.0},
             },   
             { new:true,useFindAndModify:false}
             ).then((ret=>{
@@ -420,14 +431,16 @@ const exactMatchQuantity =(matchItems,productId)=>{//search and get the exact ca
 
 }
 const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
-     var subtotal = 0.0;
-  const aggr= await Cart.aggregate([{$match:{userId:req.body.userId}},{$unwind:"$items"},
+    var subtotal = 0.0;
+    var subFees  = 0.0;
+    const aggr= await Cart.aggregate([{$match:{userId:req.body.userId}},{$unwind:"$items"},
         {$match:{'items.selected':true}},
     {
         $group:{
             "_id":'0',
-            "subTotal":{$sum:"$items.line_item_sub_price"}
-     
+            "subFees" :{$sum:"$items.line_item_sub_fees"},
+            "subTotal":{$sum:"$items.line_item_sub_price"},
+
           }
    }]).then((ret=>{ 
        //update subtotal 
@@ -436,7 +449,8 @@ const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
       var retLength=ret.length
        console.log("aggr : "+JSON.stringify(ret)+ " length :"+retLength);
        if(retLength!==0){
-        subtotal=  ret[0].subTotal;
+        subtotal=  ret[0].subTotal ;
+        subFees =  ret[0].subFees;
 
         }
        }catch(err){
@@ -444,7 +458,9 @@ const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
        }
         Cart.findOneAndUpdate({userId:req.body.userId},
         {
-          $set:{subtotal:subtotal},
+          $set:{subtotal:subtotal,
+                subfees :subFees
+        },
         },   
         { new:true,useFindAndModify:false}
         ).then((ret=>{
@@ -461,12 +477,11 @@ const updateSubtotal = async (req,res) =>{//sum all line_items_sub_price
    
 }
 
-   function convertValueFromExponent(value){
-    if (value >= 1){
+const convertValueFromExponent = (value)=>{
+    if (value >=1){
       return value
     }else{
-
-      return decimalPlaces(parseFloat(value),8) ;
+      return value.toFixed(8)
     }
   }
   function decimalPlaces(float, length) {

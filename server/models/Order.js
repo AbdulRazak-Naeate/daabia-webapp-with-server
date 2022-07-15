@@ -48,15 +48,15 @@ const OrderSchema  =  new mongoose.Schema({
         required:true
     },
     priceEach:{
-        type:Number,
+        type:double,
         required:true
     },
     totalPrice:{
-        type:Number,
+        type:double,
         required:true,
     },
     shippingFees:{
-        type:Number,
+        type:double,
         required:true,
     },
     userId:{

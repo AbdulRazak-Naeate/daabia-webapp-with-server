@@ -11,7 +11,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Checkbox from '@mui/material/Checkbox';
 import Measurement from './Measurement';
 import { pink,orange } from '@mui/material/colors';
-import {formarttoCurrency} from '../../../utils/Utils';
+import {formarttoCurrency,convertValueFromExponent} from '../../../utils/Utils';
 
 const CartItem = ({cartitem,onUpdateCartQty,onUpdateColorSize,onUpdateMeasurement,onRemoveFromCart,onUpdateSelect}) => {
     const classes = useStyles();
@@ -23,7 +23,7 @@ const CartItem = ({cartitem,onUpdateCartQty,onUpdateColorSize,onUpdateMeasuremen
     const[colorSelectedList,setColorSelectedList]=useState([]);
     const [checked, setChecked] = useState(cartitem.selected);
     const [imagepath]=useState( `http://localhost:3001/server/uploads/products/${cartitem.product.image[0].filename}`)
-
+  console.log((convertValueFromExponent(cartitem.line_item_sub_fees)));
     const label = { inputProps: { 'aria-label': 'Select item' } };
 
     const sleeves = [
@@ -105,7 +105,8 @@ const CartItem = ({cartitem,onUpdateCartQty,onUpdateColorSize,onUpdateMeasuremen
             <CardMedia image={imagepath} alt={cartitem.product.name} className={classes.media}/>
             <CardContent className={classes.cardContent}>
              <Typography variant="h6">{cartitem.product.name}</Typography>
-             <Typography variant="body1" className={classes.price}>{`${formarttoCurrency(cartitem.line_item_sub_price,'π')}`}</Typography>
+          {/**/}    <Typography variant="body1" className={classes.price}>{`${formarttoCurrency(cartitem.line_item_sub_price,'π')}`}</Typography> 
+             <Typography variant="body1" className={classes.price}>{`${formarttoCurrency(cartitem.line_item_sub_fees,'π')}`}</Typography>
             </CardContent>
             <CardActions className={classes.cardActions}>
              <div className={classes.specifications}>
@@ -132,9 +133,9 @@ const CartItem = ({cartitem,onUpdateCartQty,onUpdateColorSize,onUpdateMeasuremen
         }} checked={checked} onChange={(e)=>{setChecked(e.target.checked); console.log(e.target.checked)
                 onUpdateSelect(cartitem.product._id,e.target.checked) }} />
                 
-                <Button type="button" size="small" onClick={()=>{onUpdateCartQty(cartitem.product._id,cartitem.quantity-1,parseFloat(cartitem.product.price))}}>-</Button>
+                <Button type="button" size="small" onClick={()=>{onUpdateCartQty(cartitem.product._id,cartitem.quantity-1,parseFloat(cartitem.product.price),parseFloat(cartitem.product.shippingFees))}}>-</Button>
                 <Typography>{cartitem.quantity}</Typography>
-                <Button type="button" size="small"  color="secondary" onClick={()=>{onUpdateCartQty(cartitem.product._id,cartitem.quantity+1,parseFloat(cartitem.product.price))}}>+</Button>
+                <Button type="button" size="small"  color="secondary" onClick={()=>{onUpdateCartQty(cartitem.product._id,cartitem.quantity+1,parseFloat(cartitem.product.price),parseFloat(cartitem.product.shippingFees))}}>+</Button>
                    <Button type="button"   variant="contained" color="secondary" onClick={()=>{onRemoveFromCart(cartitem.product._id)}}>Remove</Button>
               </div>
            
