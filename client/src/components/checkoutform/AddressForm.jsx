@@ -10,7 +10,7 @@ import {convertValueFromExponent} from '../../utils/Utils'
  */
 
 const AddressForm = ({checkoutToken,next}) => {
-
+  console.log(checkoutToken)
   const uniqueOrderNumber= ()=> {//Unique Identifier
     var result           = '';
    // var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -39,7 +39,7 @@ const AddressForm = ({checkoutToken,next}) => {
     const [city,setCity]=useState('');
     const [citylabel,setCityLabel]=useState('');
     const [orderNumber]=useState(uniqueOrderNumber());
-    const [shippingFees,setShippingFees]=useState(checkoutToken.cart.subfees);
+    const [shippingFees,setShippingFees]=useState(checkoutToken ? checkoutToken.subfees :'');
    
 
     
@@ -119,7 +119,7 @@ const AddressForm = ({checkoutToken,next}) => {
        
     
   return (
-    <>
+   checkoutToken ? <>
       <Typography variant="h6" gutterBottom>Shipping Address</Typography>
           <form onSubmit = {handleSubmit((data) =>{ 
             next({...data,countrylabel,statelabel,citylabel,orderNumber,shippingFees})
@@ -184,7 +184,7 @@ const AddressForm = ({checkoutToken,next}) => {
                         <Button type="submit" variant="contained" color="primary">Next</Button>
             </div>
           </form>
-            </>
+            </>:'...loading'
   )
 }
 

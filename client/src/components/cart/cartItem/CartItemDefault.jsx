@@ -102,45 +102,13 @@ const CartItem = ({cartitem,onUpdateCartQty,onUpdateColorSize,onUpdateMeasuremen
   return (
     <div>
         <Card>
-          <Grid container justifyContent="space-between" spacing={0}>
-              <Grid item xs={3} sm={3} md={3} lg={3}>
-              <CardMedia  image={imagepath} alt={cartitem.product.name} className={classes.media}/>
-
-              </Grid>
-
-              <Grid item xs={9} sm={9} md={9} lg={9}  >
-              <CardActions className={classes.cardActions}>
-              <div className={classes.buttons}>
-                <div className={classes.quantityUpdateWrapper}>
-                <Button type="button" size="small" onClick={()=>{onUpdateCartQty(cartitem.product._id,cartitem.quantity-1,parseFloat(cartitem.product.price),parseFloat(cartitem.product.shippingFees))}}>-</Button>
-                <Typography >{cartitem.quantity}</Typography>
-                <Button type="button" size="small"  color="secondary" onClick={()=>{onUpdateCartQty(cartitem.product._id,cartitem.quantity+1,parseFloat(cartitem.product.price),parseFloat(cartitem.product.shippingFees))}}>+</Button>
-                </div>
-          
-          <Checkbox {...label}  sx={{color: orange[800],
-          '&.Mui-checked': {
-             color: orange[600],
-          },
-        }} checked={checked} onChange={(e)=>{setChecked(e.target.checked); console.log(e.target.checked)
-                onUpdateSelect(cartitem.product._id,e.target.checked) }} /> 
-              </div>
-     <CardContent className={classes.cardContent}>
-                  {/* <Typography variant="h6">{cartitem.product.name}</Typography> */}
-          {/**/} 
-          <div className={classes.cost}>
-           <Typography variant="body2" >{`price: ${formarttoCurrency(cartitem.product.price,'π')}`}</Typography> 
-             <Typography variant="body2">{`shipping: ${formarttoCurrency(cartitem.line_item_sub_fees,'π')}`}</Typography>
-               
-          </div>
-         
-  <Button type="button" size='small'   variant="outlined" color="secondary" onClick={()=>{onRemoveFromCart(cartitem.product._id)}}>Remove</Button>
+            <CardMedia image={imagepath} alt={cartitem.product.name} className={classes.media}/>
+            <CardContent className={classes.cardContent}>
+             <Typography variant="h6">{cartitem.product.name}</Typography>
+          {/**/}    <Typography variant="body1" className={classes.price}>{`${formarttoCurrency(cartitem.product.price,'π')}`}</Typography> 
+             <Typography variant="body1" className={classes.price}>{`${formarttoCurrency(cartitem.line_item_sub_fees,'π')}`}</Typography>
             </CardContent>
-            </CardActions>
-            
-              </Grid>
-          </Grid>
-          <Grid>
-          <CardActions className={classes.cardActions}>
+            <CardActions className={classes.cardActions}>
              <div className={classes.specifications}>
              {/*  <ListItemButton onClick={handleClick}>
               <Typography variant="body2">Measurement</Typography> {open ? <ExpandLess /> : <ExpandMore />}
@@ -156,10 +124,22 @@ const CartItem = ({cartitem,onUpdateCartQty,onUpdateColorSize,onUpdateMeasuremen
               {cartitem.product.color.length>0 ?  <ColorGridList type={"color"} onUpdateColorSize={onUpdateColorSize} list={cartitem.product.color}/>:''}
             
              </div>
-            </CardActions>
-          </Grid>
-        
+              <div className={classes.buttons}>
+              <Checkbox {...label}  sx={{
+          color: orange[800],
+          '&.Mui-checked': {
+            color: orange[600],
+          },
+        }} checked={checked} onChange={(e)=>{setChecked(e.target.checked); console.log(e.target.checked)
+                onUpdateSelect(cartitem.product._id,e.target.checked) }} />
+                
+                <Button type="button" size="small" onClick={()=>{onUpdateCartQty(cartitem.product._id,cartitem.quantity-1,parseFloat(cartitem.product.price),parseFloat(cartitem.product.shippingFees))}}>-</Button>
+                <Typography>{cartitem.quantity}</Typography>
+                <Button type="button" size="small"  color="secondary" onClick={()=>{onUpdateCartQty(cartitem.product._id,cartitem.quantity+1,parseFloat(cartitem.product.price),parseFloat(cartitem.product.shippingFees))}}>+</Button>
+                   <Button type="button"   variant="contained" color="secondary" onClick={()=>{onRemoveFromCart(cartitem.product._id)}}>Remove</Button>
+              </div>
            
+            </CardActions>
         </Card>
       
     </div>

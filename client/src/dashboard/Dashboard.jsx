@@ -7,6 +7,8 @@ import Confirm from "./components/email/Confirm"
 import "./dashboard.css"
 import {BrowserRouter as Router,Switch,Route
 } from "react-router-dom";
+import { CircularProgress } from '@mui/material';
+
 import Home from "./pages/home/Home";
 import UserList from "./pages/userList/UserList";
 import User from "./pages/user/User";
@@ -564,7 +566,7 @@ return ()=>{
          <Topbar devicetype={devicetype} handleMouseDown={handleMouseDown} />
     </Route>
      <div className="content">
-
+     { showprogress ? <CircularProgress className='circularProgress' variant='indeterminate' color ='primary' size={25} />:''}
     <div>
        {showSidebar &&
        <Route exact path={paths}>
@@ -613,7 +615,7 @@ return ()=>{
         <ProductsList products={products} handlegetProducts={handlegetProducts} handleDeleteProduct={handleDeleteProduct} isproductsLoaded={isproductsLoaded}setIsproductsLoaded={setIsproductsLoaded} store={stores[storeindex]}/>
        </Route>
        <Route path="/dashboard/product">
-        <Product store={stores[storeindex]}/>
+        <Product store={stores[storeindex]} setShowProgress={setShowProgress} showprogress={showprogress}/>
        </Route>
 
        <Route path="/dashboard/newProduct">

@@ -117,6 +117,18 @@ export default function ProductsList({products,handlegetProducts,handleDeletePro
           }
         },
         {
+          field: 'shippingFees',
+          headerName: 'Shipping',
+          width: 135,
+          renderCell:(params)=>{
+            return(
+              <>
+               <span>{`${formarttoCurrency(params.row.shippingFees,'π')}`}</span>
+              </>
+            )
+          }
+        },
+        {
             field:"action",
             headerName:"Action",
             width:120,

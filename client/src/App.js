@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {useState}from 'react';
 import {BrowserRouter as Router,Switch,Route,useHistory
 } from "react-router-dom";
@@ -9,7 +10,8 @@ import {Topbar,Appbar,TopbarcontacInfo,BottomNav,Products,Cart,Orders,ProceedChe
 import React, { useEffect } from 'react';
 import axios ,{post,patch} from 'axios';
 import CheckOut from './components/checkoutform/checkout/CheckOut';
-import Box from '@mui/material/Box';
+import { Box } from '@mui/material';
+
 import CssBaseline from '@mui/material/CssBaseline';
 import {RModal} from './components/modal/RModal'
 import { blue, orange,red} from '@mui/material/colors';
@@ -96,7 +98,6 @@ const analytics = getAnalytics(app);
      const[product,setProduct]=useState([]);
      const[cart,setCart]=useState({});
      const[itemsCount,setItemsCount]=useState(0);
-     const [errorMessage,setErrorMessage]=useState('');
      const [order,setOrder]=useState({});
      const[myOrders,setMyOrders]=useState([]);
      const[categories,setCategories]=useState([]);
@@ -445,7 +446,7 @@ const analytics = getAnalytics(app);
           sendConfirmationEmail(userid,newOrder)
           //refreshCart();
     }catch(error){
-           setErrorMessage(error.data.error.message);
+      console.log(error.data.error.message)
     }
 }
   
@@ -680,6 +681,7 @@ const searchProduct =(searchString)=>{
   return (
     <ThemeProvider theme={theme}>
     <Box sx={{ pb: 0 }} ref={ref} className='boxMain'>
+    
       <CssBaseline />
        
          <Route exact path={paths}>

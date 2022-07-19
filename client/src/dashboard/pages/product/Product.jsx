@@ -25,7 +25,7 @@ import { convertValueFromExponent} from "../../../utils/Utils"
      return( <input type="text" className={`measurementItem ${name}`} placeholder="" value={sval} key={index} onChange={(e)=>{setsValue(e.target.value);onUpdateSizes(name)}}  id={`${name}${index}`}/>)
     }
 
-export default function Product({store}) {
+export default function Product({store , setShowProgress,showprogress}) {
     const query=QueryParams();
     const [product,setProduct]= useState(JSON.parse(localStorage.getItem('product')));
     const [storeid]=useState(query.get('storeId'));
@@ -34,8 +34,7 @@ export default function Product({store}) {
     const [productname]=useState(product.name);
     const [colors,setColors]=useState(product.color);
     const [sizes,setSizes]=useState(product.size);
-    // eslint-disable-next-line no-unused-vars
-    const [stock,setStock]=useState(product.stock.currentstock);
+    const [currentStock,setCurrentStock]=useState(product.stock.currentstock);
     const [addStock,setaddStock]=useState(0);
     const [active,setActive]=useState(product.active);
     const [price,setPrice]=useState(convertValueFromExponent(product.price));
@@ -50,7 +49,6 @@ export default function Product({store}) {
     const editorState = EditorState.createWithContent(contentState);
     const [editorstate,setEditorState]=useState(editorState);
     const [showForms,setShowForms]=useState(false)
-    const [sales,setSales]=useState({})
     const [isSalesLoaded,setIsSalesLoaded]=useState(false);
     const[user]=useState(JSON.parse(localStorage.getItem('user')));
 
@@ -85,10 +83,12 @@ export default function Product({store}) {
       }
       const handleUpdate=(e)=>{
             e.preventDefault();
+            setShowProgress(true)
             editProduct().then((response)=>{
                 if(response.status===200){
+                     setShowProgress(false)
                      setProduct(response.data)
-                     setStock(response.data.stock.currentstock);
+                     setCurrentStock(response.data.stock.currentstock);
                      setPrice(convertValueFromExponent(response.data.price));
                      setShippingFees(convertValueFromExponent(response.data.shippingFees))
                      setActive(response.data.active);
@@ -224,7 +224,7 @@ export default function Product({store}) {
                         </span>
                         <span className="productInfoItem">
                             <span className="productInfoKey">in stock:</span>
-                            <label className="productInfoValue" >{product.stock.currentstock}</label>
+                            <label className="productInfoValue" >{currentStock}</label>
                         </span>
                         <span className="productInfoItem">
                             <span className="productInfoKey">price:</span>

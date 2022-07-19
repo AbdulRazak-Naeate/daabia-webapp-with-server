@@ -55,7 +55,7 @@ if (amount!==undefined){
         return symbol + amount.toFixed(8).replace(/\d(?=(\d{3})+\.)/g,"$&,");
        }else if(bool===false){
        // console.log(amount)
-        return symbol + amount;
+        return symbol + amount.toFixed(2);
        }
   /*     
   }else{

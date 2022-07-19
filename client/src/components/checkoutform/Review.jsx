@@ -54,11 +54,13 @@ const Review = ({checkoutToken,fees}) => {
           item.selected === true ? <>
           <ListItemButton  className={classes.listItemButton} onClick={()=>{handleClick()}}  key={index}>
            <ListItem key={item.product._id}>
-           <ListItemText  primary={item.product.name} secondary={`Quantity ${item.quantity}  ${item.color!=='null'? ' , '+item.color+' , '+item.size:''}`} />   
-             <Typography variant="body2">{`price : ${formarttoCurrency(item.line_item_sub_price,'π')}`}</Typography>
-             <Typography variant="body2">{`fees  : ${formarttoCurrency(item.line_item_sub_fees,'π')}`}</Typography>
+           <ListItemText key={`${item.product._id}-lit`}  primary={item.product.name} secondary={`Quantity ${item.quantity}  ${item.color!=='null'? ' , '+item.color :''} ${item.size!=='null'? ' , '+item.size:''}`} />   
+            <div className="cost-wrapper" style={{display:'flex',flexDirection:'column'}}>
+            <Typography variant="body2">{`price : ${formarttoCurrency(item.line_item_sub_price,'π')}`}</Typography>
+             <Typography variant="body2">{`fees \t\t : ${formarttoCurrency(item.line_item_sub_fees,'π')}`}</Typography>
+            </div>
            </ListItem>
-          {open ? <ExpandLess key={index} /> : <ExpandMore key={index} />}
+          {open ? <ExpandLess key={`${index}-expls`} /> : <ExpandMore key={`${index}-expmr`} />}
         </ListItemButton>
 
         

@@ -10,7 +10,7 @@ import AlertDialog from '../../components/alertdialog/AlertDialog'
 import  {patch} from 'axios';
 import QueryParams from '../../QueryParams';
 import {TransacModal} from  './modal/TransacModal'
-
+import { formarttoCurrency } from "../../../utils/Utils"
 import {PrintBox} from './printbox/PrintBox.jsx';
 
 const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTransLoaded ,setIstransLoaded,handleUpdateManyTransactions,handleUpdateTransaction,handleShowAllTransactions,showAlltransactions,switchText,showprogress,setShowProgress}) => {
@@ -169,13 +169,40 @@ const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTran
     {
       field:'priceEach',
       headerName:"Price Each",
-      width:160
+      width:160,
+      renderCell:(params)=>{
+        return(
+          <>
+           <span>{`${formarttoCurrency(params.row.priceEach,'π')}`}</span>
+          </>
+        )
+      }
+
     },
     {
       field:'totalPrice',
       headerName:"Total Price",
-      width:180
+      width:180,
+      renderCell:(params)=>{
+        return(
+          <>
+           <span>{`${formarttoCurrency(params.row.totalPrice,'π')}`}</span>
+          </>
+        )
+      }
     },
+    /*{
+      field: 'shippingFees',
+      headerName: 'Shipping',
+      width: 135 ,
+      renderCell:(params)=>{
+        return(
+          <>
+           <span>{`${formarttoCurrency(params.row.shippingFees,'π')}`}</span>
+          </>
+        )
+      }
+    }, */
   /*   {
       field: 'fullname',
       headerName: 'Full Name',
@@ -240,7 +267,7 @@ const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTran
         var futureDate = new Date(datenow.setMonth(datenow.getMonth()+1))
         console.log(futureDate.toISOString())
       }}>future Date</Button> */}
-      { showprogress ? <CircularProgress className='circularProgress' variant='indeterminate' color ='primary' size={25} />:''}
+     {/*  { showprogress ? <CircularProgress className='circularProgress' variant='indeterminate' color ='primary' size={25} />:''} */}
         <TransacModal openModal={openModal} handleCloseTransacModal={handleCloseTransacModal} tranxData={tranxData} />
        <AlertDialog open={open} handleClickOpen={handleClickOpen} handleClose={handleClose} title="Mark transaction" textContent={`Are you sure you want to mark transaction status as ${status} !`}DeleteOutline={Edit}/>
        <div className="pageTitleContainer">

@@ -2,12 +2,18 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
   media: {
-    height: 200,
+    height: 120,
+    border:'0px solid',
+    width:'100%',
+    padding:0,
   },
   cardContent: {
-    height:80,
+    height: 80,
     display: 'flex',
     justifyContent: 'space-between',
+    border:'0px solid',
+    width:'100%',
+
   },
   cardActions: {
     border:'0px solid',
@@ -19,13 +25,28 @@ export default makeStyles((theme) => ({
   buttons: {
     width:'100%',
     display: 'flex',
+    justifyContent:'space-between',
+    alignItems: 'center',
+  },
+  quantityUpdateWrapper:{
+    display: 'flex',
+    justifyContent:'space-between',
     alignItems: 'center',
   },
   price:{
      color:'red',
      fontWeight:600,
   },
+  cost:{
+      height:'auto',
+      display:'flex',
+      flexDirection:'column',
+      justifyContent:'space-bewtween',
+      color:'#afb4b0',
+      border:'0px solid'
+  },
   specifications:{
+   height:'auto',
    display:'flex',
    flexDirection:'column',
    border:'0px solid',

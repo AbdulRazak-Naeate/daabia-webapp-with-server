@@ -83,7 +83,7 @@
 
   }
   .circularProgress{
-    position: absolute;
+    position:fixed;
     margin: 25% 40%;
   }
   @media only  screen and (max-width:620px){

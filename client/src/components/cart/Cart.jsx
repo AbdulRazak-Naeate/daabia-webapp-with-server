@@ -82,7 +82,7 @@ const Cart = ({cart, handleUpdateCartQty,handleupdateColorSize,handleupdateMeasu
           <>
             <Grid container spacing={3}> 
                 {cart.items.map((item,index)=>(
-                    <Grid item xs={12} sm={4} key={`grid-${index}`}>
+                    <Grid item xs={12} sm={4} md={6} lg={6} key={`grid-${index}`}>
                         <CartItem cartitem={item} key={`cartitem-${index}`} onUpdateCartQty={handleUpdateCartQty} onUpdateColorSize={handleupdateColorSize} onUpdateMeasurement={handleupdateMeasurement} onRemoveFromCart={handleRemoveFromCart} onHookFormError={onHookFormError} setOnhookFormError={setOnhookFormError} onUpdateSelect={handleupdateSelection}/>
                     </Grid>
                 ))}
