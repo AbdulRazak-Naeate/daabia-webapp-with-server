@@ -80,16 +80,16 @@ const Cart = ({cart, handleUpdateCartQty,handleupdateColorSize,handleupdateMeasu
     );
     const  FilledCart =()=>(
           <>
-            <Grid container spacing={3}> 
+            <Grid container spacing={3} className={classes.filledcart}> 
                 {cart.items.map((item,index)=>(
-                    <Grid item xs={12} sm={4} md={6} lg={6} key={`grid-${index}`}>
+                    <Grid item xs={12} sm={4} md={4} lg={4} key={`grid-${index}`}>
                         <CartItem cartitem={item} key={`cartitem-${index}`} onUpdateCartQty={handleUpdateCartQty} onUpdateColorSize={handleupdateColorSize} onUpdateMeasurement={handleupdateMeasurement} onRemoveFromCart={handleRemoveFromCart} onHookFormError={onHookFormError} setOnhookFormError={setOnhookFormError} onUpdateSelect={handleupdateSelection}/>
                     </Grid>
                 ))}
             </Grid>
             <div className={classes.cardDetails}>
              <div> <Typography variant="h5" className={classes.price}>{`Subtotal: ${formarttoCurrency(cart.subtotal,'π')}`} </Typography>
-</div>
+              </div>
                 <div className={classes.buttons}>
                 <Button className={classes.emptyButton} size="large" type="button" variant="contained" color="secondary" onClick={handleEmptyCart}>Empty Cart</Button> 
                  <Button  className={classes.checkoutButton} size="large" type="button" variant="contained" onClick={handleCheckOut} color="primary">Check Out</Button>

@@ -6,7 +6,7 @@ export const Chart = ({title,data,datakey,grid}) => {
    
     return (
         <div className="chart">
-             <Grid continaer sx={12} sm={12} md={12} lg={12}>
+             <Grid container sx={12} sm={12} md={12} lg={12}>
              <Grid item xs={11} sm={11} md={12} lg={12}>
                   <h3 className="chartTitle">{title}</h3>
             <ResponsiveContainer width="95%" aspect={4/1}>

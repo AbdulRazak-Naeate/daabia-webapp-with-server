@@ -17,7 +17,7 @@ export default makeStyles((theme) => ({
        },
        marginBottom:20,
    },
-   slider:{
+   /* slider:{
     [theme.breakpoints.up(620)]:{
       display:'none',
      },
@@ -26,7 +26,7 @@ export default makeStyles((theme) => ({
       marginTop:'0px',
 
      }
-   },
+   }, */
    commentListContainer:{
      margin:'2% 20%',
      border:'0px solid',

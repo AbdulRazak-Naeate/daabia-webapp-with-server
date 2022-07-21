@@ -8,7 +8,6 @@ import { LineStyle,Timeline,TrendingUp
     ,Storefront,Add,BarChart,DynamicFeed,
     ChatBubbleOutline,WorkOutline,Report,CloseOutlined } from '@material-ui/icons'
 export const  MobileSlider = ({stores,storeindex,handleMouseDown,showMobileSidebar,handleOnStoreChange,setShowMobileSideBar}) => {
-    console.log(showMobileSidebar)
   return (
     <div id='flyoutMenu' className={showMobileSidebar ? 'show' : 'hide'} onMouseDown={handleMouseDown}>
               <div style={{position:'absolute',top:'20px',left:'80%'}}><CloseOutlined onClick={()=>{setShowMobileSideBar(!showMobileSidebar)}}/></div>

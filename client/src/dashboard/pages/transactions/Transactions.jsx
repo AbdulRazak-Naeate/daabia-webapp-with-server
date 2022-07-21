@@ -88,7 +88,6 @@ const Transactions = ({handlegetTransactions,transactions,handlegetStores,isTran
     return <span onClick={onClick} id={"status-span-"+id} className={"transStatusSpan "+type}>{type}</span>
 }
  
-   console.log(showprogress)
   useEffect(() => {  
 
     if (!isTransLoaded){

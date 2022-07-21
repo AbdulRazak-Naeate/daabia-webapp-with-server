@@ -5,8 +5,21 @@ import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 import axios from 'axios';
 import {formarttoCurrency,convertValueFromExponent} from '../../utils/Utils';
 
-const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,nextStep}) => {
-  console.log(shippingData.shippingFees);
+const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,nextStep,showAddresses}) => {
+  console.log(shippingData);
+  const address={
+    firstName: shippingData.firstName,
+    lastName: shippingData.lastName,
+    email: shippingData.email,
+    phone: shippingData.phone,
+    address1:shippingData.address1,
+    address2:shippingData.address2,
+    zip: shippingData.zip,
+    countrylabel: shippingData.countrylabel,
+    statelabel: shippingData.statelabel,
+    citylabel: shippingData.citylabel,
+    
+}
   var handleFlutterPayment =null;
   
       try{
@@ -76,7 +89,7 @@ const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,next
                 } 
               //console.log(orderData)
                // handlePayment(orderData);
-               onCaptureCheckout(checkoutToken._id,orderData);
+               onCaptureCheckout(checkoutToken._id,orderData,address,showAddresses);
                nextStep();
               }
 
@@ -85,7 +98,7 @@ const PaymentForm = ({shippingData,checkoutToken,backStep,onCaptureCheckout,next
          axios.get(url).then((response)=>{
            console.log("verify payment response "+response)
               if (response.body.status==="success"){
-                onCaptureCheckout(checkoutToken._id,orderData);
+                onCaptureCheckout(checkoutToken._id,orderData,address,showAddresses);
                 nextStep();
               }  
          })

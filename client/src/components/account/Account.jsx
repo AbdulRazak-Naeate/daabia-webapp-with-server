@@ -14,15 +14,15 @@ import Avatar from '../../assets/icons/user_96px.png';
 import useStyles from './styles'
 const Account = () => {
    const classes = useStyles()
-  const query =QueryParams();    
+  //const query =QueryParams();    
   const [user,setUser] = useState(JSON.parse(localStorage.getItem('user')));
   const[username,setUsername]=useState(user.name);
   const[firstname,setFirstname]=useState(user.firstname);
   const[lastname,setLastname]=useState(user.lastname);
   const[email,setEmail]=useState(user.email);
   const[phone,setPhone]=useState(user.phone);
-  const[address,setAddress]=useState(user.address);
-  const[country,setCountry]=useState(address.country !== 'null'? address.country :'');
+  const[address,setAddress]=useState(user.addresses);
+  const[country,setCountry]=useState(address[0].country !== 'null'? address[0].country :'');
   const[state,setState]=useState(address.state!== 'null'? address.state :'');
   const[city,setCity]=useState(address.city!== 'null'? address.city :'');
   const[street,setStreet]=useState(address.street!== 'null'? address.street :'');

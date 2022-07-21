@@ -47,8 +47,9 @@ import Daabia from './daabia/daabia'
     };
   const [showSidebar,setShowSideBar]=useState(true);
   const [showMobileSidebar,setShowMobileSideBar]=useState(true);
-  const [stores, setStores] = useState(JSON.parse(localStorage.getItem('stores')));
- const [storeindex,setStoreindex]=useState(parseInt(localStorage.getItem('storeindex')));
+  const [stores, setStores] = useState(JSON.parse(localStorage.getItem('stores'))!==null?JSON.parse(localStorage.getItem('stores')):[]);
+  //console.log(parseInt(localStorage.getItem('storeindex')))
+ const [storeindex,setStoreindex]=useState(  isNaN(parseInt(localStorage.getItem('storeindex'))) ? 0 : parseInt(localStorage.getItem('storeindex')));
  const user = JSON.parse(localStorage.getItem('user'));
  const [products,setProducts]=useState([]);
  const [productxs,set_Products]=useState([]);
@@ -70,8 +71,8 @@ import Daabia from './daabia/daabia'
  const [switchText,setSwitchText]=useState('Show all');
  const [showprogress,setShowProgress]=useState(false);
  const [devicetype]=useState(getDeviceType());
- 
- const daabia = new Daabia(stores[storeindex]._id);
+ const [useStoreId]=useState(stores.length >0 ? stores[storeindex]._id:'none')
+ const daabia = new Daabia(useStoreId);
  const handletoggleSideBar=(bol)=>{
    setShowSideBar(bol);
  }

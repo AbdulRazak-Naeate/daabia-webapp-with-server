@@ -4,7 +4,7 @@ export default makeStyles((theme) => ({
   root:{
     [theme.breakpoints.down('xs')]:{
           /* marginBottom:'10vh', */
-
+         padding:8,
     }
   },
   toolbar: theme.mixins.toolbar,
@@ -56,4 +56,5 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
     border:'0px solid'
   },
+ 
 }));

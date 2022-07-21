@@ -52,7 +52,7 @@ router.post('/',async (req,res)=>{
                        
                         },
                        { items:{$elemMatch:{productId:pid}}}
-                      )
+                      );
 
                       
                     var matchItems=itemAlreadyExistInCart.items;

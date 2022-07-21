@@ -100,8 +100,8 @@ const CartItem = ({cartitem,onUpdateCartQty,onUpdateColorSize,onUpdateMeasuremen
     </>)
 
   return (
-    <div>
-        <Card>
+
+        <Card className={classes.root}>
           <Grid container justifyContent="space-between" spacing={0}>
               <Grid item xs={3} sm={3} md={3} lg={3}>
               <CardMedia  image={imagepath} alt={cartitem.product.name} className={classes.media}/>
@@ -162,7 +162,7 @@ const CartItem = ({cartitem,onUpdateCartQty,onUpdateColorSize,onUpdateMeasuremen
            
         </Card>
       
-    </div>
+   
   )
 }
 

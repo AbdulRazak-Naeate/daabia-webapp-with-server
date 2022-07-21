@@ -37,7 +37,7 @@ export const FeaturedInfo = ({completedAggregate,inCompletedAggregate,alltimeAgg
    }
    const Featured =({completeCount,completeSales})=>(
     <div className="featured">
-    <Grid container justifyContent='space-between' sx={12} sm={12} md={12} lg={12}>
+    <Grid container justifyContent='space-between' xs={12} sm={12} md={12} lg={12}>
         <Grid item xs={12} sm={12} md={3} lg={3}>
                 <div className="featuredItem" onClick={()=>{onFeatureItemOnclik('transactions')}}>
     <span className="featureTitle">In Progress</span>

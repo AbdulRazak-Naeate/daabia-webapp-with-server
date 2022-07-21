@@ -99,6 +99,7 @@ const analytics = getAnalytics(app);
      const[cart,setCart]=useState({});
      const[itemsCount,setItemsCount]=useState(0);
      const [order,setOrder]=useState({});
+     const [addresses,setAddresses]=useState(user.addresses.length>0 ? user.addresses:[]);   
      const[myOrders,setMyOrders]=useState([]);
      const[categories,setCategories]=useState([]);
      const[orderCount,setMyOrderCount]=useState(0);
@@ -146,6 +147,16 @@ const analytics = getAnalytics(app);
     })
   }
 
+  const handlesetAddress = (_id,address)=>{
+     const url = `http://localhost:3001/api/user/shippingaddress/${_id}`;
+       
+       post(url,{address:address}).then((response)=>{
+       console.log(response);
+       localStorage.setItem('user',JSON.stringify(response.data));
+       setAddresses(response);
+
+   })
+ }
  
   
   const handleEmptyCart = async ()=>{
@@ -432,18 +443,23 @@ const analytics = getAnalytics(app);
     
   }
  
-  const handleCaptureCheckout =async (checkoutTokenId,newOrder)=>{
+  const handleCaptureCheckout =async (checkoutTokenId,newOrder,shippingData,showAddresses)=>{
    
     try{ 
           incomingOrder(newOrder).then((response)=>{
           // console.log(response)
-           setMyOrders(response.data.orders)
-           setMyOrderCount(response.data.orders.length)
+           setMyOrders(response.data.orders);
+           setMyOrderCount(response.data.orders.length);
+           if (localStorage.getItem('loggedin')==="true"){
+
+            if (!showAddresses){handlesetAddress(user._id,shippingData)}//user clicking on add button at addresses page set @showAddresses to false 
           
+
+           }
          })
          // console.log(newOrder)
           setOrder(newOrder);
-          sendConfirmationEmail(userid,newOrder)
+        /*   sendConfirmationEmail(userid,newOrder) */
           //refreshCart();
     }catch(error){
       console.log(error.data.error.message)
@@ -702,7 +718,7 @@ const searchProduct =(searchString)=>{
           handleEmptyCart={handleEmptyCart} handleupdateSelection={handleupdateSelection}/>
        </Route>
        <Route exact path="/checkout">
-         <CheckOut cart={cart}   order={order}  onCaptureCheckout={handleCaptureCheckout}/>
+         <CheckOut cart={cart}   order={order}  onCaptureCheckout={handleCaptureCheckout} addresses={addresses} setAddresses={setAddresses}/>
        </Route>
         <Route exact path="/orders">
         <Orders orders={myOrders}/>

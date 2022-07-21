@@ -93,7 +93,8 @@ router.post('/',async (req,res)=>{
   var shippingData={
         country:req.body.country,
         state:req.body.state,
-        city:req.body.city
+        city:req.body.city,
+        homeAddress:req.body.homeAddress
   }
       const order = new Order({
           name:req.body.name,

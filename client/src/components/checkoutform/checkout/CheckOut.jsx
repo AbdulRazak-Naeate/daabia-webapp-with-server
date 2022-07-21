@@ -9,10 +9,13 @@ import axios from  'axios';
 
 const steps =['Shipping address','Payment details'];
 
-const CheckOut = ({cart,order,onCaptureCheckout,error}) => {
+const CheckOut = ({cart,order,onCaptureCheckout,error,addresses,setAddresses}) => {
+
     const [activeStep,setActiveStep]=useState(0);
     const [checkoutToken,setCheckoutToken]= useState([]);
     const [shippingData,setShippingData]=useState({});
+    const [address,setAddress]=useState(addresses.length>0 ? addresses[0]:{});
+    const [showAddresses,setShowAddresses]=useState(addresses.length >0 ? true :false);
     const classes = useStyles();
     const history = useHistory();
     const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -75,8 +78,8 @@ const CheckOut = ({cart,order,onCaptureCheckout,error}) => {
     );
   }
      const Form = () => activeStep === 0
-     ?<AddressForm checkoutToken={checkoutToken} next={next}/>
-     :<PaymentForm shippingData={shippingData} checkoutToken={checkoutToken} nextStep={nextStep} backStep={backStep}  onCaptureCheckout={onCaptureCheckout} />
+     ?<AddressForm checkoutToken={checkoutToken}  next={next} address={address}  setAddress={setAddress} addresses={addresses} showAddresses={showAddresses} setShowAddresses={setShowAddresses}/>
+     :<PaymentForm shippingData={shippingData}   checkoutToken={checkoutToken} nextStep={nextStep} backStep={backStep}  onCaptureCheckout={onCaptureCheckout}   />
 
      
   return (

@@ -43,7 +43,7 @@ router.get('/check/email/:email',async(req,res)=>{
      email:user.email,
      phone:user.phone,
      image:user.image,
-     address:user.address,
+     addresses:user.addresses,
      comfirmed:user.confirmed
 
    }).status(400);
@@ -81,7 +81,7 @@ router.post('/register',async (req,res) => {
                     phone:emailExist.phone,
                     email:emailExist.email,
                     image:emailExist.image,
-                    address:emailExist.address,
+                    addresses:emailExist.addresses,
                     status:200}).status(200);
      
         }catch(err){
@@ -160,14 +160,19 @@ const CreateNewUser = async(req,res)=> {
     phone:req.body.phone,
     password:hashPassword,
     image:[{}],
-    address:{
-         country:'null',
-         state:'null',
-         city:'null',
-         street:'null',
-         aprt_suit_num:'null'
-         
-        },
+    addresses:[
+      {
+        firstName: "LDOO",
+        lastName: "HUYOS",
+        email: "ABDU@GMAIL",
+        phone: "09488391",
+        address1: "ST 93",
+        address2: "T-HDHHK",
+        zip: "00233",
+        countrylabel: "Germany",
+        statelabel: "North Rhine-Westphalia",
+        citylabel: "Augustdorf", 
+        }],
     fromGoogle:req.body.fromGoogle
 });
 try{
@@ -185,7 +190,7 @@ const token = jwt.sign({_id:savedUser.id},process.env.TOKEN_SECRET);
             phone:user.phone,
             email:user.email,
             image:user.image,
-            address:user.address,
+            addresses:user.addresses,
             status:200}).status(200);
 
 }catch(err){
@@ -225,7 +230,7 @@ router.post('/login',async (req,res)=>{
       email:user.email,
       phone:user.phone,
       image:user.image,
-      address:user.address,
+      addresses:user.addresses,
       comfirmed:user.confirmed
 
     }).status(400);
@@ -243,7 +248,7 @@ router.patch('/:userId',async (req,res)=> {
           lastname:req.body.lastname,
           email:req.body.email,
           phone:req.body.phone,
-          address:req.body.address
+          addresses:req.body.addresses
        };
       // console.log(req.body)
        await User.findOneAndUpdate(
@@ -260,7 +265,7 @@ router.patch('/:userId',async (req,res)=> {
               lastname:ret.lastname,
               email:ret.email,
               phone:ret.phone,
-              address:ret.address
+              addresses:ret.addresses
            };
            var updated=JSON.stringify(query)===JSON.stringify(newData)
            if(!updated) return res.status(400).send("user not modified");
@@ -272,7 +277,55 @@ router.patch('/:userId',async (req,res)=> {
       res.json({message:err});
   }
 });
+//save User shipping address
+router.post('/shippingaddress/:userId',async (req,res)=> {
+  try{
+       const {address} =req.body;
+       
+      var oId= new mongoose.Types.ObjectId(req.params.userId);
+      console.log(address.firstName);
 
+      /* const findAddress = await User.findOne(
+        {
+         userId:req.params.userId,
+        
+         },
+        { addresses:{$elemMatch:{
+          firstName: address.firstName,
+          lastName: address.lastName,
+          email:address.email,
+          phone: address.phone,
+          address1: address.address1,
+          address2: address.address2,
+          zip: address.zip,
+          countrylabel: address.countrylabel,
+          statelabel:address.statelabel,
+          citylabel: address.citylabel 
+        }}}
+       ); */
+       //if (save === true){
+         await User.findOneAndUpdate(
+          {_id:oId},
+          {$push:{addresses:
+               address
+           }},
+           {new:true,useFindAndModify:false}
+            
+          ).then(ret=>{
+           //console.log(ret)
+          res.json(ret);
+
+          });
+        
+      /*  }else{
+        res.json({message:'address allready exist'})
+       } */
+      
+         
+  }catch(err){
+      res.json({message:err});
+  }
+});
 
 router.post('/updateImage/:userId',updateImage('./server/uploads/users'),async (req,res)=>{
   try{
