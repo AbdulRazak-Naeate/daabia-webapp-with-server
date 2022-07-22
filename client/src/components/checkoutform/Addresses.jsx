@@ -1,28 +1,16 @@
-import { Grid,Typography,Card,CardContent,Radio,RadioGroup,FormControlLabel,Button} from '@mui/material'
+import { Grid,Typography,Card,CardContent,Radio,Button} from '@mui/material'
+import {DeleteOutlined} from '@material-ui/icons';
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-const Addresses = ({addresses,setAddresses,showAddresses, setShowAddresses,address,setAddress,next,orderNumber,shippingFees}) => {
-    console.log(address)
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event) => {
-        console.log(event.target.value);
-        
-        setAddress(addresses[event.target.value])
-        setValue(event.target.value);
-    };
+const Addresses = ({addresses,showAddresses, setShowAddresses,address,next,orderNumber,shippingFees ,handleonRadioButtonChanged, selectedValue,handleDeleteAddress}) => {
   
+    const [alphabets]=React.useState(['a','b','c','d','e','f','g','h','i']);
   return (
     <div className=''>
        { addresses.length>0 ? <Grid container xs={12} sm={12} md={12} lg={12}justifyContent='space-between'>
-          <RadioGroup style={{display:'flex',flexDirection:'row', width:'100%'}}
-        aria-labelledby="demo-controlled-radio-buttons-group"
-        name="controlled-radio-buttons-group"
-        value={value}
-        onChange={handleChange}
-      >
         
+     
           { addresses.map((address,index)=>{
             return <Grid item xs={12} sm={12} md={12} lg={12} >
                  <Card style={{padding:'5px 10px',margin:'15px'}}>
@@ -30,9 +18,15 @@ const Addresses = ({addresses,setAddresses,showAddresses, setShowAddresses,addre
       
                     <Grid container xs={12} sm={12} md={12} lg={12}>
                       <Grid item xs={2} sm={2} md={2} lg={2} justifyContent='space-evenly' alignItems='center'>
-                      <FormControlLabel style={{margin:'48% 5%'}} value={index}control={<Radio />} label={''} />
+                    <Radio  style={{margin:'48% 5%'}}
+                       checked={selectedValue === `${alphabets[index]}`}
+                       onChange={(e)=>{handleonRadioButtonChanged(e,alphabets)}}
+                       value={`${alphabets[index]}`}
+                       name="radio-buttons"
+                      inputProps={{ 'aria-label': `${alphabets[index]}`}}/> 
+
                       </Grid>
-                      <Grid item xs={10} sm={10} md={10} lg={10} alignItems='center'>
+                      <Grid item xs={9} sm={9} md={9} lg={9} alignItems='center'>
                       <Grid container xs={12} sm={12} md={12} lg={12} justifyContent='space-between' >
                         <Grid item xs={3} sm={3} md={3} lg={3} justifyContent='space-between' >
                             <Typography variant='body1'>Name : </Typography> 
@@ -75,10 +69,14 @@ const Addresses = ({addresses,setAddresses,showAddresses, setShowAddresses,addre
                         </Grid>
                      </Grid>
                      
+                     
+                    </Grid> 
+                     <Grid item xs={1} sm={1} md={1} lg={1} justifyContent='flex-end' flexDirection='column'alignItems={'flex-end'} >
+                    <DeleteOutlined color='primary'  onClick={()=>{handleDeleteAddress(address)}} /> 
+                       </Grid>
+                    
+
                       </Grid>
-                      
-                    </Grid>
-                      
                     </CardContent>
                 </Card>
               
@@ -89,7 +87,7 @@ const Addresses = ({addresses,setAddresses,showAddresses, setShowAddresses,addre
           <div style={{display:'flex',justifyContent:'flex-end',width:'100%',margin:'20px', }}>
           <Button onClick={()=>{setShowAddresses(!showAddresses)}} variant='outlined'>Add</Button>
           </div>
-      </RadioGroup>
+    {/*   </RadioGroup> */}
 
       <div style={{display:'flex',justifyContent:'space-between' ,width:'100%' }}>
                         <Button component={Link} to="/cart" variant='outlined'>Back to Cart</Button>

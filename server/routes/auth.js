@@ -327,6 +327,33 @@ router.post('/shippingaddress/:userId',async (req,res)=> {
   }
 });
 
+
+//remove  address from User shipping addresses
+router.patch('/shippingaddress/:userId',async (req,res)=> {
+  try{
+       const {address} =req.body;
+       
+      var oId= new mongoose.Types.ObjectId(req.params.userId);
+         await User.findOneAndUpdate(
+          {_id:oId},
+          {$pull:{addresses:
+                 {address:address}
+           }},
+           {new:true,useFindAndModify:false}
+            
+          ).then(ret=>{
+           //console.log(ret)
+          res.json(ret);
+
+          });
+        
+         
+  }catch(err){
+      res.json({message:err});
+  }
+});
+
+
 router.post('/updateImage/:userId',updateImage('./server/uploads/users'),async (req,res)=>{
   try{
     //update iamge field in user

@@ -11,7 +11,7 @@ import Addresses from './Addresses';
  var loki = require('lokijs');
  */
 
-const AddressForm = ({checkoutToken,next,address,setAddress,addresses,showAddresses,setShowAddresses}) => {
+const AddressForm = ({checkoutToken,next,address,setAddress,addresses,showAddresses,setShowAddresses,handleonRadioButtonChanged,selectedValue,handleDeleteAddress}) => {
   console.log(showAddresses)
   const uniqueOrderNumber= ()=> {//Unique Identifier
     var result           = '';
@@ -136,7 +136,7 @@ const AddressForm = ({checkoutToken,next,address,setAddress,addresses,showAddres
    checkoutToken ? <>
         {
           <Grid>
-                {showAddresses ? <Addresses addresses={user.addresses} setAddress={setAddress} address={address} showAddresses={showAddresses} setShowAddresses={setShowAddresses} next={next} orderNumber={orderNumber} shippingFees={shippingFees}/> :
+                {showAddresses ? <Addresses addresses={user.addresses} address={address} setAddress={setAddress}  showAddresses={showAddresses} setShowAddresses={setShowAddresses} next={next} orderNumber={orderNumber} shippingFees={shippingFees} handleonRadioButtonChanged={handleonRadioButtonChanged} selectedValue={selectedValue} handleDeleteAddress={handleDeleteAddress}/> :
                 <>
                 <Typography variant="h6" gutterBottom>Shipping Address</Typography>
           <form onSubmit = {handleSubmit((data) =>{ 

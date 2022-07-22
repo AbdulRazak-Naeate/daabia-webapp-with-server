@@ -157,6 +157,16 @@ const analytics = getAnalytics(app);
 
    })
  }
+ const handleDeleteAddress = (_id,address)=>{
+  const url = `http://localhost:3001/api/user/shippingaddress/${user._id}`;
+    
+    axios.patch(url,{address:address}).then((response)=>{
+    console.log(response);
+    localStorage.setItem('user',JSON.stringify(response.data));
+    setAddresses(response);
+
+})
+}
  
   
   const handleEmptyCart = async ()=>{
@@ -718,7 +728,7 @@ const searchProduct =(searchString)=>{
           handleEmptyCart={handleEmptyCart} handleupdateSelection={handleupdateSelection}/>
        </Route>
        <Route exact path="/checkout">
-         <CheckOut cart={cart}   order={order}  onCaptureCheckout={handleCaptureCheckout} addresses={addresses} setAddresses={setAddresses}/>
+         <CheckOut cart={cart}   order={order}  onCaptureCheckout={handleCaptureCheckout} addresses={addresses} setAddresses={setAddresses} handleDeleteAddress={handleDeleteAddress}/>
        </Route>
         <Route exact path="/orders">
         <Orders orders={myOrders}/>
