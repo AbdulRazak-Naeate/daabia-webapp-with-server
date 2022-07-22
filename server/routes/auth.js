@@ -331,13 +331,14 @@ router.post('/shippingaddress/:userId',async (req,res)=> {
 //remove  address from User shipping addresses
 router.patch('/shippingaddress/:userId',async (req,res)=> {
   try{
-       const {address} =req.body;
+       const {_id} =req.body;
        
-      var oId= new mongoose.Types.ObjectId(req.params.userId);
+      var useroId= new mongoose.Types.ObjectId(req.params.userId);
+      var addressoId= new mongoose.Types.ObjectId(_id);
+
          await User.findOneAndUpdate(
-          {_id:oId},
-          {$pull:{addresses:
-                 {address:address}
+          {_id:useroId},
+          {$pull:{addresses:{_id:addressoId}
            }},
            {new:true,useFindAndModify:false}
             

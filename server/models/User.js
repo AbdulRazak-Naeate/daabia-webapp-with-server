@@ -37,7 +37,20 @@ const userSchema = new mongoose.Schema({
         default:'0'
     },
      addresses:{
-        type:Array,
+        type:[
+            {_id:{type:mongoose.Schema.Types.ObjectId,index:true,required:true,auto:true},
+            firstName : { type:String,  required:false, },
+            lastName : { type:String, required:false},
+            email: { type:String, required:false },
+            phone: { type:String, required:false },
+            address1:{ type:String, required:false },
+            address2: { type:String, required:false },
+             zip: { type:String, required:false },
+            countrylabel: { type:String, required:false },
+            statelabel : { type:String, required:false },
+            citylabel: { type:String, required:false }
+              }
+        ],
         required:false,
     },
     password:{

@@ -72,7 +72,7 @@ const Addresses = ({addresses,showAddresses, setShowAddresses,address,next,order
                      
                     </Grid> 
                      <Grid item xs={1} sm={1} md={1} lg={1} justifyContent='flex-end' flexDirection='column'alignItems={'flex-end'} >
-                    <DeleteOutlined color='primary'  onClick={()=>{handleDeleteAddress(address)}} /> 
+                    <DeleteOutlined color='primary'  onClick={()=>{handleDeleteAddress(address._id)}} /> 
                        </Grid>
                     
 

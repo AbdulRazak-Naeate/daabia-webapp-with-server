@@ -157,10 +157,10 @@ const analytics = getAnalytics(app);
 
    })
  }
- const handleDeleteAddress = (_id,address)=>{
+ const handleDeleteAddress = (_id)=>{
   const url = `http://localhost:3001/api/user/shippingaddress/${user._id}`;
     
-    axios.patch(url,{address:address}).then((response)=>{
+    axios.patch(url,{_id:_id}).then((response)=>{
     console.log(response);
     localStorage.setItem('user',JSON.stringify(response.data));
     setAddresses(response);
